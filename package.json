@@ -6,5 +6,9 @@
     "server:install": "cd server && npm install",
     "client:dev": "cd client && npm run dev",
     "server:dev": "cd server && npm run dev"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "mysql2": "^3.22.5"
   }
 }

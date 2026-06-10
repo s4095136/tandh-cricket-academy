@@ -44,18 +44,26 @@ const TRUST_STATS = [
 ]
 
 function CoachCard({ coach }: { coach: Coach }) {
+  const [hovered, setHovered] = useState(false)
   return (
-    <Card
-      sx={{
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        border: '1px solid',
-        borderColor: 'divider',
-        overflow: 'hidden',
-      }}
-    >
-      <Box
+      <Card
+        sx={{
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          border: '1px solid',
+          borderColor: 'divider',
+          overflow: 'hidden',
+          borderRadius: 5,
+          transition: 'all 0.3s ease',
+
+          '&:hover': {
+            transform: 'translateY(-4px)',
+            boxShadow: '0 12px 32px rgba(0,0,0,0.15)',
+          },
+        }}
+      >      
+        <Box
         sx={{
           bgcolor: coach.bg_color,
           px: 3,
@@ -219,8 +227,15 @@ return (
 
       {/* Swiper */}
       {assistantCoaches.length > 0 && (
-        <Box sx={{ overflow: 'hidden', mb: 8, position: 'relative' }}>
-
+        <Box
+          sx={{
+            mb: 8,
+            position: 'relative',
+            overflow: 'visible',
+            px: { xs: 2, md: 4 },
+            pt: 2, // ADD THIS
+          }}
+        >
           <IconButton
             className="coach-prev"
             sx={{
@@ -280,8 +295,12 @@ return (
     900: { slidesPerView: 2.2 },
     1200: { slidesPerView: 2.2 },
   }}
-  style={{ paddingBottom: '50px', paddingLeft: '16px', paddingRight: '16px', alignItems: 'stretch' }}
->
+  style={{
+    paddingTop: '12px',
+    paddingBottom: '50px',
+    paddingLeft: '16px',
+    paddingRight: '16px',
+  }}>
     {assistantCoaches.map((coach) => (
     <SwiperSlide key={coach.id} style={{ height: 'auto' }}>
       <CoachCard coach={coach} />

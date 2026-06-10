@@ -4,6 +4,7 @@ dotenv.config()
 import express from 'express'
 import apiRouter from './routes/api'
 import coachesRouter from './routes/coaches'
+import testimonialsRouter from './routes/testimonials'
 import cors from 'cors'
 
 const app = express()
@@ -18,6 +19,7 @@ app.get('/', (_req, res) => {
 
 app.use('/api', apiRouter)
 app.use('/api', coachesRouter)
+app.use('/api', testimonialsRouter)
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`)

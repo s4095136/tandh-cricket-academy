@@ -1,59 +1,27 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Box, Container, Typography, Card, CardContent, Grid, Avatar, Rating } from '@mui/material'
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote'
 
-const TESTIMONIALS = [
-  {
-    name: 'James M.',
-    role: 'Parent of U14 player',
-    initials: 'JM',
-    rating: 5,
-    quote:
-      'My son has been training with T&H for two seasons now. The improvement in his technique and confidence has been remarkable. Tom has this incredible ability to break down professional-level concepts for young players.',
-  },
-  {
-    name: 'Sarah K.',
-    role: 'Parent of U10 player',
-    initials: 'SK',
-    rating: 5,
-    quote:
-      'The holiday clinics are absolutely fantastic. My daughter comes home buzzing every single day. Hanni is so patient and encouraging with the younger kids — it never feels overwhelming.',
-  },
-  {
-    name: 'Daniel R.',
-    role: 'Representative player, Age 16',
-    initials: 'DR',
-    rating: 5,
-    quote:
-      'Training with Tom has genuinely changed my game. Getting insights from an actual BBL player about batting under pressure is something you can\'t get anywhere else. Highly recommend the elite program.',
-  },
-  {
-    name: 'Michelle T.',
-    role: 'Parent of two players',
-    initials: 'MT',
-    rating: 5,
-    quote:
-      'Both my kids train with T&H — one in beginner, one in advanced. The programs are completely different in depth but equal in quality. They both love going.',
-  },
-  {
-    name: 'Alex P.',
-    role: 'Club cricketer, Age 19',
-    initials: 'AP',
-    rating: 5,
-    quote:
-      'Joined the advanced training last winter. My club form improved noticeably the following season. The video analysis sessions were a game-changer for spotting technique flaws.',
-  },
-  {
-    name: 'Chris B.',
-    role: 'Parent of U12 player',
-    initials: 'CB',
-    rating: 5,
-    quote:
-      'Brilliant coaching setup. Small groups mean the kids actually get coached, not just supervised. My son has gone from a shy beginner to genuinely loving his cricket.',
-  },
-]
+interface Review {
+  id: number
+  initials: string
+  name: string
+  role: string
+  intials: string
+  rating: number
+  quote: string
+}
+
 
 export default function TestimonialsSection() {
+  const [testimonials, setTestimonials] = useState<Review[]>([])
+
+  useEffect(() => {
+    fetch('http://localhost:4000/api/testimonials')
+      .then((res) => res.json())
+      .then((data) => setTestimonials(data))
+      .catch((err) => console.error('Failed to fetch testimonials:', err))
+  }, [])
   return (
     <Box
       id="testimonials"
@@ -91,7 +59,7 @@ export default function TestimonialsSection() {
         </Box>
 
         <Grid container spacing={3}>
-          {TESTIMONIALS.map((t) => (
+          {testimonials.map((t) => (
             <Grid key={t.name} size={{ xs: 12, sm: 6, md: 4 }}>
               <Card
                 sx={{

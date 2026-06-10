@@ -1,31 +1,41 @@
-import React from 'react'
-import { Box, Container, Typography, Grid, Card, CardContent, Chip, Stack, Avatar } from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import {
+  Box,
+  Container,
+  Typography,
+  Card,
+  CardContent,
+  Chip,
+  Stack,
+  Avatar,
+  IconButton,
+  Grid,
+} from '@mui/material'
 import SportsCricketIcon from '@mui/icons-material/SportsCricket'
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium'
 import PeopleIcon from '@mui/icons-material/People'
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 
-const COACHES = [
-  {
-    initials: 'TR',
-    name: 'Tom Rogers',
-    role: 'Co-Founder & Head Coach',
-    credentials: ['BBL Melbourne Stars opener', 'Shield cricketer for Victoria', 'Professional playing career'],
-    bio: 'Tom Rogers is one of Australia\'s exciting batting talents, known for his explosive BBL performances with the Melbourne Stars. As a Shield cricketer for Victoria, Tom brings professional-level technical insight and match awareness that you simply cannot find anywhere else. His sessions bridge the gap between amateur coaching and elite professional thinking.',
-    accentColor: '#1d6e4a',
-    bgColor: '#0b2d1c',
-    tags: ['Batting', 'Opening', 'T20 Specialist'],
-  },
-  {
-    initials: 'HH',
-    name: 'Hanni Harb',
-    role: 'Co-Founder & Senior Coach',
-    credentials: ['Level 2 accredited coach', '25+ years of coaching experience', 'Senior & junior specialist'],
-    bio: 'Hanni Harb is a Level 2 accredited cricket coach with over 25 years of experience working with cricketers across all ages and abilities. His deep knowledge of technique, player psychology, and long-term development pathways makes him one of Melbourne\'s most trusted coaches. Hanni has helped hundreds of families find the right program for their child.',
-    accentColor: '#27915f',
-    bgColor: '#133d26',
-    tags: ['All-round coaching', 'Junior development', 'Technique'],
-  },
-]
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Navigation, Pagination, Autoplay } from 'swiper/modules'
+
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+
+interface Coach {
+  id: number
+  initials: string
+  name: string
+  role: string
+  credentials: string[]
+  bio: string
+  image: string | null
+  accent_color: string
+  bg_color: string
+  tags: string[]
+}
 
 const TRUST_STATS = [
   { icon: <SportsCricketIcon />, value: '250+', label: 'Players developed' },
@@ -33,128 +43,257 @@ const TRUST_STATS = [
   { icon: <PeopleIcon />, value: '8yrs', label: 'Coaching together' },
 ]
 
-export default function CoachesSection() {
+function CoachCard({ coach }: { coach: Coach }) {
   return (
+    <Card
+      sx={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        border: '1px solid',
+        borderColor: 'divider',
+        overflow: 'hidden',
+      }}
+    >
+      <Box
+        sx={{
+          bgcolor: coach.bg_color,
+          px: 3,
+          py: 3,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 2.5,
+        }}
+      >
+        <Avatar
+          sx={{
+            width: 64,
+            height: 64,
+            bgcolor: coach.accent_color,
+            border: '2px solid rgba(255,255,255,0.2)',
+            fontFamily: '"Bebas Neue", sans-serif',
+            fontSize: '1.5rem',
+            letterSpacing: '0.05em',
+            color: '#fff',
+          }}
+        >
+          {coach.initials}
+        </Avatar>
+        <Box>
+          <Typography variant="h5" sx={{ color: '#fff', fontSize: '1.2rem', mb: 0.3 }}>
+            {coach.name}
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.82rem' }}>
+            {coach.role}
+          </Typography>
+        </Box>
+      </Box>
+
+      <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+        <Stack spacing={0.8} sx={{ mb: 2.5, flexShrink: 0 }}>
+          {coach.credentials.map((cred) => (
+            <Box key={cred} sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <Box
+                sx={{
+                  width: 6,
+                  height: 6,
+                  borderRadius: '50%',
+                  bgcolor: 'primary.main',
+                  flexShrink: 0,
+                }}
+              />
+              <Typography
+                variant="body2"
+                sx={{ color: 'primary.main', fontWeight: 600, fontSize: '0.82rem' }}
+              >
+                {cred}
+              </Typography>
+            </Box>
+          ))}
+        </Stack>
+
+        <Box sx={{ flexGrow: 1 }}>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ lineHeight: 1.75 }}
+          >
+            {coach.bio}
+          </Typography>
+        </Box>
+
+        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mt: 2.5 }}>
+          {coach.tags.map((tag) => (
+            <Chip
+              key={tag}
+              label={tag}
+              size="small"
+              sx={{
+                bgcolor: 'rgba(29,110,74,0.08)',
+                color: 'primary.main',
+                fontSize: '0.7rem',
+                fontWeight: 600,
+              }}
+            />
+          ))}
+        </Stack>
+      </CardContent>
+    </Card>
+  )
+}
+
+export default function CoachesSection() {
+  const [coaches, setCoaches] = useState<Coach[]>([])
+
+  useEffect(() => {
+    fetch('http://localhost:4000/api/coaches')
+      .then((res) => res.json())
+      .then((data) => setCoaches(data))
+      .catch((err) => console.error('FETCH ERROR:', err))
+  }, [])
+
+const sortedAsc = [...coaches].sort((a, b) => a.id - b.id)
+const founders = sortedAsc.slice(0, 2)
+const rest = sortedAsc.slice(2)
+const assistantCoaches = rest
+const initialSlide = 0
+
+return (
     <Box
       id="coaches"
       component="section"
-      sx={{ py: { xs: 8, md: 12 }, bgcolor: 'background.default' }}
+      sx={{ py: { xs: 8, md: 12 }, bgcolor: 'background.default', overflow: 'hidden' }}
     >
+
+      {/* ── MEET THE FOUNDERS ── */}
       <Container maxWidth="lg">
-        {/* Header */}
         <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 8 } }}>
           <Typography variant="overline" color="primary" sx={{ display: 'block', mb: 1.5 }}>
-            The coaching team
+            The founders
           </Typography>
-          <Typography variant="h2" sx={{ fontSize: { xs: '2.8rem', md: '3.8rem' }, color: 'secondary.main' }}>
-            Meet the coaches
+          <Typography
+            variant="h2"
+            sx={{ fontSize: { xs: '2.8rem', md: '3.8rem' }, color: 'secondary.main' }}
+          >
+            Meet the founders
           </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 500, mx: 'auto', mt: 2 }}>
+          <Typography
+            variant="body1"
+            color="text.secondary"
+            sx={{ maxWidth: 500, mx: 'auto', mt: 2 }}
+          >
             A unique blend of professional playing expertise and deep coaching experience.
           </Typography>
         </Box>
 
-        {/* Coach cards */}
-        <Grid container spacing={4} sx={{ mb: 6 }}>
-          {COACHES.map((coach) => (
-            <Grid key={coach.name} size={{ xs: 12, md: 6 }}>
-              <Card
-                sx={{
-                  height: '100%',
-                  border: '1px solid',
-                  borderColor: 'divider',
-                  overflow: 'hidden',
-                }}
-              >
-                {/* Card header band */}
-                <Box
-                  sx={{
-                    bgcolor: coach.bgColor,
-                    px: 3,
-                    py: 3,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 2.5,
-                  }}
-                >
-                  <Avatar
-                    sx={{
-                      width: 64,
-                      height: 64,
-                      bgcolor: coach.accentColor,
-                      border: '2px solid rgba(255,255,255,0.2)',
-                      fontFamily: '"Bebas Neue", sans-serif',
-                      fontSize: '1.5rem',
-                      letterSpacing: '0.05em',
-                      color: '#fff',
-                    }}
-                  >
-                    {coach.initials}
-                  </Avatar>
-                  <Box>
-                    <Typography
-                      variant="h5"
-                      sx={{ color: '#fff', fontSize: '1.2rem', mb: 0.3 }}
-                    >
-                      {coach.name}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.82rem' }}
-                    >
-                      {coach.role}
-                    </Typography>
-                  </Box>
-                </Box>
-
-                <CardContent sx={{ p: 3 }}>
-                  {/* Credentials */}
-                  <Stack spacing={0.8} sx={{ mb: 2.5 }}>
-                    {coach.credentials.map((cred) => (
-                      <Box key={cred} sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                        <Box
-                          sx={{
-                            width: 6,
-                            height: 6,
-                            borderRadius: '50%',
-                            bgcolor: 'primary.main',
-                            flexShrink: 0,
-                          }}
-                        />
-                        <Typography variant="body2" sx={{ color: 'primary.main', fontWeight: 600, fontSize: '0.82rem' }}>
-                          {cred}
-                        </Typography>
-                      </Box>
-                    ))}
-                  </Stack>
-
-                  <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.75, mb: 2.5 }}>
-                    {coach.bio}
-                  </Typography>
-
-                  {/* Skill tags */}
-                  <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-                    {coach.tags.map((tag) => (
-                      <Chip
-                        key={tag}
-                        label={tag}
-                        size="small"
-                        sx={{
-                          bgcolor: 'rgba(29,110,74,0.08)',
-                          color: 'primary.main',
-                          fontSize: '0.7rem',
-                          fontWeight: 600,
-                        }}
-                      />
-                    ))}
-                  </Stack>
-                </CardContent>
-              </Card>
+        <Grid container spacing={4} sx={{ mb: { xs: 10, md: 14 } }}>
+          {founders.map((coach) => (
+            <Grid size={{ xs: 12, md: 6 }} key={coach.id}>
+              <CoachCard coach={coach} />
             </Grid>
           ))}
         </Grid>
+      </Container>
 
-        {/* Trust stats */}
+      {/* ── MEET THE COACHES ── */}
+      <Container maxWidth="lg">
+        <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 8 } }}>
+          <Typography variant="overline" color="primary" sx={{ display: 'block', mb: 1.5 }}>
+            The coaching team
+          </Typography>
+          <Typography
+            variant="h2"
+            sx={{ fontSize: { xs: '2.8rem', md: '3.8rem' }, color: 'secondary.main' }}
+          >
+            Meet the coaches
+          </Typography>
+          <Typography
+            variant="body1"
+            color="text.secondary"
+            sx={{ maxWidth: 500, mx: 'auto', mt: 2 }}
+          >
+            Our team of dedicated coaches bringing specialist skills to every session.
+          </Typography>
+        </Box>
+      </Container>
+
+      {/* Swiper */}
+      {assistantCoaches.length > 0 && (
+        <Box sx={{ overflow: 'hidden', mb: 8, position: 'relative' }}>
+
+          <IconButton
+            className="coach-prev"
+            sx={{
+              position: 'absolute',
+              left: { xs: 8, md: 24 },
+              top: '45%',
+              transform: 'translateY(-50%)',
+              zIndex: 10,
+              bgcolor: 'primary.main',
+              color: '#fff',
+              width: 44,
+              height: 44,
+              '&:hover': { bgcolor: 'primary.dark' },
+              '&.swiper-button-disabled': { opacity: 0.3, pointerEvents: 'none' },
+            }}
+          >
+            <ArrowBackIosNewIcon fontSize="small" />
+          </IconButton>
+
+          <IconButton
+            className="coach-next"
+            sx={{
+              position: 'absolute',
+              right: { xs: 8, md: 24 },
+              top: '45%',
+              transform: 'translateY(-50%)',
+              zIndex: 10,
+              bgcolor: 'primary.main',
+              color: '#fff',
+              width: 44,
+              height: 44,
+              '&:hover': { bgcolor: 'primary.dark' },
+              '&.swiper-button-disabled': { opacity: 0.3, pointerEvents: 'none' },
+            }}
+          >
+            <ArrowForwardIosIcon fontSize="small" />
+          </IconButton>
+
+<Swiper
+  modules={[Navigation, Pagination, Autoplay]}
+  navigation={{
+    prevEl: '.coach-prev',
+    nextEl: '.coach-next',
+  }}
+  pagination={{ clickable: true }}
+  autoplay={{
+    delay: 5000,
+    disableOnInteraction: false,
+  }}
+  loop={assistantCoaches.length > 3}
+  spaceBetween={20}
+  centeredSlides={false}
+  initialSlide={0}
+  slidesPerView={1.2}
+  breakpoints={{
+    600: { slidesPerView: 1.5 },
+    900: { slidesPerView: 2.2 },
+    1200: { slidesPerView: 2.2 },
+  }}
+  style={{ paddingBottom: '50px', paddingLeft: '16px', paddingRight: '16px', alignItems: 'stretch' }}
+>
+    {assistantCoaches.map((coach) => (
+    <SwiperSlide key={coach.id} style={{ height: 'auto' }}>
+      <CoachCard coach={coach} />
+    </SwiperSlide>
+  ))}
+</Swiper>
+
+        </Box>
+      )}
+
+      {/* ── TRUST STATS ── */}
+      <Container maxWidth="lg">
         <Box
           sx={{
             display: 'flex',
@@ -187,6 +326,7 @@ export default function CoachesSection() {
           ))}
         </Box>
       </Container>
+
     </Box>
   )
 }

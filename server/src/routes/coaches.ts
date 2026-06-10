@@ -6,11 +6,10 @@ const router = Router()
 router.get('/coaches', async (_req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM coaches')
-
     res.json(rows)
-  } catch (error) {
-    console.error(error)
-    res.status(500).json({ error: 'Failed to fetch coaches' })
+  } catch (error: any) {
+    console.error('DB ERROR:', error.message)
+    res.status(500).json({ error: error.message })
   }
 })
 

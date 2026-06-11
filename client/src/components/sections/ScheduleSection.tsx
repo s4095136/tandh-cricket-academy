@@ -1,101 +1,45 @@
 import React, { useState } from 'react'
 import {
   Box, Container, Typography, Grid, Card, CardContent,
-  Chip, Button, Stack, Tab, Tabs,
+  Chip, Stack, Button, Tab, Tabs,
 } from '@mui/material'
-import LocationOnIcon from '@mui/icons-material/LocationOn'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
-import PeopleIcon from '@mui/icons-material/People'
+import PersonIcon from '@mui/icons-material/Person'
+import LocationOnIcon from '@mui/icons-material/LocationOn'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 
-interface Session {
-  day: string
-  month: string
+interface Squad {
   title: string
-  type: string
+  day: 'Friday' | 'Saturday' | 'Sunday'
   time: string
-  venue: string
-  ages: string
-  spots: number
-  totalSpots: number
-  price: string
+  coaches: string
+  dates: string
+  location: string
 }
 
-const SESSIONS: Session[] = [
-  {
-    day: '12', month: 'May',
-    title: 'Junior Holiday Clinic',
-    type: 'Holiday Clinic',
-    time: '9:00 AM – 3:00 PM',
-    venue: 'Elsternwick Park, Melbourne',
-    ages: 'Ages 8–14',
-    spots: 8,
-    totalSpots: 20,
-    price: '$95',
-  },
-  {
-    day: '17', month: 'May',
-    title: 'Elite Batting Masterclass',
-    type: 'Advanced Training',
-    time: '10:00 AM – 1:00 PM',
-    venue: 'MSAC, Albert Park',
-    ages: 'Ages 15+',
-    spots: 4,
-    totalSpots: 12,
-    price: '$75',
-  },
-  {
-    day: '24', month: 'May',
-    title: 'Spin Bowling Clinic',
-    type: 'Skills Focus',
-    time: '2:00 PM – 5:00 PM',
-    venue: 'Caulfield Park',
-    ages: 'All ages',
-    spots: 0,
-    totalSpots: 16,
-    price: '$65',
-  },
-  {
-    day: '31', month: 'May',
-    title: 'Beginner Cricket Program',
-    type: 'Beginner',
-    time: '9:00 AM – 11:00 AM',
-    venue: 'Elsternwick Park, Melbourne',
-    ages: 'Ages 6–12',
-    spots: 12,
-    totalSpots: 20,
-    price: '$45',
-  },
-  {
-    day: '7', month: 'Jun',
-    title: 'Representative Squad Camp',
-    type: 'Elite / Rep',
-    time: '8:00 AM – 4:00 PM',
-    venue: 'Junction Oval, Melbourne',
-    ages: 'Ages 14+',
-    spots: 6,
-    totalSpots: 16,
-    price: '$120',
-  },
-  {
-    day: '14', month: 'Jun',
-    title: 'Fast Bowling Masterclass',
-    type: 'Skills Focus',
-    time: '10:00 AM – 1:00 PM',
-    venue: 'MSAC, Albert Park',
-    ages: 'Ages 12+',
-    spots: 10,
-    totalSpots: 14,
-    price: '$75',
-  },
+const LOCATION = 'Hoppers Crossing Cricket Store'
+
+const SQUADS: Squad[] = [
+  { title: 'Open Team White',  day: 'Saturday', time: '6:45pm – 9:00pm', coaches: 'Hanni, Alan, Tom & Simon',              dates: '2 May – 30 Aug 2026', location: LOCATION },
+  { title: 'Open Team Navy',   day: 'Saturday', time: '4:45pm – 7:00pm', coaches: 'Hanni, Alan, Simon, Ali & Aiman',       dates: '2 May – 30 Aug 2026', location: LOCATION },
+  { title: '16&U White',       day: 'Saturday', time: '2:45pm – 5:00pm', coaches: 'Hanni, Alan, Aiman & Hashim',           dates: '2 May – 30 Aug 2026', location: LOCATION },
+  { title: '16&U Navy',        day: 'Sunday',   time: '5:45pm – 8:00pm', coaches: 'Hanni, Daksh, Ritin & Krish',           dates: '3 May – 31 Aug 2026', location: LOCATION },
+  { title: '14&U Navy',        day: 'Sunday',   time: '3:45pm – 6:00pm', coaches: 'Hanni, Aiman & Ritwik',                 dates: '3 May – 31 Aug 2026', location: LOCATION },
+  { title: '14&U',             day: 'Sunday',   time: '1:45pm – 4:00pm', coaches: 'Hanni, Aiman & Ritwik',                 dates: '3 May – 31 Aug 2026', location: LOCATION },
+  { title: 'Special Group',    day: 'Friday',   time: '6:15pm – 8:30pm', coaches: 'Hanni, Aiman, Ali Khan & Ceriac',       dates: '1 May – 29 Aug 2026', location: LOCATION },
+  { title: '10&U',             day: 'Friday',   time: '4:45pm – 6:30pm', coaches: 'Hanni, Richard, Ritwik, Rehit & Humza', dates: '1 May – 29 Aug 2026', location: LOCATION },
 ]
 
-const ALL_TYPES = ['All', 'Holiday Clinic', 'Advanced Training', 'Skills Focus', 'Beginner', 'Elite / Rep']
+const DAYS = ['All', 'Friday', 'Saturday', 'Sunday'] as const
 
-function SessionCard({ session }: { session: Session }) {
-  const isFull = session.spots === 0
-  const isLow = session.spots > 0 && session.spots <= 4
+const DAY_COLOR: Record<string, { bg: string; text: string }> = {
+  Friday:   { bg: '#ede7f6', text: '#5c35a0' },
+  Saturday: { bg: '#e3f0fb', text: '#032053' },
+  Sunday:   { bg: '#e8f5e9', text: '#1a6e3c' },
+}
 
+function SquadCard({ squad }: { squad: Squad }) {
+  const col = DAY_COLOR[squad.day]
   return (
     <Card
       sx={{
@@ -112,123 +56,64 @@ function SessionCard({ session }: { session: Session }) {
       }}
     >
       <CardContent sx={{ p: 3, flexGrow: 1 }}>
-        {/* Date + status */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-          <Box
+          <Typography
             sx={{
-              width: 48,
-              height: 52,
-              borderRadius: 2,
-              bgcolor: isFull ? 'grey.200' : 'primary.dark',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
+              fontFamily: '"Bebas Neue", sans-serif',
+              fontSize: '1.35rem',
+              letterSpacing: '0.04em',
+              color: 'text.primary',
+              lineHeight: 1.2,
+              flex: 1,
+              pr: 1,
             }}
           >
-            <Typography
-              sx={{
-                fontFamily: '"Bebas Neue", sans-serif',
-                fontSize: '1.4rem',
-                color: isFull ? 'text.secondary' : '#fff',
-                lineHeight: 1,
-              }}
-            >
-              {session.day}
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: '0.65rem',
-                color: isFull ? 'text.secondary' : 'rgba(255,255,255,0.7)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
-              }}
-            >
-              {session.month}
-            </Typography>
-          </Box>
-
+            {squad.title}
+          </Typography>
           <Chip
-            label={isFull ? 'Full' : isLow ? `${session.spots} left` : 'Open'}
+            label={squad.day}
             size="small"
-            sx={{
-              bgcolor: isFull
-                ? 'error.light'
-                : isLow
-                ? 'warning.light'
-                : 'success.light',
-              color: isFull ? 'error.dark' : isLow ? 'warning.dark' : 'success.dark',
-              fontWeight: 700,
-              fontSize: '0.68rem',
-            }}
+            sx={{ bgcolor: col.bg, color: col.text, fontWeight: 700, fontSize: '0.68rem', flexShrink: 0 }}
           />
         </Box>
-
-        {/* Type tag */}
-        <Chip
-          label={session.type}
-          size="small"
-          sx={{
-            mb: 1.5,
-            bgcolor: 'rgba(29,110,74,0.07)',
-            color: 'primary.main',
-            fontSize: '0.68rem',
-            fontWeight: 600,
-          }}
-        />
-
-        <Typography variant="h6" sx={{ fontSize: '1rem', mb: 2 }}>
-          {session.title}
-        </Typography>
 
         <Stack spacing={1}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <AccessTimeIcon sx={{ fontSize: 15, color: 'text.secondary' }} />
-            <Typography variant="caption" color="text.secondary">{session.time}</Typography>
+            <Typography variant="caption" color="text.secondary">{squad.time}</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <LocationOnIcon sx={{ fontSize: 15, color: 'text.secondary' }} />
-            <Typography variant="caption" color="text.secondary">{session.venue}</Typography>
+            <Typography variant="caption" color="text.secondary">{squad.location}</Typography>
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <PeopleIcon sx={{ fontSize: 15, color: 'text.secondary' }} />
-            <Typography variant="caption" color="text.secondary">{session.ages}</Typography>
+          <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+            <PersonIcon sx={{ fontSize: 15, color: 'text.secondary', mt: '1px' }} />
+            <Typography variant="caption" color="text.secondary" sx={{ lineHeight: 1.5 }}>
+              {squad.coaches}
+            </Typography>
           </Box>
         </Stack>
       </CardContent>
 
-      {/* Footer */}
       <Box
         sx={{
-          px: 3,
-          py: 2,
+          px: 3, py: 1.5,
+          borderTop: '1px solid',
+          borderColor: 'divider',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          borderTop: '1px solid',
-          borderColor: 'divider',
         }}
       >
-        <Typography variant="h6" color="primary" sx={{ fontWeight: 700 }}>
-          {session.price}
-        </Typography>
+        <Typography variant="caption" color="text.secondary">{squad.dates}</Typography>
         <Button
-          variant={isFull ? 'outlined' : 'contained'}
+          variant="contained"
           color="primary"
           size="small"
           href="#contact"
-          disabled={false}
-          sx={{
-            fontSize: '0.78rem',
-            px: 2,
-            py: 0.8,
-            ...(isFull && {
-              borderColor: 'divider',
-              color: 'text.secondary',
-            }),
-          }}
+          sx={{ fontSize: '0.75rem', px: 2, py: 0.7 }}
         >
-          {isFull ? 'Waitlist' : 'Book now'}
+          Enquire
         </Button>
       </Box>
     </Card>
@@ -238,10 +123,9 @@ function SessionCard({ session }: { session: Session }) {
 export default function ScheduleSection() {
   const [activeTab, setActiveTab] = useState(0)
 
-  const filteredSessions =
-    activeTab === 0
-      ? SESSIONS
-      : SESSIONS.filter((s) => s.type === ALL_TYPES[activeTab])
+  const filtered = activeTab === 0
+    ? SQUADS
+    : SQUADS.filter((s) => s.day === DAYS[activeTab])
 
   return (
     <Box
@@ -250,14 +134,13 @@ export default function ScheduleSection() {
       sx={{ py: { xs: 8, md: 12 }, bgcolor: 'background.paper' }}
     >
       <Container maxWidth="lg">
-        {/* Header */}
         <Box sx={{ mb: { xs: 5, md: 6 } }}>
           <Typography variant="overline" color="primary" sx={{ display: 'block', mb: 1.5 }}>
-            Upcoming sessions
+            2026 Season · May – August
           </Typography>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 2 }}>
             <Typography variant="h2" sx={{ fontSize: { xs: '2.8rem', md: '3.8rem' }, color: 'secondary.main' }}>
-              Book your spot
+              Weekly schedule
             </Typography>
             <Button
               variant="text"
@@ -266,17 +149,14 @@ export default function ScheduleSection() {
               href="#contact"
               sx={{ fontWeight: 600 }}
             >
-              View all sessions
+              Get in touch
             </Button>
           </Box>
         </Box>
 
-        {/* Filter tabs */}
         <Tabs
           value={activeTab}
           onChange={(_, v) => setActiveTab(v)}
-          variant="scrollable"
-          scrollButtons="auto"
           sx={{
             mb: 4,
             '& .MuiTabs-indicator': { bgcolor: 'primary.main' },
@@ -284,28 +164,15 @@ export default function ScheduleSection() {
             '& .MuiTab-root': { textTransform: 'none', fontSize: '0.875rem', minWidth: 'auto', px: 2 },
           }}
         >
-          {ALL_TYPES.map((type) => (
-            <Tab key={type} label={type} />
-          ))}
+          {DAYS.map((d) => <Tab key={d} label={d} />)}
         </Tabs>
 
-        {/* Session grid */}
         <Grid container spacing={3}>
-          {filteredSessions.map((session, i) => (
-            <Grid key={i} size={{ xs: 12, sm: 6, lg: 4 }}>
-              <SessionCard session={session} />
+          {filtered.map((squad) => (
+            <Grid key={squad.title} size={{ xs: 12, sm: 6, lg: 4 }}>
+              <SquadCard squad={squad} />
             </Grid>
           ))}
-          {filteredSessions.length === 0 && (
-            <Grid size={{ xs: 12 }}>
-              <Box sx={{ textAlign: 'center', py: 8 }}>
-                <Typography color="text.secondary">No sessions in this category right now.</Typography>
-                <Button variant="text" color="primary" href="#contact" sx={{ mt: 1 }}>
-                  Contact us to arrange one
-                </Button>
-              </Box>
-            </Grid>
-          )}
         </Grid>
       </Container>
     </Box>

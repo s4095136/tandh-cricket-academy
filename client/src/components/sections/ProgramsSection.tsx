@@ -4,49 +4,83 @@ import {
   Chip, Stack, Button,
 } from '@mui/material'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
-import GroupsIcon from '@mui/icons-material/Groups'
-import StarIcon from '@mui/icons-material/Star'
-import WbSunnyIcon from '@mui/icons-material/WbSunny'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
+import PersonIcon from '@mui/icons-material/Person'
+import LocationOnIcon from '@mui/icons-material/LocationOn'
 
-const PROGRAMS = [
+const SQUADS = [
   {
-    icon: <GroupsIcon sx={{ fontSize: 28 }} />,
-    tag: 'Ages 6–12',
-    title: 'Beginner Programs',
-    description:
-      'Fun, structured sessions for young newcomers. We build confidence, fundamental technique and a genuine love for cricket in a supportive group setting.',
-    highlights: ['Safe, encouraging environment', 'Bat, bowl & field basics', 'Small group sizes', 'No experience needed'],
+    title: 'Open Team White',
+    day: 'Saturday',
+    time: '6:45pm – 9:00pm',
+    coaches: 'Hanni, Alan, Tom & Simon',
+    dates: '2 May – 30 Aug 2026',
     accent: false,
   },
   {
-    icon: <StarIcon sx={{ fontSize: 28 }} />,
-    tag: 'Ages 13–17',
-    title: 'Advanced Training',
-    description:
-      'Competitive preparation for club-level players looking to take their game seriously. Focus on technique refinement, match strategy and physical conditioning.',
-    highlights: ['Club & representative prep', 'Video analysis available', 'Strength & conditioning', 'Mental game coaching'],
+    title: 'Open Team Navy',
+    day: 'Saturday',
+    time: '4:45pm – 7:00pm',
+    coaches: 'Hanni, Alan, Simon, Ali & Aiman',
+    dates: '2 May – 30 Aug 2026',
+    accent: false,
+  },
+  {
+    title: '16&U White',
+    day: 'Saturday',
+    time: '2:45pm – 5:00pm',
+    coaches: 'Hanni, Alan, Ayman & Hashim',
+    dates: '2 May – 30 Aug 2026',
+    accent: false,
+  },
+  {
+    title: '16&U Navy',
+    day: 'Sunday',
+    time: '5:45pm – 8:00pm',
+    coaches: 'Hanni, Daksh, Ritin & Krish',
+    dates: '3 May – 31 Aug 2026',
+    accent: false,
+  },
+  {
+    title: '14&U Navy',
+    day: 'Sunday',
+    time: '3:45pm – 6:00pm',
+    coaches: 'Hanni, Aiman & Ritwik',
+    dates: '3 May – 31 Aug 2026',
     accent: true,
   },
   {
-    icon: <EmojiEventsIcon sx={{ fontSize: 28 }} />,
-    tag: 'Ages 15+',
-    title: 'Elite / Representative',
-    description:
-      'State-level pathway coaching designed for players with serious ambitions. Tom Rogers brings professional BBL and Shield experience to every session.',
-    highlights: ['BBL-level coaching insight', 'Pathway to state selection', 'Individual programs', 'Professional technique'],
+    title: '14&U',
+    day: 'Sunday',
+    time: '1:45pm – 4:00pm',
+    coaches: 'Hanni, Aiman & Ritwik',
+    dates: '3 May – 31 Aug 2026',
     accent: false,
   },
   {
-    icon: <WbSunnyIcon sx={{ fontSize: 28 }} />,
-    tag: 'All ages',
-    title: 'Holiday Clinics',
-    description:
-      'Full-day school holiday programs run across Greater Melbourne. The perfect way to keep kids active, develop skills and make new cricket friends.',
-    highlights: ['Full-day sessions', 'Multiple Melbourne venues', 'All skill levels welcome', 'Morning & afternoon programs'],
+    title: 'Special Group',
+    day: 'Friday',
+    time: '6:15pm – 8:30pm',
+    coaches: 'Hanni, Aiman, Ali Khan & Ceriac',
+    dates: '1 May – 29 Aug 2026',
+    accent: false,
+  },
+  {
+    title: '10&U',
+    day: 'Friday',
+    time: '4:45pm – 6:30pm',
+    coaches: 'Hanni, Richard, Ritwik, Rehit & Humza',
+    dates: '1 May – 29 Aug 2026',
     accent: false,
   },
 ]
+
+const DAY_COLOR: Record<string, string> = {
+  Friday: '#5c35a0',
+  Saturday: '#032053',
+  Sunday: '#1a6e3c',
+}
 
 export default function ProgramsSection() {
   const [hovered, setHovered] = useState<number | null>(null)
@@ -61,24 +95,25 @@ export default function ProgramsSection() {
         {/* Header */}
         <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 8 } }}>
           <Typography variant="overline" color="primary" sx={{ display: 'block', mb: 1.5 }}>
-            What we offer
+            2026 Training Squads
           </Typography>
           <Typography variant="h2" sx={{ fontSize: { xs: '2.8rem', md: '3.8rem' }, color: 'secondary.main' }}>
-            Programs for every level
+            Find your squad
           </Typography>
           <Typography
             variant="body1"
             color="text.secondary"
             sx={{ maxWidth: 520, mx: 'auto', mt: 2 }}
           >
-            From first-time players to elite representatives — we have a pathway designed for your goals.
+            T&H Cricket runs 8 squads across Friday, Saturday and Sunday — from 10&U through to Open.
+            Season runs May to August 2026.
           </Typography>
         </Box>
 
         {/* Cards */}
         <Grid container spacing={3}>
-          {PROGRAMS.map((program, i) => (
-            <Grid key={program.title} size={{ xs: 12, sm: 6, lg: 3 }}>
+          {SQUADS.map((squad, i) => (
+            <Grid key={squad.title} size={{ xs: 12, sm: 6, lg: 3 }}>
               <Card
                 onMouseEnter={() => setHovered(i)}
                 onMouseLeave={() => setHovered(null)}
@@ -87,112 +122,71 @@ export default function ProgramsSection() {
                   display: 'flex',
                   flexDirection: 'column',
                   border: '1px solid',
-                  borderColor: program.accent ? 'primary.main' : 'divider',
-                  bgcolor: program.accent ? 'primary.dark' : 'background.default',
+                  borderColor: squad.accent ? 'primary.main' : 'divider',
+                  bgcolor: squad.accent ? 'primary.dark' : 'background.default',
                   position: 'relative',
                   overflow: 'visible',
                   transition: 'transform 0.25s ease, box-shadow 0.25s ease',
                   transform: hovered === i ? 'translateY(-6px)' : 'translateY(0)',
                   boxShadow: hovered === i
                     ? '0 12px 40px rgba(0,0,0,0.14)'
-                    : program.accent
+                    : squad.accent
                     ? '0 4px 20px rgba(29,110,74,0.25)'
                     : '0 2px 8px rgba(0,0,0,0.06)',
                 }}
               >
-                {program.accent && (
-                  <Chip
-                    label="Most popular"
-                    size="small"
-                    sx={{
-                      position: 'absolute',
-                      top: -12,
-                      left: '50%',
-                      transform: 'translateX(-50%)',
-                      bgcolor: 'secondary.main',
-                      color: 'primary.dark',
-                      fontWeight: 700,
-                      fontSize: '0.68rem',
-                    }}
-                  />
-                )}
                 <CardContent sx={{ p: 3, flexGrow: 1 }}>
-                  {/* Icon */}
-                  <Box
-                    sx={{
-                      width: 52,
-                      height: 52,
-                      borderRadius: 2.5,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      bgcolor: program.accent ? 'rgba(77,214,138,0.15)' : 'rgba(29,110,74,0.08)',
-                      color: program.accent ? 'primary.light' : 'primary.main',
-                      mb: 2.5,
-                    }}
-                  >
-                    {program.icon}
-                  </Box>
-
-                  {/* Age tag */}
+                  {/* Day badge */}
                   <Chip
-                    label={program.tag}
+                    label={squad.day}
                     size="small"
                     sx={{
-                      mb: 1.5,
-                      bgcolor: program.accent ? 'rgba(77,214,138,0.1)' : 'rgba(29,110,74,0.07)',
-                      color: program.accent ? 'primary.light' : 'primary.main',
+                      mb: 2,
+                      bgcolor: DAY_COLOR[squad.day],
+                      color: '#fff',
+                      fontWeight: 700,
                       fontSize: '0.7rem',
-                      fontWeight: 600,
                     }}
                   />
 
                   <Typography
                     variant="h5"
                     sx={{
-                      fontSize: '1.1rem',
-                      mb: 1.5,
-                      color: program.accent ? '#fff' : 'text.primary',
-                    }}
-                  >
-                    {program.title}
-                  </Typography>
-
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: program.accent ? 'rgba(255,255,255,0.65)' : 'text.secondary',
+                      fontSize: '1.15rem',
                       mb: 2.5,
-                      lineHeight: 1.7,
+                      color: squad.accent ? '#fff' : 'text.primary',
+                      fontFamily: '"Bebas Neue", sans-serif',
+                      letterSpacing: '0.04em',
                     }}
                   >
-                    {program.description}
+                    {squad.title}
                   </Typography>
 
-                  {/* Highlights */}
-                  <Stack spacing={0.8}>
-                    {program.highlights.map((h) => (
-                      <Box key={h} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Box
-                          sx={{
-                            width: 5,
-                            height: 5,
-                            borderRadius: '50%',
-                            bgcolor: program.accent ? 'primary.light' : 'primary.main',
-                            flexShrink: 0,
-                          }}
-                        />
-                        <Typography
-                          variant="caption"
-                          sx={{
-                            color: program.accent ? 'rgba(255,255,255,0.6)' : 'text.secondary',
-                            fontSize: '0.78rem',
-                          }}
-                        >
-                          {h}
-                        </Typography>
-                      </Box>
-                    ))}
+                  <Stack spacing={1.2}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <AccessTimeIcon sx={{ fontSize: 15, color: squad.accent ? 'rgba(255,255,255,0.5)' : 'text.secondary' }} />
+                      <Typography variant="caption" sx={{ color: squad.accent ? 'rgba(255,255,255,0.75)' : 'text.secondary' }}>
+                        {squad.time}
+                      </Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <LocationOnIcon sx={{ fontSize: 15, color: squad.accent ? 'rgba(255,255,255,0.5)' : 'text.secondary' }} />
+                      <Typography variant="caption" sx={{ color: squad.accent ? 'rgba(255,255,255,0.75)' : 'text.secondary' }}>
+                        Hoppers Crossing Cricket Store
+                      </Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <CalendarTodayIcon sx={{ fontSize: 15, color: squad.accent ? 'rgba(255,255,255,0.5)' : 'text.secondary' }} />
+                      <Typography variant="caption" sx={{ color: squad.accent ? 'rgba(255,255,255,0.75)' : 'text.secondary' }}>
+                        {squad.dates}
+                      </Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+                      <PersonIcon sx={{ fontSize: 15, mt: '1px', color: squad.accent ? 'rgba(255,255,255,0.5)' : 'text.secondary' }} />
+                      <Typography variant="caption" sx={{ color: squad.accent ? 'rgba(255,255,255,0.75)' : 'text.secondary', lineHeight: 1.5 }}>
+                        {squad.coaches}
+                      </Typography>
+                    </Box>
                   </Stack>
                 </CardContent>
               </Card>
@@ -209,7 +203,7 @@ export default function ProgramsSection() {
             endIcon={<ArrowForwardIcon />}
             href="#contact"
           >
-            Enquire about a program
+            Enquire about a squad
           </Button>
         </Box>
       </Container>

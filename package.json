@@ -8,6 +8,7 @@
     "server:dev": "cd server && npm run dev"
   },
   "dependencies": {
+    "@types/nodemailer": "^8.0.1",
     "dotenv": "^17.4.2",
     "mysql2": "^3.22.5",
     "nodemailer": "^8.0.11"

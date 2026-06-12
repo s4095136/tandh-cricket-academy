@@ -111,7 +111,7 @@ export default function ProgramsSection() {
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL ?? 'http://localhost:4000'}/api/contact`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL ?? 'http://localhost:4000'}/api/enquiries`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...form, program: program.label }),

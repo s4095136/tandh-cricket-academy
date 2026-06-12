@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Box, Container, Typography, Button, Stack, Chip } from '@mui/material'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutlined'
-
+import Avatar from '@mui/material/Avatar'
 const ROTATING_WORDS = [
   'developing skills.',
   'dedicated coaches.',
@@ -160,16 +160,22 @@ export default function HeroSection() {
           </Stack>
 
           {/* Stats row */}
-          <Box
-            sx={{
-              display: 'flex',
-              gap: { xs: 3, md: 5 },
-              flexWrap: 'wrap',
-              pt: 4,
-              borderTop: '1px solid rgba(255,255,255,0.1)',
-            }}
-          >
-            {STATS.map((stat) => (
+<Box
+  sx={{
+    width: '500px',
+    height: '1px',
+    bgcolor: 'rgba(255,255,255,0.2)',
+    mb: 4,
+  }}
+/>
+
+<Box
+  sx={{
+    display: 'flex',
+    gap: { xs: 3, md: 5 },
+    flexWrap: 'wrap',
+  }}
+>            {STATS.map((stat) => (
               <Box key={stat.label}>
                 <Typography
                   sx={{
@@ -192,7 +198,147 @@ export default function HeroSection() {
             ))}
           </Box>
         </Box>
-      </Container>
+  </Container>
+<Box
+  sx={{
+    display: { xs: 'none', lg: 'flex' },
+    position: 'absolute',
+    right: 60,
+    top: '48%',
+    transform: 'translateY(-50%) scale(0.85)',
+    transformOrigin: 'center',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 5,
+  }}
+>  {/* Founders */}
+  <Typography
+    sx={{
+      color: '#f5c842',
+      fontWeight: 700,
+      fontSize: '0.8rem',
+      letterSpacing: '0.1em',
+    }}
+  >
+    FOUNDERS & HEAD COACHES
+  </Typography>
+
+<Box sx={{ display: 'flex', gap: 5 }}>
+  {[
+    { name: 'Tom Rogers', image: '/images/coaches/tom-rogers.png' },
+    { name: 'Hanni Harb', image: '/images/coaches/hanni-harb.png' },
+  ].map((coach) => (
+    <Box key={coach.name} sx={{ textAlign: 'center' }}>
+      <Avatar
+        src={`http://localhost:4000${coach.image}`}
+        sx={{
+          width: 150,
+          height: 150,
+          border: '4px solid #f5c842',
+          mb: 1,
+        }}
+      />
+      <Typography sx={{ color: '#fff', fontWeight: 600 }}>
+        {coach.name}
+      </Typography>
+    </Box>
+  ))}
+</Box>
+
+  {/* Lead Coaches */}
+  <Typography
+    sx={{
+      color: '#84f542',
+      fontWeight: 700,
+      fontSize: '0.8rem',
+      letterSpacing: '0.1em',
+    }}
+  >
+    LEAD COACHES
+  </Typography>
+
+  <Box sx={{ display: 'flex', gap: 5 }}>
+    {[
+      { name: 'Aiman Nadeem', image: '/images/coaches/aiman.png' },
+      { name: 'Alan Chandwick', image: '/images/coaches/alan.png' },
+    ].map((coach) => (
+      <Box key={coach.name} sx={{ textAlign: 'center' }}>
+        <Avatar
+          src={coach.image}
+          sx={{
+            width: 150,
+            height: 150,
+            border: '4px solid #84f542',
+            mb: 1,
+          }}
+        />
+        <Typography sx={{ color: '#fff', fontWeight: 600 }}>
+          {coach.name}
+        </Typography>
+      </Box>
+    ))}
+  </Box>
+
+  {/* Assistant Coaches */}
+  <Typography
+    sx={{
+      color: 'rgba(250, 42, 0, 0.85)',
+      fontWeight: 700,
+      fontSize: '0.8rem',
+      letterSpacing: '0.1em',
+    }}
+  >
+    ASSISTANT COACHES
+  </Typography>
+
+<Box
+  sx={{
+    display: 'flex',
+    gap: 2,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+  }}
+>
+      {[
+      { name: 'Ali Khan', image: '/images/coaches/ali-khan.png' },
+      { name: 'Aayan Nadeem', image: '/images/coaches/aayan.png' },
+      { name: 'Ritin Raman', image: '/images/coaches/ritin.png' },
+      { name: 'Daksh Kumar', image: '/images/coaches/daksh.png' },
+      { name: 'Krish Kumar', image: '/images/coaches/krish.png' },
+    ].map((coach) => (
+<Box
+  key={coach.name}
+  sx={{
+    width: 150,
+    textAlign: 'center',
+  }}
+>
+  <Avatar
+    src={`http://localhost:4000${coach.image}`}
+    sx={{
+      width: 150,
+      height: 150,
+      border: '3px solid rgba(250, 42, 0, 0.7)',
+      mb: 1,
+    }}
+  />
+
+  <Typography
+    sx={{
+      color: '#fff',
+      fontSize: '0.8rem',
+      fontWeight: 600,
+      width: '100%',
+      textAlign: 'center',
+    }}
+  >
+    {coach.name}
+  </Typography>
+</Box>
+    ))}
+  </Box>
+</Box>
+
 
       {/* Bottom gradient fade */}
       <Box
@@ -207,5 +353,6 @@ export default function HeroSection() {
         }}
       />
     </Box>
+    
   )
 }

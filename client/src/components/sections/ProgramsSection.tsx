@@ -1,212 +1,355 @@
 import React, { useState } from 'react'
 import {
-  Box, Container, Typography, Grid, Card, CardContent,
-  Chip, Stack, Button,
+  Box, Container, Typography, Stack, Button, Chip,
+  Dialog, DialogTitle, DialogContent, DialogActions,
+  TextField, MenuItem, IconButton, Grid,
 } from '@mui/material'
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 import PersonIcon from '@mui/icons-material/Person'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import CloseIcon from '@mui/icons-material/Close'
 
-const SQUADS = [
+interface Program {
+  label: string
+  day: string
+  time: string
+  coaches: string
+  dates: string
+  squads: string[]
+}
+
+const PROGRAMS: Program[] = [
   {
-    title: 'Open Team White',
+    label: 'Open',
     day: 'Saturday',
-    time: '6:45pm – 9:00pm',
-    coaches: 'Hanni, Alan, Tom & Simon',
+    time: 'White: 6:45pm – 9:00pm · Navy: 4:45pm – 7:00pm',
+    coaches: 'Hanni, Alan, Tom, Simon & Aiman',
     dates: '2 May – 30 Aug 2026',
-    accent: false,
+    squads: ['Open Team White', 'Open Team Navy'],
   },
   {
-    title: 'Open Team Navy',
-    day: 'Saturday',
-    time: '4:45pm – 7:00pm',
-    coaches: 'Hanni, Alan, Simon, Ali & Aiman',
-    dates: '2 May – 30 Aug 2026',
-    accent: false,
+    label: '16s',
+    day: 'Saturday & Sunday',
+    time: 'White: 2:45pm – 5:00pm (Sat) · Navy: 5:45pm – 8:00pm (Sun)',
+    coaches: 'Hanni, Alan, Ayman, Hashim, Daksh, Ritin & Krish',
+    dates: '2 May – 31 Aug 2026',
+    squads: ['16&U White', '16&U Navy'],
   },
   {
-    title: '16&U White',
-    day: 'Saturday',
-    time: '2:45pm – 5:00pm',
-    coaches: 'Hanni, Alan, Ayman & Hashim',
-    dates: '2 May – 30 Aug 2026',
-    accent: false,
-  },
-  {
-    title: '16&U Navy',
+    label: '14s',
     day: 'Sunday',
-    time: '5:45pm – 8:00pm',
-    coaches: 'Hanni, Daksh, Ritin & Krish',
-    dates: '3 May – 31 Aug 2026',
-    accent: false,
-  },
-  {
-    title: '14&U Navy',
-    day: 'Sunday',
-    time: '3:45pm – 6:00pm',
+    time: 'Navy: 3:45pm – 6:00pm · 14&U: 1:45pm – 4:00pm',
     coaches: 'Hanni, Aiman & Ritwik',
     dates: '3 May – 31 Aug 2026',
-    accent: true,
+    squads: ['14&U Navy', '14&U'],
   },
   {
-    title: '14&U',
-    day: 'Sunday',
-    time: '1:45pm – 4:00pm',
-    coaches: 'Hanni, Aiman & Ritwik',
-    dates: '3 May – 31 Aug 2026',
-    accent: false,
-  },
-  {
-    title: 'Special Group',
+    label: '12s & Under',
     day: 'Friday',
     time: '6:15pm – 8:30pm',
     coaches: 'Hanni, Aiman, Ali Khan & Ceriac',
     dates: '1 May – 29 Aug 2026',
-    accent: false,
+    squads: ['Special Group'],
   },
   {
-    title: '10&U',
+    label: '10s',
     day: 'Friday',
     time: '4:45pm – 6:30pm',
     coaches: 'Hanni, Richard, Ritwik, Rehit & Humza',
     dates: '1 May – 29 Aug 2026',
-    accent: false,
+    squads: ['10&U'],
   },
 ]
 
-const DAY_COLOR: Record<string, string> = {
-  Friday: '#5c35a0',
-  Saturday: '#032053',
-  Sunday: '#1a6e3c',
+const DAY_COLOR: Record<string, { bg: string; text: string }> = {
+  Friday:              { bg: '#ede7f6', text: '#5c35a0' },
+  Saturday:            { bg: '#e3f0fb', text: '#032053' },
+  Sunday:              { bg: '#e8f5e9', text: '#1a6e3c' },
+  'Saturday & Sunday': { bg: '#e3f0fb', text: '#032053' },
+}
+
+const EMPTY_FORM = {
+  name: '',
+  email: '',
+  phone: '',
+  club: '',
+  battingHand: '',
+  bowlingHand: '',
+  bowlingType: '',
+  message: '',
 }
 
 export default function ProgramsSection() {
-  const [hovered, setHovered] = useState<number | null>(null)
+  const [selected, setSelected] = useState(0)
+  const [modalOpen, setModalOpen] = useState(false)
+  const [form, setForm] = useState(EMPTY_FORM)
+  const [loading, setLoading] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const program = PROGRAMS[selected]
+  const col = DAY_COLOR[program.day] ?? { bg: '#f0f0f0', text: '#333' }
+
+  const handleOpen = () => {
+    setSubmitted(false)
+    setError(null)
+    setForm(EMPTY_FORM)
+    setModalOpen(true)
+  }
+
+  const handleClose = () => {
+    setModalOpen(false)
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+  }
+
+  const handleSubmit = async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL ?? 'http://localhost:4000'}/api/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...form, program: program.label }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setError(data.message || 'Something went wrong. Please try again.')
+      } else {
+        setSubmitted(true)
+      }
+    } catch {
+      setError('Could not reach the server. Please email us at info@tandhcricket.com.au')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
-    <Box
-      id="programs"
-      component="section"
-      sx={{ py: { xs: 8, md: 12 }, bgcolor: 'background.paper' }}
-    >
+    <Box id="programs" component="section" sx={{ py: { xs: 8, md: 12 }, bgcolor: 'background.default' }}>
       <Container maxWidth="lg">
+
         {/* Header */}
-        <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 8 } }}>
-          <Typography variant="overline" color="primary" sx={{ display: 'block', mb: 1.5 }}>
-            2026 Training Squads
+        <Box sx={{ mb: { xs: 5, md: 6 } }}>
+          <Typography variant="overline" color="primary" sx={{ display: 'block', mb: 1 }}>
+            2026 Season · May – August
           </Typography>
           <Typography variant="h2" sx={{ fontSize: { xs: '2.8rem', md: '3.8rem' }, color: 'secondary.main' }}>
-            Find your squad
-          </Typography>
-          <Typography
-            variant="body1"
-            color="text.secondary"
-            sx={{ maxWidth: 520, mx: 'auto', mt: 2 }}
-          >
-            T&H Cricket runs 8 squads across Friday, Saturday and Sunday — from 10&U through to Open.
-            Season runs May to August 2026.
+            Programs
           </Typography>
         </Box>
 
-        {/* Cards */}
-        <Grid container spacing={3}>
-          {SQUADS.map((squad, i) => (
-            <Grid key={squad.title} size={{ xs: 12, sm: 6, lg: 3 }}>
-              <Card
-                onMouseEnter={() => setHovered(i)}
-                onMouseLeave={() => setHovered(null)}
+        {/* Main panel */}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', md: 'row' },
+            border: '1px solid',
+            borderColor: 'divider',
+            borderRadius: 3,
+            overflow: 'hidden',
+            bgcolor: 'background.paper',
+            boxShadow: '0 4px 32px rgba(0,0,0,0.07)',
+            minHeight: { md: 420 },
+          }}
+        >
+          {/* Left — program list */}
+          <Box
+            sx={{
+              width: { xs: '100%', md: 220 },
+              borderRight: { md: '1px solid' },
+              borderBottom: { xs: '1px solid', md: 'none' },
+              borderColor: 'divider',
+              flexShrink: 0,
+            }}
+          >
+            {PROGRAMS.map((p, i) => (
+              <Box
+                key={p.label}
+                onClick={() => setSelected(i)}
                 sx={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  border: '1px solid',
-                  borderColor: squad.accent ? 'primary.main' : 'divider',
-                  bgcolor: squad.accent ? 'primary.dark' : 'background.default',
-                  position: 'relative',
-                  overflow: 'visible',
-                  transition: 'transform 0.25s ease, box-shadow 0.25s ease',
-                  transform: hovered === i ? 'translateY(-6px)' : 'translateY(0)',
-                  boxShadow: hovered === i
-                    ? '0 12px 40px rgba(0,0,0,0.14)'
-                    : squad.accent
-                    ? '0 4px 20px rgba(29,110,74,0.25)'
-                    : '0 2px 8px rgba(0,0,0,0.06)',
+                  px: 3,
+                  py: 2.2,
+                  cursor: 'pointer',
+                  borderLeft: '3px solid',
+                  borderColor: selected === i ? 'secondary.main' : 'transparent',
+                  bgcolor: selected === i ? 'rgba(245,200,66,0.07)' : 'transparent',
+                  transition: 'all 0.15s ease',
+                  '&:hover': {
+                    bgcolor: selected === i ? 'rgba(245,200,66,0.07)' : 'rgba(0,0,0,0.03)',
+                  },
+                  borderBottom: i < PROGRAMS.length - 1 ? '1px solid' : 'none',
+                  borderBottomColor: 'divider',
                 }}
               >
-                <CardContent sx={{ p: 3, flexGrow: 1 }}>
-                  {/* Day badge */}
-                  <Chip
-                    label={squad.day}
-                    size="small"
-                    sx={{
-                      mb: 2,
-                      bgcolor: DAY_COLOR[squad.day],
-                      color: '#fff',
-                      fontWeight: 700,
-                      fontSize: '0.7rem',
-                    }}
-                  />
+                <Typography
+                  sx={{
+                    fontFamily: '"Bebas Neue", sans-serif',
+                    letterSpacing: '0.04em',
+                    fontSize: '1.1rem',
+                    fontWeight: selected === i ? 700 : 500,
+                    color: selected === i ? 'primary.main' : 'text.primary',
+                  }}
+                >
+                  {p.label}
+                </Typography>
+              </Box>
+            ))}
+          </Box>
 
-                  <Typography
-                    variant="h5"
-                    sx={{
-                      fontSize: '1.15rem',
-                      mb: 2.5,
-                      color: squad.accent ? '#fff' : 'text.primary',
-                      fontFamily: '"Bebas Neue", sans-serif',
-                      letterSpacing: '0.04em',
-                    }}
-                  >
-                    {squad.title}
-                  </Typography>
-
-                  <Stack spacing={1.2}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <AccessTimeIcon sx={{ fontSize: 15, color: squad.accent ? 'rgba(255,255,255,0.5)' : 'text.secondary' }} />
-                      <Typography variant="caption" sx={{ color: squad.accent ? 'rgba(255,255,255,0.75)' : 'text.secondary' }}>
-                        {squad.time}
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <LocationOnIcon sx={{ fontSize: 15, color: squad.accent ? 'rgba(255,255,255,0.5)' : 'text.secondary' }} />
-                      <Typography variant="caption" sx={{ color: squad.accent ? 'rgba(255,255,255,0.75)' : 'text.secondary' }}>
-                        Hoppers Crossing Cricket Store
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <CalendarTodayIcon sx={{ fontSize: 15, color: squad.accent ? 'rgba(255,255,255,0.5)' : 'text.secondary' }} />
-                      <Typography variant="caption" sx={{ color: squad.accent ? 'rgba(255,255,255,0.75)' : 'text.secondary' }}>
-                        {squad.dates}
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
-                      <PersonIcon sx={{ fontSize: 15, mt: '1px', color: squad.accent ? 'rgba(255,255,255,0.5)' : 'text.secondary' }} />
-                      <Typography variant="caption" sx={{ color: squad.accent ? 'rgba(255,255,255,0.75)' : 'text.secondary', lineHeight: 1.5 }}>
-                        {squad.coaches}
-                      </Typography>
-                    </Box>
-                  </Stack>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-
-        {/* CTA */}
-        <Box sx={{ textAlign: 'center', mt: 6 }}>
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            endIcon={<ArrowForwardIcon />}
-            href="#contact"
+          {/* Right — detail panel */}
+          <Box
+            sx={{
+              flex: 1,
+              p: { xs: 3, md: 5 },
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+            }}
           >
-            Enquire about a squad
-          </Button>
+            <Box>
+              {/* Title + day chip */}
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3, flexWrap: 'wrap' }}>
+                <Typography
+                  variant="h3"
+                  sx={{
+                    fontFamily: '"Bebas Neue", sans-serif',
+                    fontSize: { xs: '2.4rem', md: '3.2rem' },
+                    color: 'primary.main',
+                    letterSpacing: '0.04em',
+                    lineHeight: 1,
+                  }}
+                >
+                  {program.label}
+                </Typography>
+                <Chip label={program.day} sx={{ bgcolor: col.bg, color: col.text, fontWeight: 700, fontSize: '0.78rem' }} />
+              </Box>
+
+              {/* Squad tags */}
+              <Stack direction="row" spacing={1} sx={{ mb: 3, flexWrap: 'wrap', gap: 1 }}>
+                {program.squads.map((s) => (
+                  <Chip key={s} label={s} size="small" sx={{ bgcolor: 'rgba(3,32,83,0.06)', color: 'primary.main', fontWeight: 600, fontSize: '0.72rem' }} />
+                ))}
+              </Stack>
+
+              {/* Details */}
+              <Stack spacing={2.5}>
+                {[
+                  { icon: <AccessTimeIcon sx={{ fontSize: 18, color: 'primary.main' }} />, label: 'Time', value: program.time },
+                  { icon: <LocationOnIcon sx={{ fontSize: 18, color: 'primary.main' }} />, label: 'Location', value: 'Hoppers Crossing Cricket Store' },
+                  { icon: <CalendarTodayIcon sx={{ fontSize: 18, color: 'primary.main' }} />, label: 'Season', value: program.dates },
+                  { icon: <PersonIcon sx={{ fontSize: 18, color: 'primary.main' }} />, label: 'Coaches', value: program.coaches },
+                ].map(({ icon, label, value }) => (
+                  <Box key={label} sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
+                    <Box sx={{ width: 36, height: 36, borderRadius: 2, bgcolor: 'rgba(3,32,83,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      {icon}
+                    </Box>
+                    <Box>
+                      <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.2 }}>{label}</Typography>
+                      <Typography variant="body2" sx={{ fontWeight: 600 }}>{value}</Typography>
+                    </Box>
+                  </Box>
+                ))}
+              </Stack>
+            </Box>
+
+            {/* CTA */}
+            <Box sx={{ mt: 4 }}>
+              <Button variant="contained" color="primary" endIcon={<ArrowForwardIcon />} onClick={handleOpen}>
+                Apply for {program.label}
+              </Button>
+            </Box>
+          </Box>
         </Box>
       </Container>
+
+      {/* Application modal */}
+      <Dialog open={modalOpen} onClose={handleClose} maxWidth="sm" fullWidth slotProps={{ paper: { sx: { borderRadius: 3 } } }}>
+        <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pb: 1 }}>
+          <Box>
+            <Typography variant="h6" sx={{ fontFamily: '"Bebas Neue", sans-serif', letterSpacing: '0.04em', fontSize: '1.4rem', color: 'primary.main' }}>
+              Apply — {program.label}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              Hoppers Crossing Cricket Store · {program.dates}
+            </Typography>
+          </Box>
+          <IconButton onClick={handleClose} size="small"><CloseIcon fontSize="small" /></IconButton>
+        </DialogTitle>
+
+        <DialogContent dividers>
+          {submitted ? (
+            <Box sx={{ py: 4, textAlign: 'center' }}>
+              <Typography variant="h5" sx={{ fontFamily: '"Bebas Neue", sans-serif', color: 'primary.main', mb: 1 }}>
+                Application received!
+              </Typography>
+              <Typography color="text.secondary">
+                Thanks! We'll be in touch within 24 hours.
+              </Typography>
+            </Box>
+          ) : (
+            <Grid container spacing={2} sx={{ pt: 1 }}>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <TextField fullWidth label="Full name" name="name" value={form.name} onChange={handleChange} required size="small" />
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <TextField fullWidth label="Email" name="email" type="email" value={form.email} onChange={handleChange} required size="small" />
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <TextField fullWidth label="Phone" name="phone" value={form.phone} onChange={handleChange} size="small" />
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <TextField fullWidth label="Club" name="club" value={form.club} onChange={handleChange} placeholder="e.g. Werribee CC" size="small" />
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <TextField fullWidth select label="Batting hand" name="battingHand" value={form.battingHand} onChange={handleChange} size="small">
+                  <MenuItem value="Right">Right handed</MenuItem>
+                  <MenuItem value="Left">Left handed</MenuItem>
+                </TextField>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <TextField fullWidth select label="Bowling hand" name="bowlingHand" value={form.bowlingHand} onChange={handleChange} size="small">
+                  <MenuItem value="Right">Right handed</MenuItem>
+                  <MenuItem value="Left">Left handed</MenuItem>
+                </TextField>
+              </Grid>
+              <Grid size={{ xs: 12 }}>
+                <TextField fullWidth select label="Bowling type" name="bowlingType" value={form.bowlingType} onChange={handleChange} size="small">
+                  <MenuItem value="Fast">Fast bowler</MenuItem>
+                  <MenuItem value="Spinner">Spinner</MenuItem>
+                </TextField>
+              </Grid>
+              <Grid size={{ xs: 12 }}>
+                <TextField fullWidth multiline rows={3} label="Anything else? (optional)" name="message" value={form.message} onChange={handleChange} size="small" />
+              </Grid>
+              {error && (
+                <Grid size={{ xs: 12 }}>
+                  <Typography color="error" variant="caption">{error}</Typography>
+                </Grid>
+              )}
+            </Grid>
+          )}
+        </DialogContent>
+
+        {!submitted && (
+          <DialogActions sx={{ px: 3, py: 2 }}>
+            <Button onClick={handleClose} color="inherit">Cancel</Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSubmit}
+              disabled={loading || !form.name || !form.email}
+              endIcon={<ArrowForwardIcon />}
+            >
+              {loading ? 'Sending...' : 'Submit application'}
+            </Button>
+          </DialogActions>
+        )}
+      </Dialog>
     </Box>
   )
 }

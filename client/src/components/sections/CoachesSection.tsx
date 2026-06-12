@@ -65,7 +65,7 @@ function CoachCard({ coach }: { coach: Coach }) {
       >      
         <Box
         sx={{
-          bgcolor: coach.bg_color,
+          background: 'linear-gradient(150deg, #010d2a 0%, #021a4a 50%, #032053 100%)',
           px: 3,
           py: 3,
           display: 'flex',

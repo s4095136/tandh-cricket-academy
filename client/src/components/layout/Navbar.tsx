@@ -7,13 +7,12 @@ import {
 import MenuIcon from '@mui/icons-material/Menu'
 import CloseIcon from '@mui/icons-material/Close'
 import SportsCricketIcon from '@mui/icons-material/SportsCricket'
+import { useApplyModal } from '../../context/ApplyModalContext'
 
 const NAV_LINKS = [
   { label: 'Philosophy', href: '#philosophy' },
   { label: 'Programs', href: '#programs' },
-  { label: 'Coaches', href: '#coaches' },
-  { label: 'Schedule', href: '#schedule' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Reviews', href: '#testimonials' },
 ]
 
 function scrollTo(href: string) {
@@ -22,6 +21,7 @@ function scrollTo(href: string) {
 }
 
 export default function Navbar() {
+  const { openApplyModal } = useApplyModal()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -94,7 +94,7 @@ export default function Navbar() {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => scrollTo('#contact')}
+                  onClick={() => openApplyModal()}
                   sx={{ ml: 2 }}
                 >
                   Join Program
@@ -174,7 +174,7 @@ export default function Navbar() {
             variant="contained"
             color="primary"
             fullWidth
-            onClick={() => { scrollTo('#contact'); setDrawerOpen(false) }}
+            onClick={() => { openApplyModal(); setDrawerOpen(false) }}
           >
             Join Program
           </Button>

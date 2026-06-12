@@ -35,34 +35,119 @@ export default function PhilosophySection() {
     <Box
       id="philosophy"
       component="section"
-      sx={{ py: { xs: 8, md: 12 }, bgcolor: 'background.default' }}
+      sx={{
+        py: { xs: 8, md: 12 },
+        bgcolor: '#f5c842',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
     >
-      <Container maxWidth="lg">
-        <Grid container>
+      {/* Subtle background texture */}
+      <Box
+        sx={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: `radial-gradient(circle at 1px 1px, rgba(2,26,74,0.06) 1px, transparent 0)`,
+          backgroundSize: '40px 40px',
+          pointerEvents: 'none',
+        }}
+      />
+
+      {/* Top accent line */}
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 4,
+          background: 'linear-gradient(90deg, #021a4a, #032053)',
+        }}
+      />
+
+      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
+        <Grid container spacing={{ xs: 6, md: 10 }}>
 
           {/* Left: text */}
-          <Grid size={{xs: 12, md:6}}>
-            <Typography variant="overline" color="primary" sx={{ display: 'block', mb: 1.5 }}>
-              Our Philosophy
-            </Typography>
-            <Typography variant="h2" sx={{ fontSize: { xs: '2.8rem', md: '3.8rem' }, color: 'secondary.main', mb: 3 }}>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Box
+              sx={{
+                display: 'inline-block',
+                bgcolor: 'rgba(2,26,74,0.1)',
+                border: '1px solid rgba(2,26,74,0.2)',
+                borderRadius: 10,
+                px: 2,
+                py: 0.5,
+                mb: 3,
+              }}
+            >
+              <Typography
+                variant="overline"
+                sx={{ color: '#021a4a', fontWeight: 800, letterSpacing: '0.12em', fontSize: '0.72rem' }}
+              >
+                Our Philosophy
+              </Typography>
+            </Box>
+
+            <Typography
+              variant="h2"
+              sx={{
+                fontSize: { xs: '2.8rem', md: '3.6rem' },
+                color: '#021a4a',
+                mb: 3,
+                fontWeight: 900,
+                lineHeight: 1.1,
+                letterSpacing: '-0.01em',
+              }}
+            >
               Developing well-rounded cricketers
             </Typography>
-            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+
+            <Box
+              sx={{
+                width: 60,
+                height: 4,
+                bgcolor: '#021a4a',
+                borderRadius: 2,
+                mb: 3,
+              }}
+            />
+
+            <Typography
+              variant="body1"
+              sx={{ mb: 2.5, color: 'rgba(2,26,74,0.8)', lineHeight: 1.85, fontSize: '1rem', fontWeight: 500 }}
+            >
               At T&H Cricket, we are passionate about developing well-rounded cricketers both on and off the field. Our comprehensive programs focus on fundamental skills while also emphasising sportsmanship, teamwork, and strategic thinking.
             </Typography>
-            <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
+            <Typography
+              variant="body1"
+              sx={{ mb: 5, color: 'rgba(2,26,74,0.8)', lineHeight: 1.85, fontSize: '1rem', fontWeight: 500 }}
+            >
               We believe in creating a positive and supportive learning environment where players can thrive and reach their full potential — from beginners to elite state representatives.
             </Typography>
 
             {/* Values checklist */}
-            <Stack spacing={1.5}>
+            <Stack spacing={1.8}>
               {VALUES.map((val) => (
-                <Box key={val} sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5 }}>
-                  <CheckCircleOutlineIcon
-                    sx={{ color: 'primary.main', mt: '2px', fontSize: 20, flexShrink: 0 }}
-                  />
-                  <Typography variant="body2" color="text.secondary">
+                <Box key={val} sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                  <Box
+                    sx={{
+                      width: 22,
+                      height: 22,
+                      borderRadius: '50%',
+                      bgcolor: '#021a4a',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                    }}
+                  >
+                    <CheckCircleOutlineIcon sx={{ color: '#f5c842', fontSize: 14 }} />
+                  </Box>
+                  <Typography
+                    variant="body2"
+                    sx={{ color: '#021a4a', fontWeight: 600, fontSize: '0.875rem' }}
+                  >
                     {val}
                   </Typography>
                 </Box>
@@ -71,46 +156,43 @@ export default function PhilosophySection() {
           </Grid>
 
           {/* Right: pillar cards */}
-          <Grid size={{xs: 12, md:6}}>
-            <Grid container spacing={2}>
+          <Grid size={{ xs: 12, md: 6 }} sx={{ display: 'flex', alignItems: 'center' }}>
+            <Grid container spacing={2} sx={{ width: '100%' }}>
               {PILLARS.map((pillar, i) => (
-                <Grid key={pillar.title} size={{xs: 12, md:6}}>
-                  <Box
-                    sx={{
-                      p: 3,
-                      height: '100%',
-                      bgcolor: i % 2 === 0 ? 'primary.dark' : 'background.paper',
-                      borderRadius: 3,
-                      border: '1px solid',
-                      borderColor: i % 2 === 0 ? 'primary.dark' : 'divider',
-                      transition: 'transform 0.2s, box-shadow 0.2s',
-                      '&:hover': {
-                        transform: 'translateY(-3px)',
-                        boxShadow: '0 8px 24px rgba(0,0,0,0.1)',
-                      },
-                    }}
-                  >
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        color: i % 2 === 0 ? 'primary.light' : 'primary.main',
-                        mb: 1,
-                        fontSize: '1rem',
-                      }}
-                    >
-                      {pillar.title}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{ color: i % 2 === 0 ? 'rgba(255,255,255,0.65)' : 'text.secondary' }}
-                    >
-                      {pillar.description}
-                    </Typography>
-                  </Box>
-                </Grid>
+                <Grid key={pillar.title} size={{ xs: 12, sm: 6 }}>
+              <Box
+                sx={{
+                  p: 3.5,
+                  height: '100%',
+                  bgcolor: '#021a4a',
+                  borderRadius: 4,
+                  border: '1px solid #021a4a',
+                  transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+                  '&:hover': {
+                    transform: 'translateY(-5px)',
+                    boxShadow: '0 12px 32px rgba(2,26,74,0.4)',
+                  },
+                }}
+              >
+                <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#f5c842', mb: 2 }} />
+                <Typography
+                  variant="h6"
+                  sx={{ color: '#f5c842', mb: 1.5, fontSize: '1rem', fontWeight: 800, letterSpacing: '0.01em' }}
+                >
+                  {pillar.title}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ color: 'rgba(255,255,255,0.65)', lineHeight: 1.75, fontSize: '0.875rem' }}
+                >
+                  {pillar.description}
+                </Typography>
+              </Box>                
+            </Grid>
               ))}
             </Grid>
           </Grid>
+
         </Grid>
       </Container>
     </Box>

@@ -33,19 +33,16 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const bg = scrolled ? 'rgba(255,255,255,0.97)' : 'transparent'
-  const linkColor = scrolled ? 'text.primary' : 'rgba(255,255,255,0.9)'
-  const logoColor = scrolled ? 'primary.dark' : '#ffffff'
-
   return (
     <>
       <AppBar
         position="fixed"
         sx={{
-          background: bg,
+          background: scrolled ? 'rgba(2,26,74,0.97)' : 'transparent',
           backdropFilter: scrolled ? 'blur(14px)' : 'none',
-          borderBottom: scrolled ? '1px solid rgba(0,0,0,0.07)' : 'none',
+          borderBottom: scrolled ? '1px solid rgba(255,255,255,0.08)' : 'none',
           transition: 'background 0.35s ease, border 0.35s ease',
+          boxShadow: 'none',
         }}
       >
         <Container maxWidth="lg">
@@ -54,21 +51,18 @@ export default function Navbar() {
             {/* Logo */}
             <Box
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              sx={{
-                display: 'flex', alignItems: 'center', gap: 1,
-                cursor: 'pointer', userSelect: 'none',
-              }}
+              sx={{ display: 'flex', alignItems: 'center', gap: 1, cursor: 'pointer', userSelect: 'none' }}
             >
-              <SportsCricketIcon sx={{ color: scrolled ? 'secondary.main' : '#ffffff', fontSize: 22 }} />
+              <SportsCricketIcon sx={{ color: 'secondary.main', fontSize: 22 }} />
               <Box
                 component="span"
                 sx={{
                   fontFamily: '"Bebas Neue", sans-serif',
                   fontSize: { xs: '1.45rem', md: '1.6rem' },
                   letterSpacing: '0.1em',
-                  color: logoColor,
+                  color: '#ffffff',
                   transition: 'color 0.35s ease',
-                  '& em': { color: scrolled ? 'secondary.main' : '#ffffff', fontStyle: 'normal' },
+                  '& em': { color: 'secondary.main', fontStyle: 'normal' },
                 }}
               >
                 T<em>&</em>H CRICKET
@@ -83,14 +77,14 @@ export default function Navbar() {
                     key={link.label}
                     onClick={() => scrollTo(link.href)}
                     sx={{
-                      color: linkColor,
+                      color: 'rgba(255,255,255,0.85)',
                       fontWeight: 500,
                       fontSize: '0.875rem',
                       px: 1.5,
-                      transition: 'color 0.35s ease',
+                      transition: 'color 0.2s ease',
                       '&:hover': {
-                        color: scrolled ? 'primary.main' : '#fff',
-                        bgcolor: 'rgba(255,255,255,0.1)',
+                        color: '#f5c842',
+                        bgcolor: 'rgba(255,255,255,0.06)',
                       },
                     }}
                   >
@@ -110,7 +104,7 @@ export default function Navbar() {
 
             {/* Mobile burger */}
             {isMobile && (
-              <IconButton onClick={() => setDrawerOpen(true)} sx={{ color: scrolled ? 'text.primary' : '#fff' }}>
+              <IconButton onClick={() => setDrawerOpen(true)} sx={{ color: '#fff' }}>
                 <MenuIcon />
               </IconButton>
             )}
@@ -123,7 +117,15 @@ export default function Navbar() {
         anchor="right"
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
-        sx={{ '& .MuiDrawer-paper': { width: 290, pt: 2, px: 2 } }}
+        sx={{
+          '& .MuiDrawer-paper': {
+            width: 290,
+            pt: 2,
+            px: 2,
+            bgcolor: '#021a4a',
+            borderLeft: '1px solid rgba(255,255,255,0.1)',
+          },
+        }}
       >
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
           <Box
@@ -131,34 +133,46 @@ export default function Navbar() {
               fontFamily: '"Bebas Neue", sans-serif',
               fontSize: '1.4rem',
               letterSpacing: '0.1em',
-              color: 'primary.dark',
-              '& em': { color: 'primary.main', fontStyle: 'normal' },
+              color: '#ffffff',
+              '& em': { color: 'secondary.main', fontStyle: 'normal' },
             }}
           >
             T<em>&</em>H CRICKET
           </Box>
-          <IconButton onClick={() => setDrawerOpen(false)} size="small">
+          <IconButton onClick={() => setDrawerOpen(false)} size="small" sx={{ color: 'rgba(255,255,255,0.6)' }}>
             <CloseIcon />
           </IconButton>
         </Box>
-        <Divider sx={{ mb: 1 }} />
+
+        <Divider sx={{ mb: 1, borderColor: 'rgba(255,255,255,0.1)' }} />
+
         <List disablePadding>
           {NAV_LINKS.map((link) => (
             <ListItem key={link.label} disablePadding>
               <ListItemButton
                 onClick={() => { scrollTo(link.href); setDrawerOpen(false) }}
-                sx={{ borderRadius: 2, mb: 0.5 }}
+                sx={{
+                  borderRadius: 2,
+                  mb: 0.5,
+                  '&:hover': { bgcolor: 'rgba(255,255,255,0.06)' },
+                }}
               >
                 <ListItemText
-                  primary={<Typography sx={{ fontWeight: 500, fontSize: '0.95rem' }}>{link.label}</Typography>}
+                  primary={
+                    <Typography sx={{ fontWeight: 500, fontSize: '0.95rem', color: 'rgba(255,255,255,0.85)' }}>
+                      {link.label}
+                    </Typography>
+                  }
                 />
               </ListItemButton>
             </ListItem>
           ))}
         </List>
+
         <Box sx={{ mt: 3 }}>
           <Button
             variant="contained"
+            color="primary"
             fullWidth
             onClick={() => { scrollTo('#contact'); setDrawerOpen(false) }}
           >

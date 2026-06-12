@@ -25,18 +25,18 @@ function TestimonialCard({ t }: { t: Review }) {
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        bgcolor: 'rgba(255,255,255,0.05)',
-        border: '1px solid rgba(255,255,255,0.1)',
-        backdropFilter: 'blur(4px)',
-        transition: 'transform 0.2s, background 0.2s',
+        bgcolor: '#021a4a',
+        border: '1px solid rgba(2,26,74,0.3)',
+        transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+        borderRadius: 4,
         '&:hover': {
-          transform: 'translateY(-4px)',
-          bgcolor: 'rgba(255,255,255,0.08)',
+          transform: 'translateY(-5px)',
+          boxShadow: '0 12px 32px rgba(2,26,74,0.4)',
         },
       }}
     >
       <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-        <FormatQuoteIcon sx={{ color: 'secondary.main', fontSize: 28, mb: 1.5, opacity: 0.8 }} />
+        <FormatQuoteIcon sx={{ color: '#f5c842', fontSize: 28, mb: 1.5, opacity: 0.9 }} />
         <Box sx={{ flexGrow: 1 }}>
           <Typography
             variant="body2"
@@ -50,7 +50,8 @@ function TestimonialCard({ t }: { t: Review }) {
             sx={{
               width: 38,
               height: 38,
-              bgcolor: 'primary.main',
+              bgcolor: '#f5c842',
+              color: '#021a4a',
               fontSize: '0.78rem',
               fontWeight: 700,
             }}
@@ -69,7 +70,7 @@ function TestimonialCard({ t }: { t: Review }) {
             value={t.rating}
             readOnly
             size="small"
-            sx={{ ml: 'auto', '& .MuiRating-iconFilled': { color: 'secondary.main' } }}
+            sx={{ ml: 'auto', '& .MuiRating-iconFilled': { color: '#f5c842' } }}
           />
         </Box>
       </CardContent>
@@ -95,7 +96,7 @@ export default function TestimonialsSection() {
       component="section"
       sx={{
         py: { xs: 8, md: 12 },
-        bgcolor: 'primary.dark',
+        bgcolor: '#f5c842',
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -105,24 +106,66 @@ export default function TestimonialsSection() {
         sx={{
           position: 'absolute',
           inset: 0,
-          backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0)`,
+          backgroundImage: `radial-gradient(circle at 1px 1px, rgba(2,26,74,0.06) 1px, transparent 0)`,
           backgroundSize: '40px 40px',
           pointerEvents: 'none',
+        }}
+      />
+
+      {/* Top accent line */}
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 4,
+          background: 'linear-gradient(90deg, #021a4a, #032053)',
         }}
       />
 
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
         {/* Header */}
         <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 8 } }}>
-          <Typography variant="overline" sx={{ color: 'secondary.main', display: 'block', mb: 1.5 }}>
-            What families say
-          </Typography>
+          <Box
+            sx={{
+              display: 'inline-block',
+              bgcolor: 'rgba(2,26,74,0.1)',
+              border: '1px solid rgba(2,26,74,0.2)',
+              borderRadius: 10,
+              px: 2,
+              py: 0.5,
+              mb: 2,
+            }}
+          >
+            <Typography
+              variant="overline"
+              sx={{ color: '#021a4a', fontWeight: 800, letterSpacing: '0.12em', fontSize: '0.72rem' }}
+            >
+              What families say
+            </Typography>
+          </Box>
           <Typography
             variant="h2"
-            sx={{ fontSize: { xs: '2.8rem', md: '3.8rem' }, color: '#ffffff' }}
+            sx={{
+              fontSize: { xs: '2.8rem', md: '3.8rem' },
+              color: '#021a4a',
+              fontWeight: 900,
+              lineHeight: 1.1,
+            }}
           >
             Trusted by Melbourne families
           </Typography>
+          <Box
+            sx={{
+              width: 60,
+              height: 4,
+              bgcolor: '#021a4a',
+              borderRadius: 2,
+              mx: 'auto',
+              mt: 3,
+            }}
+          />
         </Box>
 
         {useSwiper ? (
@@ -136,11 +179,11 @@ export default function TestimonialsSection() {
                 top: '45%',
                 transform: 'translateY(-50%)',
                 zIndex: 10,
-                bgcolor: 'primary.main',
-                color: '#fff',
+                bgcolor: '#021a4a',
+                color: '#f5c842',
                 width: 44,
                 height: 44,
-                '&:hover': { bgcolor: 'primary.dark' },
+                '&:hover': { bgcolor: '#032053' },
                 '&.swiper-button-disabled': { opacity: 0.3, pointerEvents: 'none' },
               }}
             >
@@ -155,11 +198,11 @@ export default function TestimonialsSection() {
                 top: '45%',
                 transform: 'translateY(-50%)',
                 zIndex: 10,
-                bgcolor: 'primary.main',
-                color: '#fff',
+                bgcolor: '#021a4a',
+                color: '#f5c842',
                 width: 44,
                 height: 44,
-                '&:hover': { bgcolor: 'primary.dark' },
+                '&:hover': { bgcolor: '#032053' },
                 '&.swiper-button-disabled': { opacity: 0.3, pointerEvents: 'none' },
               }}
             >

@@ -25,7 +25,7 @@ export default function App() {
         <ProgramsSection />
         {/* <CoachesSection /> */}
         <TestimonialsSection />
-        <ContactSection />
+        {/* <ContactSection /> */}
       </main>
       <Footer />
     </ThemeProvider>

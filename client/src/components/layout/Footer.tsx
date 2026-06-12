@@ -1,5 +1,13 @@
 import React from 'react'
-import { Box, Container, Typography, Stack, IconButton, Divider, Grid } from '@mui/material'
+import {
+  Box,
+  Container,
+  Typography,
+  Stack,
+  IconButton,
+  Divider,
+  Grid,
+} from '@mui/material'
 import FacebookIcon from '@mui/icons-material/Facebook'
 import InstagramIcon from '@mui/icons-material/Instagram'
 import SportsCricketIcon from '@mui/icons-material/SportsCricket'
@@ -8,7 +16,6 @@ const FOOTER_LINKS = [
   { label: 'Philosophy', href: '#philosophy' },
   { label: 'Programs', href: '#programs' },
   { label: 'Coaches', href: '#coaches' },
-  { label: 'Schedule', href: '#schedule' },
   { label: 'Contact', href: '#contact' },
 ]
 
@@ -17,61 +24,96 @@ export default function Footer() {
     <Box
       component="footer"
       sx={{
-        bgcolor: 'secondary.main',
+        background:
+          'linear-gradient(150deg, #010d2a 0%, #021a4a 50%, #032053 100%)',
         color: 'rgba(255,255,255,0.85)',
-        pt: 6,
+        pt: 8,
         pb: 4,
+        borderTop: '1px solid rgba(255,255,255,0.08)',
       }}
     >
       <Container maxWidth="lg">
-        <Grid container spacing={4} sx={{ mb: 4 }}>
+        <Grid container spacing={5} sx={{ mb: 5 }}>
           {/* Brand */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-              <SportsCricketIcon sx={{ color: 'secondary.main' }} />
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+              <SportsCricketIcon sx={{ color: '#f5c842' }} />
+
               <Typography
                 sx={{
                   fontFamily: '"Bebas Neue", sans-serif',
-                  fontSize: '1.5rem',
-                  letterSpacing: '0.1em',
+                  fontSize: '1.8rem',
+                  letterSpacing: '0.12em',
                   color: '#fff',
-                  '& em': { color: 'secondary.main', fontStyle: 'normal' },
                 }}
               >
-                T<em>&</em>H CRICKET
+                T&H CRICKET
               </Typography>
             </Box>
-            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, mb: 2, maxWidth: 280 }}>
-              Expert cricket coaching from Tom Rogers and Hanni Harb. Developing cricketers of all ages across Melbourne since 2017.
+
+            <Typography
+              variant="body2"
+              sx={{
+                color: 'rgba(255,255,255,0.65)',
+                lineHeight: 1.8,
+                mb: 3,
+                maxWidth: 320,
+              }}
+            >
+              Expert cricket coaching from Tom Rogers and Hanni Harb.
+              Developing cricketers of all ages across Melbourne since 2017.
             </Typography>
+
             <Stack direction="row" spacing={1}>
               <IconButton
                 href="https://www.facebook.com/profile.php?id=61559769562351"
                 target="_blank"
                 rel="noopener"
-                size="small"
-                sx={{ color: 'rgba(255,255,255,0.5)', '&:hover': { color: 'secondary.main' } }}
+                sx={{
+                  color: 'rgba(255,255,255,0.5)',
+                  bgcolor: 'rgba(255,255,255,0.05)',
+                  '&:hover': {
+                    color: '#f5c842',
+                    bgcolor: 'rgba(245,200,66,0.12)',
+                  },
+                }}
               >
-                <FacebookIcon fontSize="small" />
+                <FacebookIcon />
               </IconButton>
+
               <IconButton
                 href="https://www.instagram.com"
                 target="_blank"
                 rel="noopener"
-                size="small"
-                sx={{ color: 'rgba(255,255,255,0.5)', '&:hover': { color: 'secondary.main' } }}
+                sx={{
+                  color: 'rgba(255,255,255,0.5)',
+                  bgcolor: 'rgba(255,255,255,0.05)',
+                  '&:hover': {
+                    color: '#f5c842',
+                    bgcolor: 'rgba(245,200,66,0.12)',
+                  },
+                }}
               >
-                <InstagramIcon fontSize="small" />
+                <InstagramIcon />
               </IconButton>
             </Stack>
           </Grid>
 
-          {/* Links */}
+          {/* Navigation */}
           <Grid size={{ xs: 6, md: 2 }}>
-            <Typography variant="overline" sx={{ color: 'secondary.main', display: 'block', mb: 2 }}>
+            <Typography
+              variant="overline"
+              sx={{
+                color: '#f5c842',
+                display: 'block',
+                mb: 2,
+                fontWeight: 700,
+              }}
+            >
               Navigation
             </Typography>
-            <Stack spacing={1}>
+
+            <Stack spacing={1.2}>
               {FOOTER_LINKS.map((l) => (
                 <Typography
                   key={l.label}
@@ -79,10 +121,13 @@ export default function Footer() {
                   href={l.href}
                   variant="body2"
                   sx={{
-                    color: 'rgba(255,255,255,0.55)',
+                    color: 'rgba(255,255,255,0.65)',
                     textDecoration: 'none',
-                    '&:hover': { color: 'secondary.main' },
-                    transition: 'color 0.2s',
+                    transition: 'all 0.2s ease',
+                    '&:hover': {
+                      color: '#f5c842',
+                      pl: 0.5,
+                    },
                   }}
                 >
                   {l.label}
@@ -93,40 +138,97 @@ export default function Footer() {
 
           {/* Contact */}
           <Grid size={{ xs: 6, md: 3 }}>
-            <Typography variant="overline" sx={{ color: 'secondary.main', display: 'block', mb: 2 }}>
+            <Typography
+              variant="overline"
+              sx={{
+                color: '#f5c842',
+                display: 'block',
+                mb: 2,
+                fontWeight: 700,
+              }}
+            >
               Contact
             </Typography>
-            <Stack spacing={1}>
-              {['Melbourne, Victoria', 'info@tandhcricket.com.au', 'tandhcricket.com.au'].map((item) => (
-                <Typography key={item} variant="body2" sx={{ color: 'rgba(255,255,255,0.55)' }}>
-                  {item}
-                </Typography>
-              ))}
+
+            <Stack spacing={1.2}>
+              <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.65)' }}>
+                Melbourne, Victoria
+              </Typography>
+
+              <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.65)' }}>
+                info@tandhcricket.com.au
+              </Typography>
+
+              <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.65)' }}>
+                tandhcricket.com.au
+              </Typography>
             </Stack>
           </Grid>
 
           {/* Promise */}
           <Grid size={{ xs: 12, md: 3 }}>
-            <Typography variant="overline" sx={{ color: 'secondary.main', display: 'block', mb: 2 }}>
+            <Typography
+              variant="overline"
+              sx={{
+                color: '#f5c842',
+                display: 'block',
+                mb: 2,
+                fontWeight: 700,
+              }}
+            >
               Our Promise
             </Typography>
-            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.55)', lineHeight: 1.7 }}>
-              Join the T&H Cricket family today and experience the difference of expert coaching from a team that truly understands the game.
+
+            <Typography
+              variant="body2"
+              sx={{
+                color: 'rgba(255,255,255,0.65)',
+                lineHeight: 1.8,
+              }}
+            >
+              Join the T&H Cricket family today and experience the
+              difference of expert coaching from a team that truly
+              understands the game.
             </Typography>
           </Grid>
         </Grid>
 
-        <Divider sx={{ borderColor: 'rgba(255,255,255,0.08)', mb: 3 }} />
+        <Divider
+          sx={{
+            borderColor: 'rgba(255,255,255,0.08)',
+            mb: 3,
+          }}
+        />
 
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
-          <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.35)' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: 1,
+          }}
+        >
+          <Typography
+            variant="caption"
+            sx={{
+              color: 'rgba(255,255,255,0.4)',
+            }}
+          >
             © {new Date().getFullYear()} T&H Cricket · ABN 85 640 730 829
           </Typography>
+
           <Typography
             component="a"
             href="/privacy"
             variant="caption"
-            sx={{ color: 'rgba(255,255,255,0.35)', textDecoration: 'none', '&:hover': { color: 'rgba(255,255,255,0.6)' } }}
+            sx={{
+              color: 'rgba(255,255,255,0.4)',
+              textDecoration: 'none',
+              '&:hover': {
+                color: '#f5c842',
+              },
+            }}
           >
             Privacy Policy
           </Typography>

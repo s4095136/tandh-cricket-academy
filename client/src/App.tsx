@@ -24,7 +24,7 @@ export default function App() {
         <HeroSection />
         <PhilosophySection />
         <ProgramsSection />
-        <CoachesSection />
+        {/* <CoachesSection /> */}
         <ScheduleSection />
         <TestimonialsSection />
         <ContactSection />

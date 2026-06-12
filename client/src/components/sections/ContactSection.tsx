@@ -34,16 +34,45 @@ export default function ContactSection() {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    // TODO: wire up to /api/contact on the Express server
-    await new Promise((r) => setTimeout(r, 1000))
-    setLoading(false)
-    setSubmitted(true)
-    setForm(EMPTY)
-  }
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault()
+  //   setLoading(true)
+  //   // TODO: wire up to /api/contact on the Express server
+  //   await new Promise((r) => setTimeout(r, 1000))
+  //   setLoading(false)
+  //   setSubmitted(true)
+  //   setForm(EMPTY)
+  // }
 
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault()
+
+  try {
+    setLoading(true)
+
+    const response = await fetch(
+      'http://localhost:4000/api/enquiries',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(form),
+      }
+    )
+
+    const data = await response.json()
+
+    if (data.success) {
+      setSubmitted(true)
+      setForm(EMPTY)
+    }
+  } catch (err) {
+    console.error(err)
+  } finally {
+    setLoading(false)
+  }
+}
   return (
     <Box
       id="contact"

@@ -5,6 +5,7 @@ import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutlined'
 import Avatar from '@mui/material/Avatar'
 import Dialog from '@mui/material/Dialog'
 import DialogContent from '@mui/material/DialogContent'
+import { useApplyModal } from '../../context/ApplyModalContext'
 
 const ROTATING_WORDS = [
   'developing skills.',
@@ -44,6 +45,7 @@ const AVATAR_HOVER_SX = {
 }
 
 export default function HeroSection() {
+  const { openApplyModal } = useApplyModal()
   const [wordIndex, setWordIndex] = useState(0)
   const [visible, setVisible] = useState(true)
   const [coaches, setCoaches] = useState<Coach[]>([])
@@ -166,7 +168,7 @@ export default function HeroSection() {
               color="primary"
               size="large"
               endIcon={<ArrowForwardIcon />}
-              href="#contact"
+              onClick={() => openApplyModal()}
               sx={{ fontSize: '0.95rem', px: 3.5, py: 1.5 }}
             >
               Join a Program
@@ -263,7 +265,7 @@ export default function HeroSection() {
         </Box>
 
         {/* Lead Coaches */}
-        <Typography sx={{ color: '#84f542', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.1em' }}>
+        <Typography sx={{ color: '#f5c842', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.1em' }}>
           LEAD COACHES
         </Typography>
         <Box sx={{ display: 'flex', gap: 5 }}>
@@ -275,16 +277,16 @@ export default function HeroSection() {
               <Avatar
                 src={`http://localhost:4000${coach.image}`}
                 onClick={() => handleAvatarClick(coach.name)}
-                sx={{ width: 150, height: 150, border: '4px solid #84f542', mb: 1, ...AVATAR_HOVER_SX }}
+                sx={{ width: 150, height: 150, border: '4px solid #f5c842', mb: 1, ...AVATAR_HOVER_SX }}
               />
-              <Typography 
+              <Typography
                onClick={() => handleAvatarClick(coach.name)}
                 sx={{
                 color: '#fff',
                 fontWeight: 600,
                 cursor: 'pointer',
                 transition: 'color 0.2s ease',
-                '&:hover': { color: '#84f542' },
+                '&:hover': { color: '#f5c842' },
               }}
               >{coach.name}
               </Typography>
@@ -293,7 +295,7 @@ export default function HeroSection() {
         </Box>
 
         {/* Assistant Coaches */}
-        <Typography sx={{ color: 'rgba(250, 42, 0, 0.85)', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.1em' }}>
+        <Typography sx={{ color: '#f5c842', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.1em' }}>
           ASSISTANT COACHES
         </Typography>
         <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', alignItems: 'flex-start' }}>
@@ -308,16 +310,16 @@ export default function HeroSection() {
               <Avatar
                 src={`http://localhost:4000${coach.image}`}
                 onClick={() => handleAvatarClick(coach.name)}
-                sx={{ width: 150, height: 150, border: '3px solid rgba(250, 42, 0, 0.7)', mb: 1, ...AVATAR_HOVER_SX }}
+                sx={{ width: 150, height: 150, border: '3px solid #f5c842', mb: 1, ...AVATAR_HOVER_SX }}
               />
-                            <Typography 
+                            <Typography
                onClick={() => handleAvatarClick(coach.name)}
                 sx={{
                 color: '#fff',
                 fontWeight: 600,
                 cursor: 'pointer',
                 transition: 'color 0.2s ease',
-                '&:hover': { color: 'rgba(250, 42, 0, 0.85)' },
+                '&:hover': { color: '#f5c842' },
               }}
               >{coach.name}
               </Typography>
@@ -344,14 +346,16 @@ export default function HeroSection() {
   onClose={() => setSelectedCoach(null)}
   maxWidth="md"
   fullWidth
-  PaperProps={{
-    sx: {
-      backgroundColor: '#021a4a !important',
-      backgroundImage: 'none !important',
-      color: '#ffffff',
-      borderRadius: 4,
-      border: '1px solid rgba(255,255,255,0.1)',
-      boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
+  slotProps={{
+    paper: {
+      sx: {
+        backgroundColor: '#021a4a !important',
+        backgroundImage: 'none !important',
+        color: '#ffffff',
+        borderRadius: 4,
+        border: '1px solid rgba(255,255,255,0.1)',
+        boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
+      },
     },
   }}
 >
@@ -360,43 +364,58 @@ export default function HeroSection() {
       sx={{
         backgroundColor: '#021a4a',
         color: '#ffffff',
-        p: 4,
+        p: 0,
       }}
     >
-      <Box sx={{ textAlign: 'center' }}>
+      {/* Navy header */}
+      <Box
+        sx={{
+          background: 'linear-gradient(150deg, #010d2a 0%, #021a4a 50%, #032053 100%)',
+          px: 4,
+          py: 4,
+          display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' },
+          alignItems: 'center',
+          gap: 3,
+          borderBottom: '1px solid rgba(255,255,255,0.08)',
+        }}
+      >
         <Avatar
           src={`http://localhost:4000${selectedCoach.image}`}
           sx={{
-            width: 180,
-            height: 180,
-            mx: 'auto',
-            mb: 3,
+            width: 140,
+            height: 140,
+            flexShrink: 0,
             border: '4px solid #f5c842',
           }}
         />
 
-        <Typography
-          variant="h3"
-          sx={{
-            color: '#ffffff',
-            fontWeight: 700,
-            mb: 1,
-          }}
-        >
-          {selectedCoach.name}
-        </Typography>
+        <Box sx={{ textAlign: { xs: 'center', sm: 'left' } }}>
+          <Typography
+            variant="h3"
+            sx={{
+              color: '#ffffff',
+              fontWeight: 700,
+              mb: 0.5,
+            }}
+          >
+            {selectedCoach.name}
+          </Typography>
 
-        <Typography
-          sx={{
-            color: '#f5c842',
-            fontWeight: 600,
-            fontSize: '1.1rem',
-            mb: 3,
-          }}
-        >
-          {selectedCoach.role}
-        </Typography>
+          <Typography
+            sx={{
+              color: '#f5c842',
+              fontWeight: 600,
+              fontSize: '1.1rem',
+            }}
+          >
+            {selectedCoach.role}
+          </Typography>
+        </Box>
+      </Box>
 
+      {/* Body */}
+      <Box sx={{ p: 4, textAlign: 'center' }}>
         <Box sx={{ mb: 3 }}>
           {selectedCoach.credentials?.map((cred: string) => (
             <Typography

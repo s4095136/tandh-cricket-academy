@@ -1,10 +1,12 @@
 import React from 'react'
 import { ThemeProvider, CssBaseline } from '@mui/material'
 import theme from './theme/theme'
+import { ApplyModalProvider } from './context/ApplyModalContext'
 
 // Layout
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
+import ApplyModal from './components/ApplyModal'
 
 // Sections
 import HeroSection from './components/sections/HeroSection'
@@ -18,16 +20,19 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Navbar />
-      <main>
-        <HeroSection />
-        <PhilosophySection />
-        <ProgramsSection />
-        {/* <CoachesSection /> */}
-        <TestimonialsSection />
-        {/* <ContactSection /> */}
-      </main>
-      <Footer />
+      <ApplyModalProvider>
+        <Navbar />
+        <main>
+          <HeroSection />
+          <PhilosophySection />
+          <ProgramsSection />
+          {/* <CoachesSection /> */}
+          <TestimonialsSection />
+          {/* <ContactSection /> */}
+        </main>
+        <Footer />
+        <ApplyModal />
+      </ApplyModalProvider>
     </ThemeProvider>
   )
 }

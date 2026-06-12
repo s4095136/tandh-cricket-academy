@@ -7,7 +7,9 @@ const router = express.Router()
 
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -46,38 +48,36 @@ router.post('/enquiries', async (req, res) => {
       ]
     )
 
-// Send notification email
-const emailInfo = await transporter.sendMail({
-  from: process.env.EMAIL_USER,
-  to: process.env.EMAIL_USER,
-  subject: `New T&H Enquiry - ${program}`,
-  html: `
-    <h2>New Enquiry Received</h2>
+    // Enquiry saved — respond to the user right away
+    res.json({ success: true })
 
-    <p><strong>Name:</strong> ${name}</p>
-    <p><strong>Email:</strong> ${email}</p>
-    <p><strong>Phone:</strong> ${phone || 'Not provided'}</p>
-    <p><strong>Program:</strong> ${program}</p>
+    // Send notification email in the background; don't block/fail the
+    // request if the SMTP connection is slow or blocked
+    transporter
+      .sendMail({
+        from: process.env.EMAIL_USER,
+        to: process.env.EMAIL_USER, // or info@tandhcricket.com.au
+        subject: `New T&H Enquiry - ${program}`,
+        html: `
+          <h2>New Enquiry Received</h2>
 
-    <h3>Player Information</h3>
-    <p>${message}</p>
-  `,
-})
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Phone:</strong> ${phone || 'Not provided'}</p>
+          <p><strong>Program:</strong> ${program}</p>
 
-console.log('✅ EMAIL SENT')
-console.log(emailInfo.response)
+          <h3>Player Information</h3>
+          <p>${message}</p>
+        `,
+      })
+      .catch((emailError) => {
+        console.error('Failed to send enquiry notification email:', emailError)
+      })
 
-res.json({
-  success: true,
-  message: 'Enquiry saved and email sent successfully',
-})    } catch (error) {
-  console.error('❌ ENQUIRY ERROR:', error)
-
-  res.status(500).json({
-    success: false,
-    message: 'Failed to save enquiry or send email',
-  })
-}
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ success: false })
+  }
 })
 
 export default router

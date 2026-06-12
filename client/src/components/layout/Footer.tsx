@@ -11,15 +11,17 @@ import {
 import FacebookIcon from '@mui/icons-material/Facebook'
 import InstagramIcon from '@mui/icons-material/Instagram'
 import SportsCricketIcon from '@mui/icons-material/SportsCricket'
+import { useApplyModal } from '../../context/ApplyModalContext'
 
 const FOOTER_LINKS = [
   { label: 'Philosophy', href: '#philosophy' },
   { label: 'Programs', href: '#programs' },
-  { label: 'Coaches', href: '#coaches' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Reviews', href: '#testimonials' },
 ]
 
 export default function Footer() {
+  const { openApplyModal } = useApplyModal()
+
   return (
     <Box
       component="footer"
@@ -133,6 +135,28 @@ export default function Footer() {
                   {l.label}
                 </Typography>
               ))}
+              <Typography
+                component="button"
+                onClick={() => openApplyModal()}
+                variant="body2"
+                sx={{
+                  color: 'rgba(255,255,255,0.65)',
+                  textDecoration: 'none',
+                  transition: 'all 0.2s ease',
+                  background: 'none',
+                  border: 'none',
+                  p: 0,
+                  font: 'inherit',
+                  textAlign: 'left',
+                  cursor: 'pointer',
+                  '&:hover': {
+                    color: '#f5c842',
+                    pl: 0.5,
+                  },
+                }}
+              >
+                Join Program
+              </Typography>
             </Stack>
           </Grid>
 

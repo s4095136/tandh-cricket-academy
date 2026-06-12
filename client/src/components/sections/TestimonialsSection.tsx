@@ -1,13 +1,57 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Container, Typography, Card, CardContent, Grid, Avatar, Rating, IconButton } from '@mui/material'
+import { Box, Container, Typography, Card, CardContent, Grid, Avatar, Rating, IconButton, TextField, Button, MenuItem } from '@mui/material'
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination, Autoplay } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
+import { PROGRAMS } from '../../data/programs'
+
+const inputSx = {
+  '& .MuiOutlinedInput-root': {
+    color: '#fff',
+    backgroundColor: 'rgba(255,255,255,0.05)',
+
+    '& fieldset': {
+      borderColor: 'rgba(255,255,255,0.15)',
+    },
+
+    '&:hover fieldset': {
+      borderColor: '#f5c842',
+    },
+
+    '&.Mui-focused fieldset': {
+      borderColor: '#f5c842',
+    },
+  },
+
+  '& .MuiInputLabel-root': {
+    color: 'rgba(255,255,255,0.7)',
+  },
+
+  '& .MuiInputLabel-root.Mui-focused': {
+    color: '#f5c842',
+  },
+
+  '& .MuiInputBase-input': {
+    color: '#fff',
+  },
+}
+
+const EMPTY_REVIEW_FORM = {
+  name: '',
+  relation: '',
+  grade: '',
+  quote: '',
+}
+
+const RELATION_OPTIONS = ['Parent', 'Player']
+
+const GRADE_OPTIONS = [...PROGRAMS.map((p) => p.label), 'Other']
 
 interface Review {
   id: number
@@ -25,13 +69,14 @@ function TestimonialCard({ t }: { t: Review }) {
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        bgcolor: '#021a4a',
-        border: '1px solid rgba(2,26,74,0.3)',
-        transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+        bgcolor: 'rgba(255,255,255,0.05)',
+        border: '1px solid rgba(255,255,255,0.1)',
+        transition: 'transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease',
         borderRadius: 4,
         '&:hover': {
           transform: 'translateY(-5px)',
-          boxShadow: '0 12px 32px rgba(2,26,74,0.4)',
+          bgcolor: 'rgba(255,255,255,0.08)',
+          boxShadow: '0 12px 32px rgba(0,0,0,0.35)',
         },
       }}
     >
@@ -78,6 +123,216 @@ function TestimonialCard({ t }: { t: Review }) {
   )
 }
 
+function WriteReviewForm() {
+  const [form, setForm] = useState(EMPTY_REVIEW_FORM)
+  const [rating, setRating] = useState<number | null>(5)
+  const [loading, setLoading] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+  }
+
+  const handleSubmit = async () => {
+    setError(null)
+
+    if (!form.name.trim() || !form.quote.trim() || !rating || !form.relation || !form.grade) {
+      setError('Please add your name, role, grade, a rating and a review.')
+      return
+    }
+
+    const role = form.relation === 'Parent'
+      ? `Parent of ${form.grade} player`
+      : `${form.grade} Player`
+
+    setLoading(true)
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL ?? 'http://localhost:4000'}/api/testimonials`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: form.name, quote: form.quote, rating, role }),
+      })
+      const data = await res.json()
+      if (!res.ok || !data.success) {
+        setError(data.message || 'Something went wrong. Please try again.')
+      } else {
+        setSubmitted(true)
+      }
+    } catch {
+      setError('Could not reach the server. Please try again later.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (submitted) {
+    return (
+      <Card
+        sx={{
+          bgcolor: 'rgba(255,255,255,0.05)',
+          border: '1px solid rgba(255,255,255,0.1)',
+          borderRadius: 4,
+          textAlign: 'center',
+          py: 6,
+          px: 3,
+        }}
+      >
+        <Typography variant="h5" sx={{ fontFamily: '"Bebas Neue", sans-serif', color: '#f5c842', mb: 1 }}>
+          Thanks for your review!
+        </Typography>
+        <Typography sx={{ color: 'rgba(255,255,255,0.6)', mb: 3 }}>
+          We really appreciate you taking the time to share your experience. It'll appear on this page once it's
+          been reviewed.
+        </Typography>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            setForm(EMPTY_REVIEW_FORM)
+            setRating(5)
+            setError(null)
+            setSubmitted(false)
+          }}
+          sx={{
+            color: '#f5c842',
+            borderColor: 'rgba(245,200,66,0.4)',
+            '&:hover': {
+              borderColor: '#f5c842',
+              bgcolor: 'rgba(245,200,66,0.08)',
+            },
+          }}
+        >
+          Submit another review
+        </Button>
+      </Card>
+    )
+  }
+
+  return (
+    <Card
+      sx={{
+        bgcolor: 'rgba(255,255,255,0.05)',
+        border: '1px solid rgba(255,255,255,0.1)',
+        borderRadius: 4,
+      }}
+    >
+      <CardContent sx={{ p: { xs: 3, md: 4 } }}>
+        <Typography
+          variant="h5"
+          sx={{ fontFamily: '"Bebas Neue", sans-serif', letterSpacing: '0.04em', color: '#fff', mb: 0.5 }}
+        >
+          Write a review
+        </Typography>
+        <Typography sx={{ color: 'rgba(255,255,255,0.5)', mb: 3 }}>
+          Let other families know what you think of T&H Cricket.
+        </Typography>
+
+        <Grid container spacing={2}>
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <TextField
+              fullWidth
+              label="Full name"
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              required
+              size="small"
+              sx={inputSx}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <TextField
+              fullWidth
+              select
+              label="I am a..."
+              name="relation"
+              value={form.relation}
+              onChange={handleChange}
+              size="small"
+              sx={inputSx}
+              slotProps={{ select: { MenuProps: { slotProps: { paper: { sx: { bgcolor: '#021a4a', color: '#fff' } } } } } }}
+            >
+              {RELATION_OPTIONS.map((option) => (
+                <MenuItem key={option} value={option}>{option}</MenuItem>
+              ))}
+            </TextField>
+          </Grid>
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <TextField
+              fullWidth
+              select
+              label="Grade"
+              name="grade"
+              value={form.grade}
+              onChange={handleChange}
+              size="small"
+              sx={inputSx}
+              slotProps={{ select: { MenuProps: { slotProps: { paper: { sx: { bgcolor: '#021a4a', color: '#fff' } } } } } }}
+            >
+              {GRADE_OPTIONS.map((option) => (
+                <MenuItem key={option} value={option}>{option}</MenuItem>
+              ))}
+            </TextField>
+          </Grid>
+          <Grid size={{ xs: 12 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <Typography sx={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem' }}>
+                Your rating
+              </Typography>
+              <Rating
+                value={rating}
+                onChange={(_e, value) => setRating(value)}
+                sx={{ '& .MuiRating-iconFilled': { color: '#f5c842' }, '& .MuiRating-iconEmpty': { color: 'rgba(255,255,255,0.25)' } }}
+              />
+            </Box>
+          </Grid>
+          <Grid size={{ xs: 12 }}>
+            <TextField
+              fullWidth
+              multiline
+              rows={4}
+              label="Your review"
+              name="quote"
+              value={form.quote}
+              onChange={handleChange}
+              required
+              size="small"
+              sx={inputSx}
+            />
+          </Grid>
+          {error && (
+            <Grid size={{ xs: 12 }}>
+              <Typography color="error" variant="caption">{error}</Typography>
+            </Grid>
+          )}
+          <Grid size={{ xs: 12 }}>
+            <Button
+              variant="contained"
+              onClick={handleSubmit}
+              disabled={loading}
+              endIcon={<ArrowForwardIcon />}
+              sx={{
+                bgcolor: '#f5c842',
+                color: '#021a4a',
+                fontWeight: 700,
+                '&:hover': {
+                  bgcolor: '#e0b030',
+                },
+                '&.Mui-disabled': {
+                  bgcolor: 'rgba(245,200,66,0.3)',
+                  color: 'rgba(2,26,74,0.5)',
+                },
+              }}
+            >
+              {loading ? 'Submitting...' : 'Submit review'}
+            </Button>
+          </Grid>
+        </Grid>
+      </CardContent>
+    </Card>
+  )
+}
+
 export default function TestimonialsSection() {
   const [testimonials, setTestimonials] = useState<Review[]>([])
 
@@ -96,7 +351,7 @@ export default function TestimonialsSection() {
       component="section"
       sx={{
         py: { xs: 8, md: 12 },
-        bgcolor: '#f5c842',
+        background: 'linear-gradient(150deg, #010d2a 0%, #021a4a 50%, #032053 100%)',
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -106,21 +361,9 @@ export default function TestimonialsSection() {
         sx={{
           position: 'absolute',
           inset: 0,
-          backgroundImage: `radial-gradient(circle at 1px 1px, rgba(2,26,74,0.06) 1px, transparent 0)`,
+          backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0)`,
           backgroundSize: '40px 40px',
           pointerEvents: 'none',
-        }}
-      />
-
-      {/* Top accent line */}
-      <Box
-        sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: 4,
-          background: 'linear-gradient(90deg, #021a4a, #032053)',
         }}
       />
 
@@ -130,8 +373,8 @@ export default function TestimonialsSection() {
           <Box
             sx={{
               display: 'inline-block',
-              bgcolor: 'rgba(2,26,74,0.1)',
-              border: '1px solid rgba(2,26,74,0.2)',
+              bgcolor: 'rgba(255,255,255,0.08)',
+              border: '1px solid rgba(255,255,255,0.15)',
               borderRadius: 10,
               px: 2,
               py: 0.5,
@@ -140,7 +383,7 @@ export default function TestimonialsSection() {
           >
             <Typography
               variant="overline"
-              sx={{ color: '#021a4a', fontWeight: 800, letterSpacing: '0.12em', fontSize: '0.72rem' }}
+              sx={{ color: '#f5c842', fontWeight: 800, letterSpacing: '0.12em', fontSize: '0.72rem' }}
             >
               What families say
             </Typography>
@@ -149,7 +392,7 @@ export default function TestimonialsSection() {
             variant="h2"
             sx={{
               fontSize: { xs: '2.8rem', md: '3.8rem' },
-              color: '#021a4a',
+              color: '#ffffff',
               fontWeight: 900,
               lineHeight: 1.1,
             }}
@@ -160,7 +403,7 @@ export default function TestimonialsSection() {
             sx={{
               width: 60,
               height: 4,
-              bgcolor: '#021a4a',
+              bgcolor: '#f5c842',
               borderRadius: 2,
               mx: 'auto',
               mt: 3,
@@ -179,11 +422,11 @@ export default function TestimonialsSection() {
                 top: '45%',
                 transform: 'translateY(-50%)',
                 zIndex: 10,
-                bgcolor: '#021a4a',
-                color: '#f5c842',
+                bgcolor: '#f5c842',
+                color: '#021a4a',
                 width: 44,
                 height: 44,
-                '&:hover': { bgcolor: '#032053' },
+                '&:hover': { bgcolor: '#f8d76a' },
                 '&.swiper-button-disabled': { opacity: 0.3, pointerEvents: 'none' },
               }}
             >
@@ -198,11 +441,11 @@ export default function TestimonialsSection() {
                 top: '45%',
                 transform: 'translateY(-50%)',
                 zIndex: 10,
-                bgcolor: '#021a4a',
-                color: '#f5c842',
+                bgcolor: '#f5c842',
+                color: '#021a4a',
                 width: 44,
                 height: 44,
-                '&:hover': { bgcolor: '#032053' },
+                '&:hover': { bgcolor: '#f8d76a' },
                 '&.swiper-button-disabled': { opacity: 0.3, pointerEvents: 'none' },
               }}
             >
@@ -243,6 +486,11 @@ export default function TestimonialsSection() {
             ))}
           </Grid>
         )}
+
+        {/* Write a review */}
+        <Box sx={{ maxWidth: 700, mx: 'auto', mt: { xs: 6, md: 10 } }}>
+          <WriteReviewForm />
+        </Box>
       </Container>
     </Box>
   )

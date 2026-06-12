@@ -37,7 +37,7 @@ export default function PhilosophySection() {
       component="section"
       sx={{
         py: { xs: 8, md: 12 },
-        bgcolor: '#f5c842',
+        background: 'linear-gradient(150deg, #010d2a 0%, #021a4a 50%, #032053 100%)',
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -47,21 +47,9 @@ export default function PhilosophySection() {
         sx={{
           position: 'absolute',
           inset: 0,
-          backgroundImage: `radial-gradient(circle at 1px 1px, rgba(2,26,74,0.06) 1px, transparent 0)`,
+          backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0)`,
           backgroundSize: '40px 40px',
           pointerEvents: 'none',
-        }}
-      />
-
-      {/* Top accent line */}
-      <Box
-        sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: 4,
-          background: 'linear-gradient(90deg, #021a4a, #032053)',
         }}
       />
 
@@ -73,8 +61,8 @@ export default function PhilosophySection() {
             <Box
               sx={{
                 display: 'inline-block',
-                bgcolor: 'rgba(2,26,74,0.1)',
-                border: '1px solid rgba(2,26,74,0.2)',
+                bgcolor: 'rgba(255,255,255,0.08)',
+                border: '1px solid rgba(255,255,255,0.15)',
                 borderRadius: 10,
                 px: 2,
                 py: 0.5,
@@ -83,7 +71,7 @@ export default function PhilosophySection() {
             >
               <Typography
                 variant="overline"
-                sx={{ color: '#021a4a', fontWeight: 800, letterSpacing: '0.12em', fontSize: '0.72rem' }}
+                sx={{ color: '#f5c842', fontWeight: 800, letterSpacing: '0.12em', fontSize: '0.72rem' }}
               >
                 Our Philosophy
               </Typography>
@@ -93,7 +81,7 @@ export default function PhilosophySection() {
               variant="h2"
               sx={{
                 fontSize: { xs: '2.8rem', md: '3.6rem' },
-                color: '#021a4a',
+                color: '#ffffff',
                 mb: 3,
                 fontWeight: 900,
                 lineHeight: 1.1,
@@ -107,7 +95,7 @@ export default function PhilosophySection() {
               sx={{
                 width: 60,
                 height: 4,
-                bgcolor: '#021a4a',
+                bgcolor: '#f5c842',
                 borderRadius: 2,
                 mb: 3,
               }}
@@ -115,13 +103,13 @@ export default function PhilosophySection() {
 
             <Typography
               variant="body1"
-              sx={{ mb: 2.5, color: 'rgba(2,26,74,0.8)', lineHeight: 1.85, fontSize: '1rem', fontWeight: 500 }}
+              sx={{ mb: 2.5, color: 'rgba(255,255,255,0.75)', lineHeight: 1.85, fontSize: '1rem', fontWeight: 500 }}
             >
               At T&H Cricket, we are passionate about developing well-rounded cricketers both on and off the field. Our comprehensive programs focus on fundamental skills while also emphasising sportsmanship, teamwork, and strategic thinking.
             </Typography>
             <Typography
               variant="body1"
-              sx={{ mb: 5, color: 'rgba(2,26,74,0.8)', lineHeight: 1.85, fontSize: '1rem', fontWeight: 500 }}
+              sx={{ mb: 5, color: 'rgba(255,255,255,0.75)', lineHeight: 1.85, fontSize: '1rem', fontWeight: 500 }}
             >
               We believe in creating a positive and supportive learning environment where players can thrive and reach their full potential — from beginners to elite state representatives.
             </Typography>
@@ -135,18 +123,18 @@ export default function PhilosophySection() {
                       width: 22,
                       height: 22,
                       borderRadius: '50%',
-                      bgcolor: '#021a4a',
+                      bgcolor: '#f5c842',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       flexShrink: 0,
                     }}
                   >
-                    <CheckCircleOutlineIcon sx={{ color: '#f5c842', fontSize: 14 }} />
+                    <CheckCircleOutlineIcon sx={{ color: '#032053', fontSize: 14 }} />
                   </Box>
                   <Typography
                     variant="body2"
-                    sx={{ color: '#021a4a', fontWeight: 600, fontSize: '0.875rem' }}
+                    sx={{ color: '#ffffff', fontWeight: 600, fontSize: '0.875rem' }}
                   >
                     {val}
                   </Typography>
@@ -164,13 +152,14 @@ export default function PhilosophySection() {
                 sx={{
                   p: 3.5,
                   height: '100%',
-                  bgcolor: '#021a4a',
+                  bgcolor: 'rgba(255,255,255,0.05)',
                   borderRadius: 4,
-                  border: '1px solid #021a4a',
-                  transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  transition: 'transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease',
                   '&:hover': {
                     transform: 'translateY(-5px)',
-                    boxShadow: '0 12px 32px rgba(2,26,74,0.4)',
+                    bgcolor: 'rgba(255,255,255,0.08)',
+                    boxShadow: '0 12px 32px rgba(0,0,0,0.35)',
                   },
                 }}
               >
@@ -187,7 +176,7 @@ export default function PhilosophySection() {
                 >
                   {pillar.description}
                 </Typography>
-              </Box>                
+              </Box>
             </Grid>
               ))}
             </Grid>

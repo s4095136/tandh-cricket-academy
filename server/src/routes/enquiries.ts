@@ -1,6 +1,7 @@
 import express from 'express'
 import { db } from '../db'
 import nodemailer from 'nodemailer'
+import { error } from 'console'
 
 const router = express.Router()
 
@@ -45,30 +46,38 @@ router.post('/enquiries', async (req, res) => {
       ]
     )
 
-    // Send notification email
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER, // or info@tandhcricket.com.au
-      subject: `New T&H Enquiry - ${program}`,
-      html: `
-        <h2>New Enquiry Received</h2>
+// Send notification email
+const emailInfo = await transporter.sendMail({
+  from: process.env.EMAIL_USER,
+  to: process.env.EMAIL_USER,
+  subject: `New T&H Enquiry - ${program}`,
+  html: `
+    <h2>New Enquiry Received</h2>
 
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Phone:</strong> ${phone || 'Not provided'}</p>
-        <p><strong>Program:</strong> ${program}</p>
+    <p><strong>Name:</strong> ${name}</p>
+    <p><strong>Email:</strong> ${email}</p>
+    <p><strong>Phone:</strong> ${phone || 'Not provided'}</p>
+    <p><strong>Program:</strong> ${program}</p>
 
-        <h3>Player Information</h3>
-        <p>${message}</p>
-      `,
-    })
+    <h3>Player Information</h3>
+    <p>${message}</p>
+  `,
+})
 
-    res.json({ success: true })
+console.log('✅ EMAIL SENT')
+console.log(emailInfo.response)
 
-  } catch (error) {
-    console.error(error)
-    res.status(500).json({ success: false })
-  }
+res.json({
+  success: true,
+  message: 'Enquiry saved and email sent successfully',
+})    } catch (error) {
+  console.error('❌ ENQUIRY ERROR:', error)
+
+  res.status(500).json({
+    success: false,
+    message: 'Failed to save enquiry or send email',
+  })
+}
 })
 
 export default router

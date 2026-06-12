@@ -339,31 +339,117 @@ export default function HeroSection() {
         }}
       />
 
-      {/* Dialog — outside the absolute box so it renders above everything */}
-      <Dialog open={!!selectedCoach} onClose={() => setSelectedCoach(null)} maxWidth="md" fullWidth>
-        {selectedCoach && (
-          <DialogContent>
-            <Box sx={{ textAlign: 'center', p: 2 }}>
-              <Avatar
-                src={`http://localhost:4000${selectedCoach.image}`}
-                sx={{ width: 180, height: 180, mx: 'auto', mb: 2 }}
-              />
-              <Typography variant="h4" gutterBottom>{selectedCoach.name}</Typography>
-              <Typography color="primary" sx={{ fontWeight: 600, mb: 2 }}>{selectedCoach.role}</Typography>
-              {selectedCoach.credentials?.map((cred) => (
-                <Typography key={cred}>• {cred}</Typography>
-              ))}
-              <Typography sx={{ mt: 3, textAlign: 'left' }}>{selectedCoach.bio}</Typography>
-              <Box sx={{ mt: 3, display: 'flex', gap: 1, justifyContent: 'center', flexWrap: 'wrap' }}>
-                {selectedCoach.tags?.map((tag) => (
-                  <Chip key={tag} label={tag} color="primary" size="small" />
-                ))}
-              </Box>
-            </Box>
-          </DialogContent>
-        )}
-      </Dialog>
+<Dialog
+  open={!!selectedCoach}
+  onClose={() => setSelectedCoach(null)}
+  maxWidth="md"
+  fullWidth
+  PaperProps={{
+    sx: {
+      backgroundColor: '#021a4a !important',
+      backgroundImage: 'none !important',
+      color: '#ffffff',
+      borderRadius: 4,
+      border: '1px solid rgba(255,255,255,0.1)',
+      boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
+    },
+  }}
+>
+  {selectedCoach && (
+    <DialogContent
+      sx={{
+        backgroundColor: '#021a4a',
+        color: '#ffffff',
+        p: 4,
+      }}
+    >
+      <Box sx={{ textAlign: 'center' }}>
+        <Avatar
+          src={`http://localhost:4000${selectedCoach.image}`}
+          sx={{
+            width: 180,
+            height: 180,
+            mx: 'auto',
+            mb: 3,
+            border: '4px solid #f5c842',
+          }}
+        />
 
+        <Typography
+          variant="h3"
+          sx={{
+            color: '#ffffff',
+            fontWeight: 700,
+            mb: 1,
+          }}
+        >
+          {selectedCoach.name}
+        </Typography>
+
+        <Typography
+          sx={{
+            color: '#f5c842',
+            fontWeight: 600,
+            fontSize: '1.1rem',
+            mb: 3,
+          }}
+        >
+          {selectedCoach.role}
+        </Typography>
+
+        <Box sx={{ mb: 3 }}>
+          {selectedCoach.credentials?.map((cred: string) => (
+            <Typography
+              key={cred}
+              sx={{
+                color: 'rgba(255,255,255,0.85)',
+                mb: 0.5,
+              }}
+            >
+              • {cred}
+            </Typography>
+          ))}
+        </Box>
+
+        <Typography
+          sx={{
+            color: 'rgba(255,255,255,0.75)',
+            lineHeight: 1.8,
+            textAlign: 'left',
+            maxWidth: 700,
+            mx: 'auto',
+            mb: 3,
+          }}
+        >
+          {selectedCoach.bio}
+        </Typography>
+
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 1,
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+          }}
+        >
+          {selectedCoach.tags?.map((tag: string) => (
+            <Chip
+              key={tag}
+              label={tag}
+              size="small"
+              sx={{
+                bgcolor: 'rgba(245,200,66,0.15)',
+                color: '#f5c842',
+                border: '1px solid rgba(245,200,66,0.25)',
+                fontWeight: 600,
+              }}
+            />
+          ))}
+        </Box>
+      </Box>
+    </DialogContent>
+  )}
+</Dialog>
     </Box>
   )
 }

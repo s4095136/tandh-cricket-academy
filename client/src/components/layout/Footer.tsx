@@ -11,16 +11,33 @@ import {
 import FacebookIcon from '@mui/icons-material/Facebook'
 import InstagramIcon from '@mui/icons-material/Instagram'
 import SportsCricketIcon from '@mui/icons-material/SportsCricket'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useApplyModal } from '../../context/ApplyModalContext'
 
 const FOOTER_LINKS = [
-  { label: 'Philosophy', href: '#philosophy' },
-  { label: 'Programs', href: '#programs' },
-  { label: 'Reviews', href: '#testimonials' },
+  { label: 'Philosophy', href: '#philosophy', type: 'anchor' as const },
+  { label: 'Programs', href: '#programs', type: 'anchor' as const },
+  { label: 'Reviews', href: '#testimonials', type: 'anchor' as const },
+  { label: 'Tours', href: '/tours', type: 'route' as const },
 ]
 
 export default function Footer() {
   const { openApplyModal } = useApplyModal()
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const handleFooterClick = (link: typeof FOOTER_LINKS[number]) => {
+    if (link.type === 'route') {
+      navigate(link.href)
+      return
+    }
+    if (location.pathname !== '/') {
+      navigate(`/${link.href}`)
+    } else {
+      const el = document.querySelector(link.href)
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
 
   return (
     <Box
@@ -119,13 +136,19 @@ export default function Footer() {
               {FOOTER_LINKS.map((l) => (
                 <Typography
                   key={l.label}
-                  component="a"
-                  href={l.href}
+                  component="button"
+                  onClick={() => handleFooterClick(l)}
                   variant="body2"
                   sx={{
                     color: 'rgba(255,255,255,0.65)',
                     textDecoration: 'none',
                     transition: 'all 0.2s ease',
+                    background: 'none',
+                    border: 'none',
+                    p: 0,
+                    font: 'inherit',
+                    textAlign: 'left',
+                    cursor: 'pointer',
                     '&:hover': {
                       color: '#f5c842',
                       pl: 0.5,

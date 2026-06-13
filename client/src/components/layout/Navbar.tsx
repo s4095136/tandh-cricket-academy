@@ -7,12 +7,14 @@ import {
 import MenuIcon from '@mui/icons-material/Menu'
 import CloseIcon from '@mui/icons-material/Close'
 import SportsCricketIcon from '@mui/icons-material/SportsCricket'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useApplyModal } from '../../context/ApplyModalContext'
 
 const NAV_LINKS = [
-  { label: 'Philosophy', href: '#philosophy' },
-  { label: 'Programs', href: '#programs' },
-  { label: 'Reviews', href: '#testimonials' },
+  { label: 'Philosophy', href: '#philosophy', type: 'anchor' as const },
+  { label: 'Programs', href: '#programs', type: 'anchor' as const },
+  { label: 'Reviews', href: '#testimonials', type: 'anchor' as const },
+  { label: 'Tours', href: '/tours', type: 'route' as const },
 ]
 
 function scrollTo(href: string) {
@@ -26,12 +28,34 @@ export default function Navbar() {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const navigate = useNavigate()
+  const location = useLocation()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  const handleNavClick = (link: typeof NAV_LINKS[number]) => {
+    if (link.type === 'route') {
+      navigate(link.href)
+      return
+    }
+    if (location.pathname !== '/') {
+      navigate(`/${link.href}`)
+    } else {
+      scrollTo(link.href)
+    }
+  }
+
+  const handleLogoClick = () => {
+    if (location.pathname !== '/') {
+      navigate('/')
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
 
   return (
     <>
@@ -50,7 +74,7 @@ export default function Navbar() {
 
             {/* Logo */}
             <Box
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              onClick={handleLogoClick}
               sx={{ display: 'flex', alignItems: 'center', gap: 1, cursor: 'pointer', userSelect: 'none' }}
             >
               <SportsCricketIcon sx={{ color: 'secondary.main', fontSize: 22 }} />
@@ -75,7 +99,7 @@ export default function Navbar() {
                 {NAV_LINKS.map((link) => (
                   <Button
                     key={link.label}
-                    onClick={() => scrollTo(link.href)}
+                    onClick={() => handleNavClick(link)}
                     sx={{
                       color: 'rgba(255,255,255,0.85)',
                       fontWeight: 500,
@@ -150,7 +174,7 @@ export default function Navbar() {
           {NAV_LINKS.map((link) => (
             <ListItem key={link.label} disablePadding>
               <ListItemButton
-                onClick={() => { scrollTo(link.href); setDrawerOpen(false) }}
+                onClick={() => { handleNavClick(link); setDrawerOpen(false) }}
                 sx={{
                   borderRadius: 2,
                   mb: 0.5,

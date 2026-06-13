@@ -130,26 +130,29 @@ export default function HeroSection() {
           />
 
           {/* Headline */}
-          <Typography
-            variant="h1"
-            sx={{ fontSize: { xs: '3.8rem', sm: '5rem', md: '6.5rem' }, color: '#ffffff', mb: 0.5 }}
-          >
-            T&H Cricket
-          </Typography>
-          <Typography
-            variant="h1"
-            sx={{
-              fontSize: { xs: '3.8rem', sm: '5rem', md: '6.5rem' },
-              color: 'secondary.main',
-              mb: 3,
-              minHeight: { xs: '4.5rem', md: '7rem' },
-              transition: 'opacity 0.4s ease, transform 0.4s ease',
-              opacity: visible ? 1 : 0,
-              transform: visible ? 'translateY(0)' : 'translateY(8px)',
-            }}
-          >
-            {ROTATING_WORDS[wordIndex]}
-          </Typography>
+          <Box sx={{ maxWidth: 720, mb: 3 }}>
+            <Typography
+              variant="h1"
+              sx={{ fontSize: { xs: '2.2rem', sm: '3rem', md: '3.8rem', lg: '4.2rem' }, color: '#ffffff', whiteSpace: 'nowrap', mb: 1.5 }}
+            >
+              T&H Cricket
+            </Typography>
+            <Typography
+              variant="h1"
+              sx={{
+                fontSize: { xs: '1.8rem', sm: '2.4rem', md: '3rem', lg: '3.3rem' },
+                color: 'secondary.main',
+                whiteSpace: 'nowrap',
+                textTransform: 'capitalize',
+                minHeight: { xs: '2.1rem', sm: '2.8rem', md: '3.5rem', lg: '3.9rem' },
+                transition: 'opacity 0.4s ease, transform 0.4s ease',
+                opacity: visible ? 1 : 0,
+                transform: visible ? 'translateY(0)' : 'translateY(8px)',
+              }}
+            >
+              {ROTATING_WORDS[wordIndex]}
+            </Typography>
+          </Box>
 
           {/* Subtext */}
           <Typography
@@ -240,8 +243,8 @@ export default function HeroSection() {
         </Typography>
         <Box sx={{ display: 'flex', gap: 5 }}>
           {[
-            { name: 'Tom Rogers', image: '/images/coaches/tom-rogers.png' },
             { name: 'Hanni Harb', image: '/images/coaches/hanni-harb.png' },
+            { name: 'Tom Rogers', image: '/images/coaches/tom-rogers.png' },
           ].map((coach) => (
             <Box key={coach.name} sx={{ textAlign: 'center' }}>
               <Avatar
@@ -272,6 +275,7 @@ export default function HeroSection() {
           {[
             { name: 'Aiman Nadeem', image: '/images/coaches/aiman.png' },
             { name: 'Alan Chandwick', image: '/images/coaches/alan.png' },
+            { name: 'Ali Khan', image: '/images/coaches/ali-khan.png' },
           ].map((coach) => (
             <Box key={coach.name} sx={{ textAlign: 'center' }}>
               <Avatar
@@ -300,7 +304,6 @@ export default function HeroSection() {
         </Typography>
         <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', alignItems: 'flex-start' }}>
           {[
-            { name: 'Ali Khan', image: '/images/coaches/ali-khan.png' },
             { name: 'Aayan Nadeem', image: '/images/coaches/aayan.png' },
             { name: 'Ritin Raman', image: '/images/coaches/ritin.png' },
             { name: 'Daksh Kumar', image: '/images/coaches/daksh.png' },

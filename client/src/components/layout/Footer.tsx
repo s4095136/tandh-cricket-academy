@@ -19,6 +19,7 @@ const FOOTER_LINKS = [
   { label: 'Programs', href: '#programs', type: 'anchor' as const },
   { label: 'Reviews', href: '#testimonials', type: 'anchor' as const },
   { label: 'Tours', href: '/tours', type: 'route' as const },
+  { label: 'State Representatives', href: '/representatives', type: 'route' as const },
 ]
 
 export default function Footer() {

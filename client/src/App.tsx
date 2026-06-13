@@ -21,6 +21,7 @@ import ContactSection from './components/sections/ContactSection'
 
 // Pages
 import ToursPage from './pages/ToursPage'
+import RepresentativesPage from './pages/RepresentativesPage'
 
 function HomePage() {
   const location = useLocation()
@@ -59,6 +60,7 @@ export default function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/tours" element={<ToursPage />} />
+              <Route path="/representatives" element={<RepresentativesPage />} />
             </Routes>
             <Footer />
             <ApplyModal />

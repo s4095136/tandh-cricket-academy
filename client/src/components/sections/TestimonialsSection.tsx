@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react'
-import { Box, Container, Typography, Card, CardContent, Grid, Avatar, Rating, IconButton, TextField, Button, MenuItem } from '@mui/material'
+import React, { useState } from 'react'
+import { Box, Container, Typography, Card, CardContent, Grid, Avatar, Rating, IconButton, TextField, Button, MenuItem, Skeleton, Dialog, DialogContent } from '@mui/material'
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import CloseIcon from '@mui/icons-material/Close'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination, Autoplay } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import { PROGRAMS } from '../../data/programs'
+import { useTestimonials, type Review } from '../../context/TestimonialsContext'
 
 const inputSx = {
   '& .MuiOutlinedInput-root': {
@@ -53,73 +55,160 @@ const RELATION_OPTIONS = ['Parent', 'Player']
 
 const GRADE_OPTIONS = [...PROGRAMS.map((p) => p.label), 'Other']
 
-interface Review {
-  id: number
-  initials: string
-  name: string
-  role: string
-  rating: number
-  quote: string
-}
+// Roughly how many characters fit in the 5-line clamp below before text gets
+// cut off - used to decide whether a card needs a "Read more" affordance.
+const QUOTE_TRUNCATE_THRESHOLD = 260
 
 function TestimonialCard({ t }: { t: Review }) {
+  const [open, setOpen] = useState(false)
+  const isLong = t.quote.length > QUOTE_TRUNCATE_THRESHOLD
+
   return (
-    <Card
-      sx={{
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        bgcolor: 'rgba(255,255,255,0.05)',
-        border: '1px solid rgba(255,255,255,0.1)',
-        transition: 'transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease',
-        borderRadius: 4,
-        '&:hover': {
-          transform: 'translateY(-5px)',
-          bgcolor: 'rgba(255,255,255,0.08)',
-          boxShadow: '0 12px 32px rgba(0,0,0,0.35)',
-        },
-      }}
-    >
-      <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-        <FormatQuoteIcon sx={{ color: '#f5c842', fontSize: 28, mb: 1.5, opacity: 0.9 }} />
-        <Box sx={{ flexGrow: 1 }}>
+    <>
+      <Card
+        onClick={() => isLong && setOpen(true)}
+        sx={{
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          bgcolor: 'rgba(255,255,255,0.05)',
+          border: '1px solid rgba(255,255,255,0.1)',
+          transition: 'transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease',
+          borderRadius: 4,
+          cursor: isLong ? 'pointer' : 'default',
+          '&:hover': {
+            transform: 'translateY(-5px)',
+            bgcolor: 'rgba(255,255,255,0.08)',
+            boxShadow: '0 12px 32px rgba(0,0,0,0.35)',
+          },
+        }}
+      >
+        <CardContent sx={{ p: 3.5, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+          <FormatQuoteIcon sx={{ color: '#f5c842', fontSize: 32, mb: 1.5, opacity: 0.9 }} />
+          <Box sx={{ flexGrow: 1, mb: 3 }}>
+            <Typography
+              variant="body2"
+              sx={{
+                color: 'rgba(255,255,255,0.75)',
+                lineHeight: 1.75,
+                fontSize: '0.95rem',
+                fontStyle: 'italic',
+                display: '-webkit-box',
+                WebkitLineClamp: 5,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+                minHeight: '8.75em',
+              }}
+            >
+              "{t.quote}"
+            </Typography>
+            {isLong && (
+              <Typography
+                sx={{
+                  color: '#f5c842',
+                  fontSize: '0.78rem',
+                  fontWeight: 700,
+                  mt: 1,
+                  '&:hover': { textDecoration: 'underline' },
+                }}
+              >
+                Read more
+              </Typography>
+            )}
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <Avatar
+              sx={{
+                width: 42,
+                height: 42,
+                bgcolor: '#f5c842',
+                color: '#021a4a',
+                fontSize: '0.85rem',
+                fontWeight: 700,
+              }}
+            >
+              {t.initials}
+            </Avatar>
+            <Box>
+              <Typography sx={{ color: '#fff', fontWeight: 600, fontSize: '0.9rem' }}>
+                {t.name}
+              </Typography>
+              <Typography sx={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.78rem' }}>
+                {t.role}
+              </Typography>
+            </Box>
+            <Rating
+              value={t.rating}
+              readOnly
+              size="small"
+              sx={{ ml: 'auto', '& .MuiRating-iconFilled': { color: '#f5c842' } }}
+            />
+          </Box>
+        </CardContent>
+      </Card>
+
+      {/* Full review dialog */}
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        maxWidth="sm"
+        fullWidth
+        slotProps={{
+          paper: {
+            sx: {
+              bgcolor: '#021a4a',
+              border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: 4,
+              backgroundImage: 'none',
+            },
+          },
+        }}
+      >
+        <IconButton
+          onClick={() => setOpen(false)}
+          sx={{ position: 'absolute', top: 12, right: 12, color: 'rgba(255,255,255,0.6)' }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <DialogContent sx={{ p: { xs: 3, md: 4 } }}>
+          <FormatQuoteIcon sx={{ color: '#f5c842', fontSize: 32, mb: 1.5, opacity: 0.9 }} />
           <Typography
-            variant="body2"
-            sx={{ color: 'rgba(255,255,255,0.75)', lineHeight: 1.75, mb: 3, fontStyle: 'italic' }}
+            variant="body1"
+            sx={{ color: 'rgba(255,255,255,0.85)', lineHeight: 1.8, fontStyle: 'italic', mb: 3 }}
           >
             "{t.quote}"
           </Typography>
-        </Box>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <Avatar
-            sx={{
-              width: 38,
-              height: 38,
-              bgcolor: '#f5c842',
-              color: '#021a4a',
-              fontSize: '0.78rem',
-              fontWeight: 700,
-            }}
-          >
-            {t.initials}
-          </Avatar>
-          <Box>
-            <Typography sx={{ color: '#fff', fontWeight: 600, fontSize: '0.875rem' }}>
-              {t.name}
-            </Typography>
-            <Typography sx={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.75rem' }}>
-              {t.role}
-            </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <Avatar
+              sx={{
+                width: 42,
+                height: 42,
+                bgcolor: '#f5c842',
+                color: '#021a4a',
+                fontSize: '0.85rem',
+                fontWeight: 700,
+              }}
+            >
+              {t.initials}
+            </Avatar>
+            <Box>
+              <Typography sx={{ color: '#fff', fontWeight: 600, fontSize: '0.9rem' }}>
+                {t.name}
+              </Typography>
+              <Typography sx={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.78rem' }}>
+                {t.role}
+              </Typography>
+            </Box>
+            <Rating
+              value={t.rating}
+              readOnly
+              size="small"
+              sx={{ ml: 'auto', '& .MuiRating-iconFilled': { color: '#f5c842' } }}
+            />
           </Box>
-          <Rating
-            value={t.rating}
-            readOnly
-            size="small"
-            sx={{ ml: 'auto', '& .MuiRating-iconFilled': { color: '#f5c842' } }}
-          />
-        </Box>
-      </CardContent>
-    </Card>
+        </DialogContent>
+      </Dialog>
+    </>
   )
 }
 
@@ -334,14 +423,7 @@ function WriteReviewForm() {
 }
 
 export default function TestimonialsSection() {
-  const [testimonials, setTestimonials] = useState<Review[]>([])
-
-  useEffect(() => {
-    fetch('http://localhost:4000/api/testimonials')
-      .then((res) => res.json())
-      .then((data) => setTestimonials(data))
-      .catch((err) => console.error('Failed to fetch testimonials:', err))
-  }, [])
+  const { testimonials, loading } = useTestimonials()
 
   const useSwiper = testimonials.length > 4
 
@@ -411,7 +493,20 @@ export default function TestimonialsSection() {
           />
         </Box>
 
-        {useSwiper ? (
+        {loading ? (
+          /* ── LOADING SKELETON (reserves space so the layout doesn't jump) ── */
+          <Grid container spacing={3}>
+            {[0, 1, 2].map((i) => (
+              <Grid key={i} size={{ xs: 12, sm: 6, md: 4 }}>
+                <Skeleton
+                  variant="rounded"
+                  height={300}
+                  sx={{ bgcolor: 'rgba(255,255,255,0.05)', borderRadius: 4 }}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        ) : useSwiper ? (
           /* ── SWIPER (more than 4 reviews) ── */
           <Box sx={{ position: 'relative' }}>
             <IconButton

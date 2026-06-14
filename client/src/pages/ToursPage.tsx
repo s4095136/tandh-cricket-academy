@@ -33,9 +33,9 @@ export default function ToursPage() {
         }}
       />
 
-      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, pt: { xs: 16, md: 20 }, pb: { xs: 8, md: 12 } }}>
+      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, pt: { xs: 9, md: 10 }, pb: { xs: 8, md: 12 } }}>
         {/* Header */}
-        <Box sx={{ textAlign: 'center', mb: { xs: 8, md: 10 } }}>
+        <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 7 } }}>
           <Chip
             label="On tour"
             size="small"

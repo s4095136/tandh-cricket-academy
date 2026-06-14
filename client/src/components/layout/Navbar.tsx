@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import {
-  AppBar, Toolbar, Box, Button, IconButton,
+  AppBar, Toolbar, Box, Button, IconButton, Chip,
   Drawer, List, ListItem, ListItemButton, ListItemText, Typography,
   Container, useMediaQuery, useTheme, Divider,
 } from '@mui/material'
@@ -19,7 +19,19 @@ const NAV_LINKS = [
 
 function scrollTo(href: string) {
   const el = document.querySelector(href)
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  if (!el) return
+
+  let targetY = el.getBoundingClientRect().top + window.scrollY
+
+  // Match the offset used for cross-page navigation to #philosophy, so the
+  // section's content clears the fixed navbar instead of landing underneath it.
+  if (href === '#philosophy') {
+    const navbar = document.querySelector('header.MuiAppBar-root')
+    const navH = navbar ? navbar.getBoundingClientRect().height : 0
+    targetY = Math.max(0, targetY - navH)
+  }
+
+  window.scrollTo({ top: targetY, behavior: 'smooth' })
 }
 
 export default function Navbar() {
@@ -62,38 +74,61 @@ export default function Navbar() {
       <AppBar
         position="fixed"
         sx={{
-          background: '#012152',
+          background: scrolled ? '#012152' : 'transparent',
           borderBottom: scrolled ? '1px solid rgba(255,255,255,0.08)' : 'none',
           transition: 'background 0.35s ease, border 0.35s ease',
           boxShadow: 'none',
         }}
       >
-        <Container maxWidth="lg">
+        <Container maxWidth={false} sx={{ px: { xs: 2, sm: 3, md: 5 } }}>
           <Toolbar disableGutters sx={{ minHeight: { xs: 64, md: 72 }, justifyContent: 'space-between' }}>
 
             {/* Logo */}
-            <Box
-              onClick={handleLogoClick}
-              sx={{ display: 'flex', alignItems: 'center', gap: 1, cursor: 'pointer', userSelect: 'none' }}
-            >
-              <Box
-                component="span"
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexShrink: 0 }}>
+              <Chip
+                label="Est. 2017 · Melbourne, AUS"
+                size="small"
                 sx={{
-                  fontFamily: '"Bebas Neue", sans-serif',
-                  fontSize: { xs: '1.8rem', md: '2.1rem' },
-                  letterSpacing: '0.1em',
-                  color: '#ffffff',
-                  transition: 'color 0.35s ease',
-                  '& em': { color: '#ffffff', fontStyle: 'normal' },
+                  display: { xs: 'none', lg: 'inline-flex' },
+                  whiteSpace: 'nowrap',
+                  bgcolor: 'rgba(245,200,66,0.15)',
+                  color: '#f5c842',
+                  border: '1px solid rgba(245,200,66,0.3)',
+                  fontWeight: 600,
+                  letterSpacing: '0.05em',
+                  fontSize: '0.72rem',
                 }}
+              />
+              <Box
+                onClick={handleLogoClick}
+                sx={{ display: 'flex', alignItems: 'center', gap: 0.75, cursor: 'pointer', userSelect: 'none' }}
               >
-                T<em>&</em>H CRICKET
+                <Box
+                  component="img"
+                  src="/images/logo-transparent.png"
+                  alt="T&H Cricket"
+                  sx={{ height: { xs: 32, md: 38 }, width: 'auto', display: 'block' }}
+                />
+                <Box
+                  component="span"
+                  sx={{
+                    fontFamily: '"Bebas Neue", sans-serif',
+                    fontSize: { xs: '1.4rem', md: '1.6rem' },
+                    letterSpacing: '0.08em',
+                    whiteSpace: 'nowrap',
+                    color: '#ffffff',
+                    transition: 'color 0.35s ease',
+                    '& em': { color: '#ffffff', fontStyle: 'normal' },
+                  }}
+                >
+                  T<em>&</em>H CRICKET
+                </Box>
               </Box>
             </Box>
 
             {/* Desktop links */}
             {!isMobile && (
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.25, minWidth: 0 }}>
                 {NAV_LINKS.map((link) => (
                   <Button
                     key={link.label}
@@ -102,7 +137,8 @@ export default function Navbar() {
                       color: 'rgba(255,255,255,0.85)',
                       fontWeight: 500,
                       fontSize: '0.875rem',
-                      px: 1.5,
+                      px: 1.25,
+                      whiteSpace: 'nowrap',
                       transition: 'color 0.2s ease',
                       '&:hover': {
                         color: '#f5c842',
@@ -117,7 +153,7 @@ export default function Navbar() {
                   variant="contained"
                   color="primary"
                   onClick={() => openApplyModal()}
-                  sx={{ ml: 2 }}
+                  sx={{ ml: 2, whiteSpace: 'nowrap', flexShrink: 0 }}
                 >
                   Join Program
                 </Button>

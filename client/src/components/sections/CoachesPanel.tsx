@@ -25,13 +25,14 @@ export default function CoachesPanel({ onCoachClick }: Props) {
       {/* Desktop */}
       <Box
         sx={{
-          display: { xs: 'none', md: 'flex' },
+          display: { xs: 'none', lg: 'flex' },
           position: 'absolute',
           right: 20,
           top: '72px',
           bottom: '20px',
           zIndex: 2,
           width: { md: 480, lg: 560 },
+          overflowY: 'auto',
           flexDirection: 'column',
         }}
       >
@@ -42,7 +43,7 @@ export default function CoachesPanel({ onCoachClick }: Props) {
       {/* Mobile */}
       <Box
         sx={{
-          display: { xs: 'block', md: 'none' },
+          display: { xs: 'block', lg: 'none' },
           mt: 6,
         }}
       >

@@ -74,9 +74,8 @@ const theme = createTheme({
     MuiCssBaseline: {
       styleOverrides: `
         @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
-        html { scroll-behavior: smooth; }
         * { box-sizing: border-box; }
-        body { margin: 0; }
+        body { margin: 0; background-color: #010d2a; }
       `,
     },
     MuiButton: {

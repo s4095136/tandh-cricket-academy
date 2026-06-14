@@ -36,7 +36,10 @@ export default function PhilosophySection() {
       id="philosophy"
       component="section"
       sx={{
-        py: { xs: 8, md: 12 },
+        py: { xs: 8, md: 8 },
+        minHeight: { md: 'calc(100vh - 72px)' },
+        display: { md: 'flex' },
+        alignItems: { md: 'center' },
         background: 'linear-gradient(150deg, #010d2a 0%, #021a4a 50%, #032053 100%)',
         position: 'relative',
         overflow: 'hidden',
@@ -80,9 +83,9 @@ export default function PhilosophySection() {
             <Typography
               variant="h2"
               sx={{
-                fontSize: { xs: '2.8rem', md: '3.6rem' },
+                fontSize: { xs: '2.8rem', md: '3.2rem' },
                 color: '#ffffff',
-                mb: 3,
+                mb: 2,
                 fontWeight: 900,
                 lineHeight: 1.1,
                 letterSpacing: '-0.01em',
@@ -97,31 +100,31 @@ export default function PhilosophySection() {
                 height: 4,
                 bgcolor: '#f5c842',
                 borderRadius: 2,
-                mb: 3,
+                mb: 2,
               }}
             />
 
             <Typography
               variant="body1"
-              sx={{ mb: 2.5, color: 'rgba(255,255,255,0.75)', lineHeight: 1.85, fontSize: '1rem', fontWeight: 500 }}
+              sx={{ mb: 2, color: 'rgba(255,255,255,0.75)', lineHeight: 1.7, fontSize: '0.95rem', fontWeight: 500 }}
             >
               At T&H Cricket, we are passionate about developing well-rounded cricketers both on and off the field. Our comprehensive programs focus on fundamental skills while also emphasising sportsmanship, teamwork, and strategic thinking.
             </Typography>
             <Typography
               variant="body1"
-              sx={{ mb: 5, color: 'rgba(255,255,255,0.75)', lineHeight: 1.85, fontSize: '1rem', fontWeight: 500 }}
+              sx={{ mb: 3, color: 'rgba(255,255,255,0.75)', lineHeight: 1.7, fontSize: '0.95rem', fontWeight: 500 }}
             >
               We believe in creating a positive and supportive learning environment where players can thrive and reach their full potential — from beginners to elite state representatives.
             </Typography>
 
             {/* Values checklist */}
-            <Stack spacing={1.8}>
+            <Stack spacing={1.3}>
               {VALUES.map((val) => (
                 <Box key={val} sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                   <Box
                     sx={{
-                      width: 22,
-                      height: 22,
+                      width: 20,
+                      height: 20,
                       borderRadius: '50%',
                       bgcolor: '#f5c842',
                       display: 'flex',
@@ -130,11 +133,11 @@ export default function PhilosophySection() {
                       flexShrink: 0,
                     }}
                   >
-                    <CheckCircleOutlineIcon sx={{ color: '#032053', fontSize: 14 }} />
+                    <CheckCircleOutlineIcon sx={{ color: '#032053', fontSize: 13 }} />
                   </Box>
                   <Typography
                     variant="body2"
-                    sx={{ color: '#ffffff', fontWeight: 600, fontSize: '0.875rem' }}
+                    sx={{ color: '#ffffff', fontWeight: 600, fontSize: '0.85rem' }}
                   >
                     {val}
                   </Typography>

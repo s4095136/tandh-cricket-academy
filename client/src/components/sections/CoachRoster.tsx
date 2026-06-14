@@ -31,6 +31,10 @@ export default function CoachRoster({ onCoachClick }: { onCoachClick: (name: str
                   alignItems: 'center',
                   gap: 0.75,
                   width: 88,
+                  cursor: 'pointer',
+                  '&:hover .coach-name': {
+                    color: '#f5c842',
+                  },
                 }}
               >
                 <Avatar
@@ -38,12 +42,14 @@ export default function CoachRoster({ onCoachClick }: { onCoachClick: (name: str
                   sx={{ width: 68, height: 68, ...AVATAR_HOVER_SX }}
                 />
                 <Typography
+                  className="coach-name"
                   sx={{
                     color: '#fff',
                     fontWeight: 600,
                     fontSize: '0.85rem',
                     lineHeight: 1.2,
                     textAlign: 'center',
+                    transition: 'color 0.2s ease',
                   }}
                 >
                   {coach.name}

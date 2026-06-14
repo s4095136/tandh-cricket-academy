@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Container, Typography, Button, Stack, Chip } from '@mui/material'
+import { Box, Container, Typography, Button, Stack } from '@mui/material'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutlined'
 import { useApplyModal } from '../../context/ApplyModalContext'
@@ -56,8 +56,8 @@ export default function HeroSection() {
       component="section"
       sx={{
         position: 'relative',
-        minHeight: '100vh',
-        display: 'flex',
+        minHeight: { xs: 'auto', lg: '100vh' },
+        display: { xs: 'block', lg: 'flex' },
         alignItems: 'center',
         background: 'linear-gradient(150deg, #010d2a 0%, #021a4a 50%, #032053 100%)',
         overflow: 'hidden',
@@ -95,34 +95,20 @@ export default function HeroSection() {
           display: 'flex',
           alignItems: 'center',
           zIndex: 1,
-          py: { xs: 16, md: 0 },
-          ml: { md: '280px' },
-          mr: { md: '640px' },
+          pt: { xs: 16, lg: '96px' },
+          pb: { xs: 16, lg: 0 },
+          ml: { lg: '280px' },
+          mr: { lg: '640px' },
         }}
       >
         <Box sx={{ maxWidth: { xs: '100%', md: 520 } }}>
-          {/* Badge */}
-          <Chip
-            label="Est. 2017 · Melbourne, AUS"
-            size="small"
-            sx={{
-              mb: 3,
-              bgcolor: 'rgba(245,200,66,0.15)',
-              color: '#f5c842',
-              border: '1px solid rgba(245,200,66,0.3)',
-              fontWeight: 600,
-              letterSpacing: '0.05em',
-              fontSize: '0.72rem',
-            }}
-          />
-
           {/* Headline */}
-          <Box sx={{ mb: 3 }}>
+          <Box sx={{ mb: 2 }}>
             <Box
               component="img"
               src="/images/logo-transparent.png"
               alt="T&H Cricket"
-              sx={{ height: { xs: 200, md: 280 }, width: 'auto', display: 'block', mx: 'auto', mb: 1.5 }}
+              sx={{ height: { xs: 200, md: 280, lg: 190 }, width: 'auto', display: 'block', mx: 'auto', mb: 1.5 }}
             />
             <Typography
               variant="h1"
@@ -142,7 +128,7 @@ export default function HeroSection() {
           {/* Subtext */}
           <Typography
             variant="body1"
-            sx={{ color: 'rgba(255,255,255,0.62)', maxWidth: 460, mb: 4, fontSize: { xs: '1rem', md: '1.05rem' } }}
+            sx={{ color: 'rgba(255,255,255,0.62)', maxWidth: 460, mb: 3, fontSize: { xs: '1rem', md: '1.05rem' } }}
           >
             Whether you're a budding cricketer dreaming of international glory or simply looking to improve your
             game, T&H Cricket has something for everyone. Expert coaching from Tom Rogers (BBL Melbourne Stars)
@@ -150,7 +136,7 @@ export default function HeroSection() {
           </Typography>
 
           {/* CTAs */}
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 4 }}>
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 3 }}>
             <Button
               variant="contained"
               color="primary"
@@ -183,7 +169,7 @@ export default function HeroSection() {
           </Stack>
 
           {/* Stats */}
-          <Box sx={{ width: '100%', maxWidth: 460, height: '1px', bgcolor: 'rgba(255,255,255,0.2)', mb: 2.5 }} />
+          <Box sx={{ width: '100%', maxWidth: 460, height: '1px', bgcolor: 'rgba(255,255,255,0.2)', mb: 2 }} />
           <Box sx={{ display: 'flex', gap: { xs: 3, md: 5 }, flexWrap: 'wrap' }}>
             {STATS.map((stat) => (
               <Box key={stat.label}>

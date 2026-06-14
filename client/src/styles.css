@@ -1,3 +1,2 @@
 /* Global resets — MUI CssBaseline handles the rest */
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; }

@@ -41,7 +41,7 @@ export default function RepresentativesPage() {
         }}
       />
 
-      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, pt: { xs: 16, md: 20 }, pb: { xs: 8, md: 12 } }}>
+      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, pt: { xs: 10, md: 12 }, pb: { xs: 8, md: 12 } }}>
         {/* Header */}
         <Box sx={{ textAlign: 'center', mb: { xs: 8, md: 10 } }}>
           <Chip

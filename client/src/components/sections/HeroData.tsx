@@ -1,9 +1,9 @@
 export const ROTATING_WORDS = [
-  'developing skills.',
-  'dedicated coaches.',
-  'holiday clinics.',
-  'building champions.',
-  'leading the way.',
+  'Developing Skills.',
+  'Dedicated Coaches.',
+  'Holiday Clinics.',
+  'Building Champions.',
+  'Leading The Way.',
 ]
 
 export const STATS = [

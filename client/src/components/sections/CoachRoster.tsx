@@ -4,24 +4,23 @@ import { COACH_GROUPS, AVATAR_HOVER_SX } from './HeroData'
 
 export default function CoachRoster({ onCoachClick }: { onCoachClick: (name: string) => void }) {
   return (
-    <Box sx={{ px: 1 }}>
+    <Box sx={{ px: 1, py: 0.5 }}>
       {COACH_GROUPS.map(({ group, coaches: groupCoaches }) => (
-        <Box key={group} sx={{ mb: 2 }}>
+        <Box key={group} sx={{ mb: 2.5 }}>
           <Typography
             sx={{
               color: '#f5c842',
               fontWeight: 800,
-              fontSize: '0.65rem',
-              letterSpacing: '0.12em',
-              px: 1,
+              fontSize: '0.8rem',
+              letterSpacing: '0.15em',
+              textAlign: 'center',
               mb: 1.5,
-              opacity: 0.7,
             }}
           >
             {group}
           </Typography>
 
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, px: 1 }}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 2.5 }}>
             {groupCoaches.map((coach) => (
               <Box
                 key={coach.name}
@@ -30,29 +29,21 @@ export default function CoachRoster({ onCoachClick }: { onCoachClick: (name: str
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  gap: 0.8,
-                  cursor: 'pointer',
-                  width: 72,
+                  gap: 0.75,
+                  width: 88,
                 }}
               >
                 <Avatar
                   src={`http://localhost:4000${coach.image}`}
-                  sx={{
-                    width: 62,
-                    height: 62,
-                    border: '2px solid rgba(245,200,66,0.5)',
-                    ...AVATAR_HOVER_SX,
-                  }}
+                  sx={{ width: 68, height: 68, ...AVATAR_HOVER_SX }}
                 />
                 <Typography
                   sx={{
                     color: '#fff',
                     fontWeight: 600,
-                    fontSize: '0.65rem',
-                    textAlign: 'center',
+                    fontSize: '0.85rem',
                     lineHeight: 1.2,
-                    transition: 'color 0.2s ease',
-                    '&:hover': { color: '#f5c842' },
+                    textAlign: 'center',
                   }}
                 >
                   {coach.name}
@@ -60,8 +51,6 @@ export default function CoachRoster({ onCoachClick }: { onCoachClick: (name: str
               </Box>
             ))}
           </Box>
-
-          <Box sx={{ height: '1px', bgcolor: 'rgba(255,255,255,0.06)', mx: 1, mt: 1.5 }} />
         </Box>
       ))}
     </Box>

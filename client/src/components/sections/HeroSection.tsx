@@ -118,16 +118,16 @@ export default function HeroSection() {
 
           {/* Headline */}
           <Box sx={{ mb: 3 }}>
-            <Typography
-              variant="h1"
-              sx={{ fontSize: { xs: '2.2rem', sm: '3rem', md: '4.5rem', lg: '5.5rem' }, color: '#ffffff', mb: 1.5 }}
-            >
-              T&H Cricket
-            </Typography>
+            <Box
+              component="img"
+              src="/images/logo-transparent.png"
+              alt="T&H Cricket"
+              sx={{ height: { xs: 200, md: 280 }, width: 'auto', display: 'block', mx: 'auto', mb: 1.5 }}
+            />
             <Typography
               variant="h1"
               sx={{
-                fontSize: { xs: '1.8rem', sm: '2.4rem', md: '3rem' },
+                fontSize: { xs: '1.3rem', sm: '1.7rem', md: '2.1rem' },
                 color: 'secondary.main',
                 minHeight: { xs: '2.1rem', md: '3.5rem' },
                 transition: 'opacity 0.4s ease, transform 0.4s ease',
@@ -150,7 +150,7 @@ export default function HeroSection() {
           </Typography>
 
           {/* CTAs */}
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 8 }}>
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 4 }}>
             <Button
               variant="contained"
               color="primary"
@@ -183,7 +183,7 @@ export default function HeroSection() {
           </Stack>
 
           {/* Stats */}
-          <Box sx={{ width: '100%', maxWidth: 460, height: '1px', bgcolor: 'rgba(255,255,255,0.2)', mb: 4 }} />
+          <Box sx={{ width: '100%', maxWidth: 460, height: '1px', bgcolor: 'rgba(255,255,255,0.2)', mb: 2.5 }} />
           <Box sx={{ display: 'flex', gap: { xs: 3, md: 5 }, flexWrap: 'wrap' }}>
             {STATS.map((stat) => (
               <Box key={stat.label}>

@@ -10,7 +10,6 @@ import {
 } from '@mui/material'
 import FacebookIcon from '@mui/icons-material/Facebook'
 import InstagramIcon from '@mui/icons-material/Instagram'
-import SportsCricketIcon from '@mui/icons-material/SportsCricket'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useApplyModal } from '../../context/ApplyModalContext'
 
@@ -44,8 +43,7 @@ export default function Footer() {
     <Box
       component="footer"
       sx={{
-        background:
-          'linear-gradient(150deg, #010d2a 0%, #021a4a 50%, #032053 100%)',
+        background: '#012152',
         color: 'rgba(255,255,255,0.85)',
         pt: 8,
         pb: 4,
@@ -57,12 +55,10 @@ export default function Footer() {
           {/* Brand */}
           <Grid size={{ xs: 12, md: 4 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-              <SportsCricketIcon sx={{ color: '#f5c842' }} />
-
               <Typography
                 sx={{
                   fontFamily: '"Bebas Neue", sans-serif',
-                  fontSize: '1.8rem',
+                  fontSize: '2.4rem',
                   letterSpacing: '0.12em',
                   color: '#fff',
                 }}

@@ -1,9 +1,9 @@
 export const ROTATING_WORDS = [
-  'developing skills.',
-  'dedicated coaches.',
-  'holiday clinics.',
-  'building champions.',
-  'leading the way.',
+  'Developing Skills.',
+  'Dedicated Coaches.',
+  'Holiday Clinics.',
+  'Building Champions.',
+  'Leading The Way.',
 ]
 
 export const STATS = [
@@ -39,7 +39,7 @@ export const COACH_GROUPS = [
   {
     group: 'ASSISTANT COACHES',
     coaches: [
-      { name: 'Aayan Nadeem', image: '/images/coaches/aayan.png', role: 'Assistant Coach' },
+      { name: 'Aayan Nadeem', image: '/images/coaches/aayan-nadeem.png', role: 'Assistant Coach' },
       { name: 'Ritin Raman', image: '/images/coaches/ritin.png', role: 'Assistant Coach' },
       { name: 'Daksh Kumar', image: '/images/coaches/daksh.png', role: 'Assistant Coach' },
       { name: 'Krish Kumar', image: '/images/coaches/krish.png', role: 'Assistant Coach' },

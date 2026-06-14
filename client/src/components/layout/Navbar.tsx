@@ -6,7 +6,6 @@ import {
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import CloseIcon from '@mui/icons-material/Close'
-import SportsCricketIcon from '@mui/icons-material/SportsCricket'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useApplyModal } from '../../context/ApplyModalContext'
 
@@ -63,8 +62,7 @@ export default function Navbar() {
       <AppBar
         position="fixed"
         sx={{
-          background: scrolled ? 'rgba(2,26,74,0.97)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(14px)' : 'none',
+          background: '#012152',
           borderBottom: scrolled ? '1px solid rgba(255,255,255,0.08)' : 'none',
           transition: 'background 0.35s ease, border 0.35s ease',
           boxShadow: 'none',
@@ -78,16 +76,15 @@ export default function Navbar() {
               onClick={handleLogoClick}
               sx={{ display: 'flex', alignItems: 'center', gap: 1, cursor: 'pointer', userSelect: 'none' }}
             >
-              <SportsCricketIcon sx={{ color: 'secondary.main', fontSize: 22 }} />
               <Box
                 component="span"
                 sx={{
                   fontFamily: '"Bebas Neue", sans-serif',
-                  fontSize: { xs: '1.45rem', md: '1.6rem' },
+                  fontSize: { xs: '1.8rem', md: '2.1rem' },
                   letterSpacing: '0.1em',
                   color: '#ffffff',
                   transition: 'color 0.35s ease',
-                  '& em': { color: 'secondary.main', fontStyle: 'normal' },
+                  '& em': { color: '#ffffff', fontStyle: 'normal' },
                 }}
               >
                 T<em>&</em>H CRICKET
@@ -147,7 +144,7 @@ export default function Navbar() {
             width: 290,
             pt: 2,
             px: 2,
-            bgcolor: '#021a4a',
+            bgcolor: '#012152',
             borderLeft: '1px solid rgba(255,255,255,0.1)',
           },
         }}
@@ -156,10 +153,10 @@ export default function Navbar() {
           <Box
             sx={{
               fontFamily: '"Bebas Neue", sans-serif',
-              fontSize: '1.4rem',
+              fontSize: '1.7rem',
               letterSpacing: '0.1em',
               color: '#ffffff',
-              '& em': { color: 'secondary.main', fontStyle: 'normal' },
+              '& em': { color: '#ffffff', fontStyle: 'normal' },
             }}
           >
             T<em>&</em>H CRICKET

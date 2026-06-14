@@ -102,37 +102,37 @@ function SponsorList() {
   )
 }
 
-export default function SponsorsPanel() {
-  return (
-    <>
-      {/* Desktop — no box, just floating content */}
-      <Box
-        sx={{
-          display: { xs: 'none', md: 'flex' },
-          position: 'absolute',
-          left: 20,
-          top: '50%',
-          transform: 'translateY(-50%)',
-          zIndex: 2,
-          width: { md: 220, lg: 240 },
-          flexDirection: 'column',
-        }}
-      >
-        <Typography sx={{ color: '#f5c842', fontWeight: 800, fontSize: '0.75rem', letterSpacing: '0.12em', mb: 2, px: 1 }}>
-          OUR SPONSORS
-        </Typography>
-        <Box sx={{ overflowY: 'auto', maxHeight: 560 }}>
-          <SponsorList />
-        </Box>
-      </Box>
+// export default function SponsorsPanel() {
+//   return (
+//     <>
+//       {/* Desktop — no box, just floating content */}
+//       <Box
+//         sx={{
+//           display: { xs: 'none', md: 'flex' },
+//           position: 'absolute',
+//           left: 20,
+//           top: '50%',
+//           transform: 'translateY(-50%)',
+//           zIndex: 2,
+//           width: { md: 220, lg: 240 },
+//           flexDirection: 'column',
+//         }}
+//       >
+//         <Typography sx={{ color: '#f5c842', fontWeight: 800, fontSize: '0.75rem', letterSpacing: '0.12em', mb: 2, px: 1 }}>
+//           OUR SPONSORS
+//         </Typography>
+//         <Box sx={{ overflowY: 'auto', maxHeight: 560 }}>
+//           <SponsorList />
+//         </Box>
+//       </Box>
 
-      {/* Mobile */}
-      <Box sx={{ display: { xs: 'block', md: 'none' }, mt: 4 }}>
-        <Typography sx={{ color: '#f5c842', fontWeight: 800, fontSize: '0.75rem', letterSpacing: '0.12em', mb: 2, px: 1 }}>
-          OUR SPONSORS
-        </Typography>
-        <SponsorList grid />
-      </Box>
-    </>
-  )
-}
+//       {/* Mobile */}
+//       <Box sx={{ display: { xs: 'block', md: 'none' }, mt: 4 }}>
+//         <Typography sx={{ color: '#f5c842', fontWeight: 800, fontSize: '0.75rem', letterSpacing: '0.12em', mb: 2, px: 1 }}>
+//           OUR SPONSORS
+//         </Typography>
+//         <SponsorList grid />
+//       </Box>
+//     </>
+//   )
+// }

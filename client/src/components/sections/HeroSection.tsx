@@ -2,25 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { Box, Container, Typography, Button, Stack, Chip } from '@mui/material'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutlined'
-import Avatar from '@mui/material/Avatar'
-import Dialog from '@mui/material/Dialog'
-import DialogContent from '@mui/material/DialogContent'
 import { useApplyModal } from '../../context/ApplyModalContext'
-
-const ROTATING_WORDS = [
-  'developing skills.',
-  'dedicated coaches.',
-  'holiday clinics.',
-  'building champions.',
-  'leading the way.',
-]
-
-const STATS = [
-  { value: '250+', label: 'Players coached' },
-  { value: '8', label: 'Years running' },
-  { value: '4', label: 'Programs' },
-  { value: '25yrs', label: 'Coaching experience' },
-]
+import { ROTATING_WORDS, STATS } from './HeroData'
+import CoachesPanel from './CoachesPanel'
+import SponsorsPanel from './SponsorsPanel'
+import CoachDialog from './CoachesDialog'
 
 interface Coach {
   id: number
@@ -33,15 +19,6 @@ interface Coach {
   accent_color: string
   bg_color: string
   tags: string[]
-}
-
-const AVATAR_HOVER_SX = {
-  transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-  cursor: 'pointer',
-  '&:hover': {
-    transform: 'scale(1.08)',
-    boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
-  },
 }
 
 export default function HeroSection() {
@@ -71,7 +48,6 @@ export default function HeroSection() {
 
   const handleAvatarClick = (name: string) => {
     const found = coaches.find((c) => c.name === name) || null
-    console.log('clicked:', name, 'found:', found)
     setSelectedCoach(found)
   }
 
@@ -87,7 +63,7 @@ export default function HeroSection() {
         overflow: 'hidden',
       }}
     >
-      {/* Background texture pattern */}
+      {/* Background texture */}
       <Box
         sx={{
           position: 'absolute',
@@ -112,8 +88,19 @@ export default function HeroSection() {
         }}
       />
 
-      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, py: { xs: 16, md: 0 } }}>
-        <Box sx={{ maxWidth: 720 }}>
+      <Container
+        maxWidth="lg"
+        sx={{
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          zIndex: 1,
+          py: { xs: 16, md: 0 },
+          ml: { md: '280px' },
+          mr: { md: '640px' },
+        }}
+      >
+        <Box sx={{ maxWidth: { xs: '100%', md: 520 } }}>
           {/* Badge */}
           <Chip
             label="Est. 2017 · Melbourne, AUS"
@@ -130,21 +117,19 @@ export default function HeroSection() {
           />
 
           {/* Headline */}
-          <Box sx={{ maxWidth: 720, mb: 3 }}>
+          <Box sx={{ mb: 3 }}>
             <Typography
               variant="h1"
-              sx={{ fontSize: { xs: '2.2rem', sm: '3rem', md: '3.8rem', lg: '4.2rem' }, color: '#ffffff', whiteSpace: 'nowrap', mb: 1.5 }}
+              sx={{ fontSize: { xs: '2.2rem', sm: '3rem', md: '4.5rem', lg: '5.5rem' }, color: '#ffffff', mb: 1.5 }}
             >
               T&H Cricket
             </Typography>
             <Typography
               variant="h1"
               sx={{
-                fontSize: { xs: '1.8rem', sm: '2.4rem', md: '3rem', lg: '3.3rem' },
+                fontSize: { xs: '1.8rem', sm: '2.4rem', md: '3rem' },
                 color: 'secondary.main',
-                whiteSpace: 'nowrap',
-                textTransform: 'capitalize',
-                minHeight: { xs: '2.1rem', sm: '2.8rem', md: '3.5rem', lg: '3.9rem' },
+                minHeight: { xs: '2.1rem', md: '3.5rem' },
                 transition: 'opacity 0.4s ease, transform 0.4s ease',
                 opacity: visible ? 1 : 0,
                 transform: visible ? 'translateY(0)' : 'translateY(8px)',
@@ -157,7 +142,7 @@ export default function HeroSection() {
           {/* Subtext */}
           <Typography
             variant="body1"
-            sx={{ color: 'rgba(255,255,255,0.62)', maxWidth: 520, mb: 4, fontSize: { xs: '1rem', md: '1.05rem' } }}
+            sx={{ color: 'rgba(255,255,255,0.62)', maxWidth: 460, mb: 4, fontSize: { xs: '1rem', md: '1.05rem' } }}
           >
             Whether you're a budding cricketer dreaming of international glory or simply looking to improve your
             game, T&H Cricket has something for everyone. Expert coaching from Tom Rogers (BBL Melbourne Stars)
@@ -197,8 +182,8 @@ export default function HeroSection() {
             </Button>
           </Stack>
 
-          {/* Stats row */}
-          <Box sx={{ width: '500px', height: '1px', bgcolor: 'rgba(255,255,255,0.2)', mb: 4 }} />
+          {/* Stats */}
+          <Box sx={{ width: '100%', maxWidth: 460, height: '1px', bgcolor: 'rgba(255,255,255,0.2)', mb: 4 }} />
           <Box sx={{ display: 'flex', gap: { xs: 3, md: 5 }, flexWrap: 'wrap' }}>
             {STATS.map((stat) => (
               <Box key={stat.label}>
@@ -222,116 +207,10 @@ export default function HeroSection() {
         </Box>
       </Container>
 
-      {/* Coaches column */}
-      <Box
-        sx={{
-          display: 'flex',
-          position: 'absolute',
-          right: 60,
-          top: '48%',
-          transform: 'translateY(-50%) scale(0.85)',
-          transformOrigin: 'center',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: 5,
-          zIndex: 2,
-        }}
-      >
-        {/* Founders */}
-        <Typography sx={{ color: '#f5c842', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.1em' }}>
-          FOUNDERS & HEAD COACHES
-        </Typography>
-        <Box sx={{ display: 'flex', gap: 5 }}>
-          {[
-            { name: 'Hanni Harb', image: '/images/coaches/hanni-harb.png' },
-            { name: 'Tom Rogers', image: '/images/coaches/tom-rogers.png' },
-          ].map((coach) => (
-            <Box key={coach.name} sx={{ textAlign: 'center' }}>
-              <Avatar
-                src={`http://localhost:4000${coach.image}`}
-                onClick={() => handleAvatarClick(coach.name)}
-                sx={{ width: 150, height: 150, border: '4px solid #f5c842', mb: 1, ...AVATAR_HOVER_SX }}
-              />
-              <Typography 
-               onClick={() => handleAvatarClick(coach.name)}
-                sx={{
-                color: '#fff',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'color 0.2s ease',
-                '&:hover': { color: '#f5c842' },
-              }}
-              >{coach.name}
-              </Typography>
-            </Box>
-          ))}
-        </Box>
+      <SponsorsPanel />
+      <CoachesPanel onCoachClick={handleAvatarClick} />
 
-        {/* Lead Coaches */}
-        <Typography sx={{ color: '#f5c842', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.1em' }}>
-          LEAD COACHES
-        </Typography>
-        <Box sx={{ display: 'flex', gap: 5 }}>
-          {[
-            { name: 'Aiman Nadeem', image: '/images/coaches/aiman.png' },
-            { name: 'Alan Chandwick', image: '/images/coaches/alan.png' },
-            { name: 'Ali Khan', image: '/images/coaches/ali-khan.png' },
-          ].map((coach) => (
-            <Box key={coach.name} sx={{ textAlign: 'center' }}>
-              <Avatar
-                src={`http://localhost:4000${coach.image}`}
-                onClick={() => handleAvatarClick(coach.name)}
-                sx={{ width: 150, height: 150, border: '4px solid #f5c842', mb: 1, ...AVATAR_HOVER_SX }}
-              />
-              <Typography
-               onClick={() => handleAvatarClick(coach.name)}
-                sx={{
-                color: '#fff',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'color 0.2s ease',
-                '&:hover': { color: '#f5c842' },
-              }}
-              >{coach.name}
-              </Typography>
-            </Box>
-          ))}
-        </Box>
-
-        {/* Assistant Coaches */}
-        <Typography sx={{ color: '#f5c842', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.1em' }}>
-          ASSISTANT COACHES
-        </Typography>
-        <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', alignItems: 'flex-start' }}>
-          {[
-            { name: 'Aayan Nadeem', image: '/images/coaches/aayan.png' },
-            { name: 'Ritin Raman', image: '/images/coaches/ritin.png' },
-            { name: 'Daksh Kumar', image: '/images/coaches/daksh.png' },
-            { name: 'Krish Kumar', image: '/images/coaches/krish.png' },
-          ].map((coach) => (
-            <Box key={coach.name} sx={{ width: 150, textAlign: 'center' }}>
-              <Avatar
-                src={`http://localhost:4000${coach.image}`}
-                onClick={() => handleAvatarClick(coach.name)}
-                sx={{ width: 150, height: 150, border: '3px solid #f5c842', mb: 1, ...AVATAR_HOVER_SX }}
-              />
-                            <Typography
-               onClick={() => handleAvatarClick(coach.name)}
-                sx={{
-                color: '#fff',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'color 0.2s ease',
-                '&:hover': { color: '#f5c842' },
-              }}
-              >{coach.name}
-              </Typography>
-            </Box>
-          ))}
-        </Box>
-      </Box>
-
-      {/* Bottom gradient fade */}
+      {/* Bottom gradient */}
       <Box
         sx={{
           position: 'absolute',
@@ -344,134 +223,7 @@ export default function HeroSection() {
         }}
       />
 
-<Dialog
-  open={!!selectedCoach}
-  onClose={() => setSelectedCoach(null)}
-  maxWidth="md"
-  fullWidth
-  slotProps={{
-    paper: {
-      sx: {
-        backgroundColor: '#021a4a !important',
-        backgroundImage: 'none !important',
-        color: '#ffffff',
-        borderRadius: 4,
-        border: '1px solid rgba(255,255,255,0.1)',
-        boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
-      },
-    },
-  }}
->
-  {selectedCoach && (
-    <DialogContent
-      sx={{
-        backgroundColor: '#021a4a',
-        color: '#ffffff',
-        p: 0,
-      }}
-    >
-      {/* Navy header */}
-      <Box
-        sx={{
-          background: 'linear-gradient(150deg, #010d2a 0%, #021a4a 50%, #032053 100%)',
-          px: 4,
-          py: 4,
-          display: 'flex',
-          flexDirection: { xs: 'column', sm: 'row' },
-          alignItems: 'center',
-          gap: 3,
-          borderBottom: '1px solid rgba(255,255,255,0.08)',
-        }}
-      >
-        <Avatar
-          src={`http://localhost:4000${selectedCoach.image}`}
-          sx={{
-            width: 140,
-            height: 140,
-            flexShrink: 0,
-            border: '4px solid #f5c842',
-          }}
-        />
-
-        <Box sx={{ textAlign: { xs: 'center', sm: 'left' } }}>
-          <Typography
-            variant="h3"
-            sx={{
-              color: '#ffffff',
-              fontWeight: 700,
-              mb: 0.5,
-            }}
-          >
-            {selectedCoach.name}
-          </Typography>
-
-          <Typography
-            sx={{
-              color: '#f5c842',
-              fontWeight: 600,
-              fontSize: '1.1rem',
-            }}
-          >
-            {selectedCoach.role}
-          </Typography>
-        </Box>
-      </Box>
-
-      {/* Body */}
-      <Box sx={{ p: 4, textAlign: 'center' }}>
-        <Box sx={{ mb: 3 }}>
-          {selectedCoach.credentials?.map((cred: string) => (
-            <Typography
-              key={cred}
-              sx={{
-                color: 'rgba(255,255,255,0.85)',
-                mb: 0.5,
-              }}
-            >
-              • {cred}
-            </Typography>
-          ))}
-        </Box>
-
-        <Typography
-          sx={{
-            color: 'rgba(255,255,255,0.75)',
-            lineHeight: 1.8,
-            textAlign: 'left',
-            maxWidth: 700,
-            mx: 'auto',
-            mb: 3,
-          }}
-        >
-          {selectedCoach.bio}
-        </Typography>
-
-        <Box
-          sx={{
-            display: 'flex',
-            gap: 1,
-            justifyContent: 'center',
-            flexWrap: 'wrap',
-          }}
-        >
-          {selectedCoach.tags?.map((tag: string) => (
-            <Chip
-              key={tag}
-              label={tag}
-              size="small"
-              sx={{
-                bgcolor: 'rgba(245,200,66,0.15)',
-                color: '#f5c842',
-                border: '1px solid rgba(245,200,66,0.25)',
-                fontWeight: 600,
-              }}
-            />
-          ))}
-        </Box>
-      </Box>
-    </DialogContent>
-  )}
-</Dialog>
+      <CoachDialog coach={selectedCoach} onClose={() => setSelectedCoach(null)} />
     </Box>
   )
 }

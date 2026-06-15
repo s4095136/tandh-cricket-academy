@@ -39,7 +39,25 @@ export default function CoachRoster({ onCoachClick }: { onCoachClick: (name: str
               >
                 <Avatar
                   src={`http://localhost:4000${coach.image}`}
-                  sx={{ width: 68, height: 68, ...AVATAR_HOVER_SX }}
+                  sx={{ width: 68, height: 68, '& img': {
+      objectFit: 'cover',
+      objectPosition:
+        coach.name === 'Alan Chandwick'
+          ? 'center top'
+          : coach.name === 'Fawad Ahmed'
+          ? 'center 5%'
+          : coach.name === 'Simon Feros'
+          ? 'center 5%'
+          : coach.name === 'Aiman Nadeem'
+          ? 'center 5%'
+          : coach.name === 'Daksh Kumar'
+          ? 'center 5%'
+          : coach.name === 'Ali Khan'
+          ? 'center 5%'
+          : coach.name === 'Krish Kumar'
+          ? 'center 5%'
+          : 'center center',
+    }, ...AVATAR_HOVER_SX }}
                 />
                 <Typography
                   className="coach-name"

@@ -22,7 +22,7 @@ export default function SponsorsPanel() {
       >
         <Box sx={{ px: 1, pb: 1.5, textAlign: 'center' }}>
           <Typography sx={{ color: '#f5c842', fontWeight: 800, fontSize: '0.75rem', letterSpacing: '0.12em' }}>
-            OUR SPONSORS
+            Proudly Affiliated With
           </Typography>
         </Box>
         <SponsorList />
@@ -37,7 +37,7 @@ export default function SponsorsPanel() {
       >
         <Box sx={{ px: 1, pb: 1.5, textAlign: 'center' }}>
           <Typography sx={{ color: '#f5c842', fontWeight: 800, fontSize: '0.75rem', letterSpacing: '0.12em' }}>
-            OUR SPONSORS
+            Proudly Affiliated With
           </Typography>
         </Box>
         <SponsorList />
@@ -49,8 +49,8 @@ export default function SponsorsPanel() {
 function SponsorList() {
   return (
     <Box sx={{ px: 1, py: 0.5 }}>
-      {SPONSOR_GROUPS.map(({ group, sponsors }) => (
-        <Box key={group} sx={{ mb: 2.5 }}>
+      {SPONSOR_GROUPS.map(({ sponsors }) => (
+        <Box key={sponsors[0]?.name} sx={{ mb: 2.5 }}>
           <Typography
             sx={{
               color: '#f5c842',
@@ -61,7 +61,7 @@ function SponsorList() {
               mb: 1.5,
             }}
           >
-            {group}
+        
           </Typography>
 
           <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 2.5 }}>
@@ -76,14 +76,29 @@ function SponsorList() {
                   width: 88,
                 }}
               >
-                <Avatar
-                  src={`http://localhost:4000${sponsor.image}`}
-                  sx={{
-                    width: 68,
-                    height: 68,
-                    bgcolor: 'rgba(255,255,255,0.06)',
-                  }}
-                />
+<Box
+  sx={{
+    width: 90,
+    height: 70,
+    bgcolor: '#fff',
+    borderRadius: 2,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    p: 1,
+  }}
+>
+  <Box
+    component="img"
+    src={`http://localhost:4000${sponsor.image}`}
+    alt={sponsor.name}
+    sx={{
+      maxWidth: '100%',
+      maxHeight: '100%',
+      objectFit: 'contain',
+    }}
+  />
+</Box>
                 <Typography
                   sx={{
                     color: '#fff',

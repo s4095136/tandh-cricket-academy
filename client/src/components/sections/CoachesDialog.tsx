@@ -55,7 +55,25 @@ export default function CoachDialog({ coach, onClose }: Props) {
           >
             <Avatar
               src={`http://localhost:4000${coach.image}`}
-              sx={{ width: 140, height: 140, flexShrink: 0, border: '4px solid #f5c842' }}
+              sx={{ width: 140, height: 140, flexShrink: 0, border: '4px solid #f5c842', '& img': {
+              objectFit: 'cover',
+              objectPosition:
+                coach.name === 'Alan Chandwick'
+                  ? 'center top'
+                  : coach.name === 'Fawad Ahmed'
+                  ? 'center 5%'
+                  : coach.name === 'Simon Feros'
+                  ? 'center 5%'
+                  : coach.name === 'Aiman Nadeem'
+                  ? 'center 5%'
+                  : coach.name === 'Daksh Kumar'
+                  ? 'center 5%'
+                  : coach.name === 'Ali Khan'
+                  ? 'center 5%'
+                  : coach.name === 'Krish Kumar'
+                  ? 'center 5%'
+                  : 'center center',
+            }, }}
             />
             <Box sx={{ textAlign: { xs: 'center', sm: 'left' } }}>
               <Typography variant="h3" sx={{ color: '#ffffff', fontWeight: 700, mb: 0.5 }}>

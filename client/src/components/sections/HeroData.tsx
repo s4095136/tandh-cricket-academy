@@ -1,9 +1,9 @@
 export const ROTATING_WORDS = [
-  'DEVELOPING SKILLS.',
-  'DEDICATED COACHES.',
-  'HOLIDAY CLINICS.',
-  'BUILDING CHAMPIONS.',
-  'LEADING THE WAY.',
+  'Developing Skills.',
+  'Dedicated Coaches.',
+  'Holiday Clinics.',
+  'Building Champions.',
+  'Leading The Way.',
 ]
 
 export const STATS = [
@@ -54,27 +54,39 @@ export const COACH_GROUPS = [
 
 export const SPONSOR_GROUPS = [
   {
-    group: 'PLATINUM SPONSORS',
+    // group: 'PLATINUM SPONSORS',
     sponsors: [
       { name: 'Kia Werribee', image: '/images/sponsors/kia-werribee.png', description: 'Official Automotive Partner' },
       { name: 'Passionate Fire', image: '/images/sponsors/passionate-fire.png', description: 'Official Partner' },
-    ],
+      {
+        name: 'H2C',
+        image: '/images/sponsors/h2c.png',
+      },
+      {
+        name: 'BowlStrong',
+        image: '/images/sponsors/bowlstrong.png',
+      },
+      {
+        name: 'Xplosive Fielding',
+        image: '/images/sponsors/xplosive-fielding.png',
+      },
+        ],
   },
-  {
-    group: 'GOLD SPONSORS',
-    sponsors: [
-      { name: 'Sponsor 3', image: '/images/sponsors/sponsor-3.png', description: 'Coming Soon' },
-      { name: 'Sponsor 4', image: '/images/sponsors/sponsor-4.png', description: 'Coming Soon' },
-    ],
-  },
-  {
-    group: 'SILVER SPONSORS',
-    sponsors: [
-      { name: 'Sponsor 5', image: '/images/sponsors/sponsor-5.png', description: 'Coming Soon' },
-      { name: 'Sponsor 6', image: '/images/sponsors/sponsor-6.png', description: 'Coming Soon' },
-      { name: 'Sponsor 7', image: '/images/sponsors/sponsor-7.png', description: 'Coming Soon' },
-    ],
-  },
+  // {
+  //   group: 'GOLD SPONSORS',
+  //   sponsors: [
+  //     { name: 'Sponsor 3', image: '/images/sponsors/sponsor-3.png', description: 'Coming Soon' },
+  //     { name: 'Sponsor 4', image: '/images/sponsors/sponsor-4.png', description: 'Coming Soon' },
+  //   ],
+  // },
+  // {
+  //   group: 'SILVER SPONSORS',
+  //   sponsors: [
+  //     { name: 'Sponsor 5', image: '/images/sponsors/sponsor-5.png', description: 'Coming Soon' },
+  //     { name: 'Sponsor 6', image: '/images/sponsors/sponsor-6.png', description: 'Coming Soon' },
+  //     { name: 'Sponsor 7', image: '/images/sponsors/sponsor-7.png', description: 'Coming Soon' },
+  //   ],
+  // },
 ]
 
 export const AVATAR_HOVER_SX = {

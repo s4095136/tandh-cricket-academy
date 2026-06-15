@@ -7,6 +7,9 @@ import SendIcon from '@mui/icons-material/Send'
 import FacebookIcon from '@mui/icons-material/Facebook'
 import InstagramIcon from '@mui/icons-material/Instagram'
 
+const API_URL =
+  import.meta.env.VITE_API_URL || 'http://localhost:4000'
+
 const PROGRAMS = [
   'Beginner Program (Ages 6–12)',
   'Advanced Training (Ages 13–17)',
@@ -51,7 +54,7 @@ export default function ContactSection() {
     setLoading(true)
 
     const response = await fetch(
-      'http://localhost:4000/api/enquiries',
+      `${API_URL}/api/enquiries`,
       {
         method: 'POST',
         headers: {

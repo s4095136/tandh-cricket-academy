@@ -24,6 +24,9 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 
+const API_URL =
+  import.meta.env.VITE_API_URL || 'http://localhost:4000'
+
 interface Coach {
   id: number
   initials: string
@@ -154,7 +157,7 @@ export default function CoachesSection() {
   const [coaches, setCoaches] = useState<Coach[]>([])
 
   useEffect(() => {
-    fetch('http://localhost:4000/api/coaches')
+    fetch(`${API_URL}/api/coaches`)
       .then((res) => res.json())
       .then((data) => setCoaches(data))
       .catch((err) => console.error('FETCH ERROR:', err))

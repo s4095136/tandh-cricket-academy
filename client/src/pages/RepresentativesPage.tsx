@@ -3,6 +3,8 @@ import { Box, Container, Typography, Card, CardContent, Chip, Grid, Avatar } fro
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
 import PublicIcon from '@mui/icons-material/Public'
 import { REPRESENTATIVES, AUSTRALIAN_REPRESENTATIVES } from '../data/representatives'
+const API_URL =
+  import.meta.env.VITE_API_URL || 'http://localhost:4000'
 
 function getInitials(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean)
@@ -95,7 +97,7 @@ export default function RepresentativesPage() {
                 <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2.5 }}>
                     <Avatar
-                      src={player.image ? `http://localhost:4000${player.image}` : undefined}
+                      src={player.image ? `${API_URL}${player.image}` : undefined}
                       sx={{
                         width: 56,
                         height: 56,
@@ -225,7 +227,7 @@ export default function RepresentativesPage() {
                 <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2.5 }}>
                     <Avatar
-                      src={player.image ? `http://localhost:4000${player.image}` : undefined}
+                      src={player.image ? `${API_URL}${player.image}` : undefined}
                       sx={{
                         width: 56,
                         height: 56,

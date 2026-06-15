@@ -1,5 +1,7 @@
 import React from 'react'
 import { Dialog, DialogContent, Box, Typography, Avatar, Chip } from '@mui/material'
+const API_URL =
+  import.meta.env.VITE_API_URL || 'http://localhost:4000'
 
 interface Coach {
   id: number
@@ -54,7 +56,7 @@ export default function CoachDialog({ coach, onClose }: Props) {
             }}
           >
             <Avatar
-              src={`http://localhost:4000${coach.image}`}
+              src={`${API_URL}${coach.image}`}
               sx={{ width: 140, height: 140, flexShrink: 0, border: '4px solid #f5c842', '& img': {
               objectFit: 'cover',
               objectPosition:

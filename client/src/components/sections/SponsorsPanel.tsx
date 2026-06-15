@@ -2,6 +2,9 @@ import React from 'react'
 import { Box, Typography, Avatar } from '@mui/material'
 import { SPONSOR_GROUPS } from './HeroData'
 
+const API_URL =
+  import.meta.env.VITE_API_URL || 'http://localhost:4000'
+
 export default function SponsorsPanel() {
   return (
     <>
@@ -90,7 +93,7 @@ function SponsorList() {
 >
   <Box
     component="img"
-    src={`http://localhost:4000${sponsor.image}`}
+    src={`${API_URL}${sponsor.image}`}
     alt={sponsor.name}
     sx={{
       maxWidth: '100%',

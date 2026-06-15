@@ -8,6 +8,9 @@ import CloseIcon from '@mui/icons-material/Close'
 import { PROGRAMS } from '../data/programs'
 import { useApplyModal } from '../context/ApplyModalContext'
 
+const API_URL =
+  import.meta.env.VITE_API_URL || 'http://localhost:4000'
+  
 const EMPTY_FORM = {
   name: '',
   email: '',
@@ -94,7 +97,7 @@ export default function ApplyModal() {
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL ?? 'http://localhost:4000'}/api/enquiries`, {
+      const res = await fetch(`${API_URL}/api/enquiries`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...form, program: program.label }),

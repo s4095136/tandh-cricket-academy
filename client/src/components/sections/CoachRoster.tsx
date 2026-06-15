@@ -1,6 +1,8 @@
 import React from 'react'
 import { Box, Typography, Avatar } from '@mui/material'
 import { COACH_GROUPS, AVATAR_HOVER_SX } from './HeroData'
+const API_URL =
+  import.meta.env.VITE_API_URL || 'http://localhost:4000'
 
 export default function CoachRoster({ onCoachClick }: { onCoachClick: (name: string) => void }) {
   return (
@@ -38,7 +40,7 @@ export default function CoachRoster({ onCoachClick }: { onCoachClick: (name: str
                 }}
               >
                 <Avatar
-                  src={`http://localhost:4000${coach.image}`}
+                  src={`${API_URL}${coach.image}`}
                   sx={{ width: 68, height: 68, '& img': {
       objectFit: 'cover',
       objectPosition:

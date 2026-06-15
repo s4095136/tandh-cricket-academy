@@ -13,6 +13,9 @@ import 'swiper/css/pagination'
 import { PROGRAMS } from '../../data/programs'
 import { useTestimonials, type Review } from '../../context/TestimonialsContext'
 
+const API_URL =
+  import.meta.env.VITE_API_URL || 'http://localhost:4000'
+  
 const inputSx = {
   '& .MuiOutlinedInput-root': {
     color: '#fff',

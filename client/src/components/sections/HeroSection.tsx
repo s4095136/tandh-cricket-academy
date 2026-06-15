@@ -9,6 +9,9 @@ import CoachesPanel from './CoachesPanel'
 import SponsorsPanel from './SponsorsPanel'
 import CoachDialog from './CoachesDialog'
 
+const API_URL =
+  import.meta.env.VITE_API_URL || 'http://localhost:4000'
+
 interface Coach {
   id: number
   initials: string
@@ -41,7 +44,7 @@ export default function HeroSection() {
   }, [])
 
   useEffect(() => {
-    fetch('http://localhost:4000/api/coaches')
+    fetch(`${API_URL}/api/coaches`)
       .then((res) => res.json())
       .then((data) => setCoaches(data))
       .catch((err) => console.error(err))

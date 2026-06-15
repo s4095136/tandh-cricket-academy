@@ -8,6 +8,9 @@ import CloseIcon from '@mui/icons-material/Close'
 import { TOURS } from '../data/tours'
 import { useTourApplyModal } from '../context/TourApplyModalContext'
 
+const API_URL =
+  import.meta.env.VITE_API_URL || 'http://localhost:4000'
+
 const UPCOMING_TOURS = TOURS.filter((t) => t.status === 'upcoming')
 
 const EMPTY_FORM = {
@@ -96,7 +99,7 @@ export default function TourApplyModal() {
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL ?? 'http://localhost:4000'}/api/enquiries`, {
+      const res = await fetch(`${API_URL}/api/enquiries`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...form, program: `Tour - ${tour.name} (${tour.year})` }),

@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-
+const API_URL =
+  import.meta.env.VITE_API_URL || 'http://localhost:4000'
+  
 export interface Review {
   id: number
   initials: string
@@ -24,7 +26,7 @@ export function TestimonialsProvider({ children }: { children: React.ReactNode }
   // testimonials section (e.g. Tours -> Home#testimonials) never re-triggers
   // a loading state - the data is already in memory.
   useEffect(() => {
-    fetch('http://localhost:4000/api/testimonials')
+    fetch(`${API_URL}/api/testimonials`)
       .then((res) => res.json())
       .then((data) => setTestimonials(data))
       .catch((err) => console.error('Failed to fetch testimonials:', err))

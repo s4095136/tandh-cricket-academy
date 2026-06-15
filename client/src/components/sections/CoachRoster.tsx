@@ -1,8 +1,7 @@
 import React from 'react'
 import { Box, Typography, Avatar } from '@mui/material'
 import { COACH_GROUPS, AVATAR_HOVER_SX } from './HeroData'
-const API_URL =
-  import.meta.env.VITE_API_URL || 'http://localhost:4000'
+const API_URL = 'https://tandh-backend-deployment-production.up.railway.app'
 
 export default function CoachRoster({ onCoachClick }: { onCoachClick: (name: string) => void }) {
   return (

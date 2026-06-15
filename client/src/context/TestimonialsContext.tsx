@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-const API_URL =
-  import.meta.env.VITE_API_URL || 'http://localhost:4000'
+const API_URL = 'https://tandh-backend-deployment-production.up.railway.app'
   
 export interface Review {
   id: number

@@ -8,8 +8,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import { PROGRAMS } from '../data/programs'
 import { useApplyModal } from '../context/ApplyModalContext'
 
-const API_URL =
-  import.meta.env.VITE_API_URL || 'http://localhost:4000'
+const API_URL = 'https://tandh-backend-deployment-production.up.railway.app'
   
 const EMPTY_FORM = {
   name: '',

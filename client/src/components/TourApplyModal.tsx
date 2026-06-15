@@ -8,8 +8,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import { TOURS } from '../data/tours'
 import { useTourApplyModal } from '../context/TourApplyModalContext'
 
-const API_URL =
-  import.meta.env.VITE_API_URL || 'http://localhost:4000'
+const API_URL = 'https://tandh-backend-deployment-production.up.railway.app'
 
 const UPCOMING_TOURS = TOURS.filter((t) => t.status === 'upcoming')
 

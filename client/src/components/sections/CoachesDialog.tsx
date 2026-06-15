@@ -1,7 +1,6 @@
 import React from 'react'
 import { Dialog, DialogContent, Box, Typography, Avatar, Chip } from '@mui/material'
-const API_URL =
-  import.meta.env.VITE_API_URL || 'http://localhost:4000'
+const API_URL = 'https://tandh-backend-deployment-production.up.railway.app'
 
 interface Coach {
   id: number

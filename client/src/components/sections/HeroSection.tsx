@@ -3,6 +3,7 @@ import { Box, Container, Typography, Button, Stack } from '@mui/material'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutlined'
 import { useApplyModal } from '../../context/ApplyModalContext'
+import { scrollToSection } from '../../utils/scrollToSection'
 import { ROTATING_WORDS, STATS } from './HeroData'
 import CoachesPanel from './CoachesPanel'
 import SponsorsPanel from './SponsorsPanel'
@@ -151,7 +152,7 @@ export default function HeroSection() {
               variant="outlined"
               size="large"
               startIcon={<PlayCircleOutlineIcon />}
-              href="#philosophy"
+              onClick={() => scrollToSection('#philosophy')}
               sx={{
                 fontSize: '0.95rem',
                 px: 3.5,

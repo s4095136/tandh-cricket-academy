@@ -8,6 +8,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import CloseIcon from '@mui/icons-material/Close'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useApplyModal } from '../../context/ApplyModalContext'
+import { scrollToSection } from '../../utils/scrollToSection'
 
 const NAV_LINKS = [
   { label: 'Philosophy', href: '#philosophy', type: 'anchor' as const },
@@ -16,23 +17,6 @@ const NAV_LINKS = [
   { label: 'Tours', href: '/tours', type: 'route' as const },
   { label: 'State Representatives', href: '/representatives', type: 'route' as const },
 ]
-
-function scrollTo(href: string) {
-  const el = document.querySelector(href)
-  if (!el) return
-
-  let targetY = el.getBoundingClientRect().top + window.scrollY
-
-  // Match the offset used for cross-page navigation to #philosophy, so the
-  // section's content clears the fixed navbar instead of landing underneath it.
-  if (href === '#philosophy') {
-    const navbar = document.querySelector('header.MuiAppBar-root')
-    const navH = navbar ? navbar.getBoundingClientRect().height : 0
-    targetY = Math.max(0, targetY - navH)
-  }
-
-  window.scrollTo({ top: targetY, behavior: 'smooth' })
-}
 
 export default function Navbar() {
   const { openApplyModal } = useApplyModal()
@@ -57,7 +41,7 @@ export default function Navbar() {
     if (location.pathname !== '/') {
       navigate(`/${link.href}`)
     } else {
-      scrollTo(link.href)
+      scrollToSection(link.href)
     }
   }
 

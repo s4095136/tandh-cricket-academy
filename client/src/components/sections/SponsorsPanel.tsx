@@ -3,8 +3,8 @@ import { Box, Typography, Avatar } from '@mui/material'
 import { SPONSOR_GROUPS } from './HeroData'
 
 const API_URL =
-  'https://tandh-backened-deployment-production.up.railway.app'
-  
+  'https://tandh-backend-deployment-production.up.railway.app'
+
 export default function SponsorsPanel() {
   return (
     <>

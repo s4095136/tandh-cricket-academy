@@ -28,7 +28,7 @@ export const REPRESENTATIVES: Representative[] = [
       'U23 Victoria 2nd XI Team (2025/26)',
       'Melbourne Renegades Junior Academy (2024/25, 2025/26)',
       'Melbourne Renegades T10 Invitational (2024/25)',
-      'Melbourne Stars Senior Academy (2025,26)'
+      'Melbourne Stars Senior Academy (2025/26)'
     ],
   },
   {

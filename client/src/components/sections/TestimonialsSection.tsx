@@ -240,7 +240,7 @@ function WriteReviewForm() {
 
     setLoading(true)
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL ?? 'http://localhost:4000'}/api/testimonials`, {
+      const res = await fetch(`${API_URL} ?? 'http://localhost:4000'}/api/testimonials`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: form.name, quote: form.quote, rating, role }),

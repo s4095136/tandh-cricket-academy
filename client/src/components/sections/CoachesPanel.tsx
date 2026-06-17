@@ -9,10 +9,10 @@ interface Props {
 function PanelHeader() {
   return (
     <Box sx={{ px: 1, pb: 1.5, textAlign: 'center' }}>
-      <Typography sx={{ color: '#f5c842', fontWeight: 800, fontSize: '0.75rem', letterSpacing: '0.12em' }}>
+      <Typography sx={{ color: '#f5c842', fontWeight: 800, fontSize: '1.5rem', letterSpacing: '0.12em' }}>
         COACHING STAFF
       </Typography>
-      <Typography sx={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.65rem', mt: 0.25 }}>
+      <Typography sx={{ color: 'rgba(255, 255, 255, 0.57)', fontSize: '0.75rem', mt: 0.25 }}>
         Click a coach to learn more
       </Typography>
     </Box>
@@ -44,7 +44,7 @@ export default function CoachesPanel({ onCoachClick }: Props) {
       <Box
         sx={{
           display: { xs: 'block', lg: 'none' },
-          mt: 6,
+          mt: 2,
         }}
       >
         <PanelHeader />

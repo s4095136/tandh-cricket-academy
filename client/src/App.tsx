@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react'
+import React, { useLayoutEffect, useEffect } from 'react'
 import { ThemeProvider, CssBaseline } from '@mui/material'
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
@@ -43,41 +43,50 @@ function PageTransition({ children }: { children: React.ReactNode }) {
 function ScrollToTop() {
   const { pathname, hash } = useLocation()
 
-  // useLayoutEffect runs synchronously before paint, so the page is already
-  // positioned correctly before the fade/scale transition starts rendering -
-  // otherwise the positioning happens mid-animation and looks like a scroll.
+  // Reset to top instantly on every navigation (no flash of old position).
   useLayoutEffect(() => {
-    if (hash) {
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
+  }, [pathname, hash])
+
+  // Defer hash scrolling by one frame so the new page has finished layout
+  // before we measure element positions — fixes incorrect scroll on mobile
+  // where getBoundingClientRect() returns 0 when called synchronously.
+  useEffect(() => {
+    if (!hash) return
+    const id = requestAnimationFrame(() => {
       const el = document.querySelector(hash)
-      if (el) {
-        // Reset to 0 first so getBoundingClientRect() reflects the element's
-        // true offset from the top of the document, regardless of whatever
-        // scroll position (or browser scroll-clamping) carried over from the
-        // previous page. Direct scrollTop assignment is always instant.
-        document.documentElement.scrollTop = 0
-        document.body.scrollTop = 0
-        let targetY = el.getBoundingClientRect().top
-        // The philosophy section is sized to exactly fill the viewport below
-        // the fixed navbar, so shift the scroll position up by the navbar's
-        // height - this tucks that empty space behind the navbar instead of
-        // having the section's own content start underneath it.
-        if (hash === '#philosophy') {
-          const navbar = document.querySelector('header.MuiAppBar-root')
-          const navH = navbar ? navbar.getBoundingClientRect().height : 0
-          targetY = Math.max(0, targetY - navH)
-        }
-        document.documentElement.scrollTop = targetY
-        document.body.scrollTop = targetY
+      if (!el) return
+      // Use offsetTop chain instead of getBoundingClientRect so CSS transforms
+      // (e.g. framer-motion entrance animations) don't skew the target position.
+      let targetY = 0
+      let node: HTMLElement | null = el as HTMLElement
+      while (node) { targetY += node.offsetTop; node = node.offsetParent as HTMLElement | null }
+      if (hash === '#philosophy') {
+        const navbar = document.querySelector('header.MuiAppBar-root')
+        const navH = navbar ? navbar.getBoundingClientRect().height : 0
+        targetY = Math.max(0, targetY - navH)
       }
-      // Clear the hash from the URL so refreshing this page returns to the top
+      window.scrollTo({ top: targetY, behavior: 'instant' })
       window.history.replaceState(null, '', pathname)
-    } else {
-      document.documentElement.scrollTop = 0
-      document.body.scrollTop = 0
-    }
+    })
+    return () => cancelAnimationFrame(id)
   }, [pathname, hash])
 
   return null
+}
+
+function SectionReveal({ children }: { children: React.ReactNode }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.98, y: 24 }}
+      whileInView={{ opacity: 1, scale: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.08 }}
+      transition={{ duration: 0.6, ease: 'easeOut' }}
+    >
+      {children}
+    </motion.div>
+  )
 }
 
 function HomePage() {
@@ -85,10 +94,8 @@ function HomePage() {
     <main>
       <HeroSection />
       <PhilosophySection />
-      <ProgramsSection />
-      {/* <CoachesSection /> */}
-      <TestimonialsSection />
-      {/* <ContactSection /> */}
+      <SectionReveal><ProgramsSection /></SectionReveal>
+      <SectionReveal><TestimonialsSection /></SectionReveal>
     </main>
   )
 }

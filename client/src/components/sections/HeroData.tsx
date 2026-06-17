@@ -18,7 +18,7 @@ export const COACH_GROUPS = [
     group: 'FOUNDERS',
     coaches: [
       { name: 'Hanni Harb', image: '/images/coaches/hanni-harb.png', role: 'Co-Founder & Head Coach' },
-      { name: 'Tom Rogers', image: '/images/coaches/tom-rogers.png', role: 'Co-Founder & Senior Coach' },
+      { name: 'Tom Rogers', image: '/images/coaches/tom-rogers1.png', role: 'Co-Founder & Senior Coach' },
     ],
   },
     {
@@ -61,6 +61,10 @@ export const SPONSOR_GROUPS = [
       {
         name: 'H2C',
         image: '/images/sponsors/h2c.png',
+      },
+      {
+        name: 'PlayStats',
+        image: '/images/sponsors/playstats.png',
       },
       {
         name: 'BowlStrong',

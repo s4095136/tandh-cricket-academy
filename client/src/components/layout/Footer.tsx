@@ -12,6 +12,7 @@ import FacebookIcon from '@mui/icons-material/Facebook'
 import InstagramIcon from '@mui/icons-material/Instagram'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useApplyModal } from '../../context/ApplyModalContext'
+import { scrollToSection } from '../../utils/scrollToSection'
 
 const FOOTER_LINKS = [
   { label: 'Philosophy', href: '#philosophy', type: 'anchor' as const },
@@ -34,8 +35,7 @@ export default function Footer() {
     if (location.pathname !== '/') {
       navigate(`/${link.href}`)
     } else {
-      const el = document.querySelector(link.href)
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      scrollToSection(link.href)
     }
   }
 

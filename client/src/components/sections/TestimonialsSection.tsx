@@ -69,7 +69,8 @@ function TestimonialCard({ t }: { t: Review }) {
   return (
     <>
       <Card
-        onClick={() => isLong && setOpen(true)}
+        // onClick={() => isLong && setOpen(true)}
+        onClick={() => setOpen(true)}
         sx={{
           height: '100%',
           display: 'flex',

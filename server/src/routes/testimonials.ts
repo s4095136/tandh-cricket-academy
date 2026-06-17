@@ -56,6 +56,9 @@ router.post('/testimonials', async (req, res) => {
       message: 'Thanks! Your review has been submitted and will appear once it has been reviewed.',
     })
 
+    console.log('EMAIL_USER:', process.env.EMAIL_USER)
+    console.log('EMAIL_PASS exists:', !!process.env.EMAIL_PASS)
+
     transporter
       .sendMail({
         from: process.env.EMAIL_USER,

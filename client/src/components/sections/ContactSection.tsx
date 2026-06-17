@@ -7,8 +7,7 @@ import SendIcon from '@mui/icons-material/Send'
 import FacebookIcon from '@mui/icons-material/Facebook'
 import InstagramIcon from '@mui/icons-material/Instagram'
 
-const API_URL =
-  import.meta.env.VITE_API_URL || 'http://localhost:4000'
+const API_URL = 'https://tandh-backend-deployment-production.up.railway.app'
 
 const PROGRAMS = [
   'Beginner Program (Ages 6–12)',

@@ -3,8 +3,8 @@ import { Box, Container, Typography, Card, CardContent, Chip, Grid, Avatar } fro
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
 import PublicIcon from '@mui/icons-material/Public'
 import { REPRESENTATIVES, AUSTRALIAN_REPRESENTATIVES } from '../data/representatives'
-const API_URL =
-  import.meta.env.VITE_API_URL || 'http://localhost:4000'
+
+const API_URL = 'https://tandh-backend-deployment-production.up.railway.app'
 
 function getInitials(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean)

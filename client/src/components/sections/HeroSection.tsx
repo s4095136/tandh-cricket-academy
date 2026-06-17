@@ -7,8 +7,7 @@ import CoachesPanel from './CoachesPanel'
 import SponsorsPanel from './SponsorsPanel'
 import CoachDialog from './CoachesDialog'
 
-const API_URL =
-  import.meta.env.VITE_API_URL || 'http://localhost:4000'
+const API_URL = 'https://tandh-backend-deployment-production.up.railway.app'
 
 interface Coach {
   id: number

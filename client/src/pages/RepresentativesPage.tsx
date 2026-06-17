@@ -9,7 +9,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import { REPRESENTATIVES, AUSTRALIAN_REPRESENTATIVES } from '../data/representatives'
 import type { Representative, AustralianRepresentative } from '../data/representatives'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000'
+const API_URL = 'https://tandh-backend-deployment-production.up.railway.app'
 
 function getInitials(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean)

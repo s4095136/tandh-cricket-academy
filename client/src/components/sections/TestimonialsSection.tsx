@@ -13,7 +13,10 @@ import 'swiper/css/pagination'
 import { PROGRAMS } from '../../data/programs'
 import { useTestimonials, type Review } from '../../context/TestimonialsContext'
 
-const API_URL = 'https://tandh-backend-deployment-production.up.railway.app'
+// const API_URL = 'https://tandh-backend-deployment-production.up.railway.app'
+
+const API_URL =
+  import.meta.env.VITE_API_URL || 'http://localhost:4000'
 
 const inputSx = {
   '& .MuiOutlinedInput-root': {
@@ -240,7 +243,7 @@ function WriteReviewForm() {
 
     setLoading(true)
     try {
-      const res = await fetch(`${API_URL} ?? 'http://localhost:4000'}/api/testimonials`, {
+        const res = await fetch(`${API_URL}/api/testimonials`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: form.name, quote: form.quote, rating, role }),

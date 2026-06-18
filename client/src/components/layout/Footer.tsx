@@ -200,7 +200,7 @@ export default function Footer() {
               </Typography>
 
               <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.65)' }}>
-                info@tandhcricket.com.au
+                coach@tandhcricket.com.au
               </Typography>
 
               <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.65)' }}>

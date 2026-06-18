@@ -1,18 +1,9 @@
 import { Router } from 'express'
 import { db } from '../db'
-import nodemailer from 'nodemailer'
+import { Resend } from 'resend'
 
 const router = Router()
-
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-})
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 function getInitials(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean)
@@ -46,7 +37,7 @@ router.post('/testimonials', async (req, res) => {
 
     const initials = getInitials(name)
 
-    const [result]: any = await db.query(
+    await db.query(
       `INSERT INTO testimonials (initials, name, role, rating, quote, status) VALUES (?, ?, ?, ?, ?, 'pending')`,
       [initials, name, role || '', ratingNum, quote]
     )
@@ -56,27 +47,26 @@ router.post('/testimonials', async (req, res) => {
       message: 'Thanks! Your review has been submitted and will appear once it has been reviewed.',
     })
 
-    console.log('EMAIL_USER:', process.env.EMAIL_USER)
-    console.log('EMAIL_PASS exists:', !!process.env.EMAIL_PASS)
+    const { error } = await resend.emails.send({
+      from: 'T&H Cricket <onboarding@resend.dev>',
+      to: process.env.EMAIL_USER!,
+      subject: `New T&H Review pending approval from ${name}`,
+      html: `
+        <h2>New Review Submitted (Pending Approval)</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Role:</strong> ${role || 'Not provided'}</p>
+        <p><strong>Rating:</strong> ${ratingNum} / 5</p>
+        <p><strong>Review:</strong></p>
+        <p>${quote}</p>
+      `,
+    })
 
-    transporter
-      .sendMail({
-        from: process.env.EMAIL_USER,
-        to: process.env.EMAIL_USER,
-        subject: `New T&H Review pending approval from ${name}`,
-        html: `
-          <h2>New Review Submitted (Pending Approval)</h2>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Role:</strong> ${role || 'Not provided'}</p>
-          <p><strong>Rating:</strong> ${ratingNum} / 5</p>
-          <p><strong>Review:</strong></p>
-          <p>${quote}</p>
-          <p>Review ID: ${result.insertId}. To publish it, set its "status" to 'approved' in the testimonials table.</p>
-        `,
-      })
-      .catch((emailError) => {
-        console.error('Failed to send review notification email:', emailError)
-      })
+    if (error) {
+      console.error('Resend error:', error)
+    } else {
+      console.log('Email sent successfully')
+    }
+
   } catch (error: any) {
     console.error('DB ERROR:', error.message)
     res.status(500).json({ success: false, message: 'Something went wrong. Please try again.' })

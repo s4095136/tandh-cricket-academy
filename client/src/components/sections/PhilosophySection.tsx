@@ -83,7 +83,7 @@ export default function PhilosophySection() {
             <Typography
               variant="h2"
               sx={{
-                fontSize: { xs: '2.8rem', md: '3.2rem' },
+                fontSize: { xs: '1.4em', md: '2rem' },
                 color: '#ffffff',
                 mb: 2,
                 fontWeight: 900,
@@ -91,7 +91,7 @@ export default function PhilosophySection() {
                 letterSpacing: '-0.01em',
               }}
             >
-              Developing well-rounded cricketers
+              Developing Crickiters For Success
             </Typography>
 
             <Box

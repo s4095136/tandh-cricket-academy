@@ -108,14 +108,13 @@ export default function PhilosophySection() {
               variant="body1"
               sx={{ mb: 2, color: 'rgba(255,255,255,0.75)', lineHeight: 1.7, fontSize: '0.95rem', fontWeight: 500 }}
             >
-              At T&H Cricket, we are passionate about developing well-rounded cricketers both on and off the field. Our comprehensive programs focus on fundamental skills while also emphasising sportsmanship, teamwork, and strategic thinking.
+              At T&H Cricket, we are passionate about developing cricketers for success, both on and off the field. Our programs are built on strong technical foundations, combined with a focus on game awareness, tactical understanding, and continuous personal development.
             </Typography>
             <Typography
               variant="body1"
               sx={{ mb: 3, color: 'rgba(255,255,255,0.75)', lineHeight: 1.7, fontSize: '0.95rem', fontWeight: 500 }}
             >
-              We believe in creating a positive and supportive learning environment where players can thrive and reach their full potential — from beginners to elite state representatives.
-            </Typography>
+              Whether you’re picking up a bat for the first time or competing at an elite level, our coaching environment is designed to help every player improve, perform, and thrive.            </Typography>
 
             {/* Values checklist */}
             <Stack spacing={1.3}>

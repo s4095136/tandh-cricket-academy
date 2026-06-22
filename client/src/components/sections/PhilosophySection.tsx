@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Container, Typography, Grid, Stack } from '@mui/material'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutlined'
-
+import CheckIcon from '@mui/icons-material/Check';
 const PILLARS = [
   {
     title: 'Fundamental Skills',
@@ -21,15 +21,47 @@ const PILLARS = [
   },
 ]
 
-const VALUES = [
-  'Positive and supportive learning environment',
-  'Coaching tailored to every age and skill level',
-  'Beginner to elite representative pathways',
-  'Specialized spin and fast bowling coaching',
-  'Professional insight from an active BBL player',
-  'Small group sessions for maximum development',
-]
+// const VALUES = [
+//   'Positive and supportive learning environment',
+//   'Coaching tailored to every age and skill level',
+//   'Beginner to elite representative pathways',
+//   'Specialized spin and fast bowling coaching',
+//   'Professional insight from an active BBL player',
+//   'Small group sessions for maximum development',
+// ]
 
+const VALUES = [
+  {
+    title: 'Positive & Supportive Environment',
+    description:
+      'Players learn, grow, and build confidence in a professional and encouraging setting.',
+  },
+  {
+    title: 'Tailored Coaching for Every Player',
+    description:
+      'Sessions are designed to suit all ages and skill levels, from juniors to elite representatives.',
+  },
+  {
+    title: 'Clear Player Pathways',
+    description:
+      'Structured development programs that guide players from beginner to representative cricket.',
+  },
+  {
+    title: 'Specialist Coaching',
+    description:
+      'Dedicated training in spin bowling, fast bowling, and skill-specific development.',
+  },
+  {
+    title: 'Professional Insight',
+    description:
+      'Learn from an active Big Bash League (BBL) player, gaining real-world, high-performance knowledge.',
+  },
+  {
+    title: 'Small Group Training',
+    description:
+      'Low coach-to-player ratios to maximise individual attention and results.',
+  },
+]
 export default function PhilosophySection() {
   return (
     <Box
@@ -115,35 +147,75 @@ export default function PhilosophySection() {
               sx={{ mb: 3, color: 'rgba(255,255,255,0.75)', lineHeight: 1.7, fontSize: '0.95rem', fontWeight: 500 }}
             >
               Whether you’re picking up a bat for the first time or competing at an elite level, our coaching environment is designed to help every player improve, perform, and thrive.            </Typography>
+            <Typography
+              variant="body1"
+              sx={{ mb: 3, color: 'rgba(255,255,255,0.75)', lineHeight: 1.7, fontSize: '0.95rem', fontWeight: 500 }}
+            >
+At T&H Cricket, we provide a high-quality coaching experience that balances skill development with a positive and supportive environment.
+            </Typography>
 
-            {/* Values checklist */}
-            <Stack spacing={1.3}>
-              {VALUES.map((val) => (
-                <Box key={val} sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                  <Box
-                    sx={{
-                      width: 20,
-                      height: 20,
-                      borderRadius: '50%',
-                      bgcolor: '#f5c842',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                    }}
-                  >
-                    <CheckCircleOutlineIcon sx={{ color: '#032053', fontSize: 13 }} />
-                  </Box>
-                  <Typography
-                    variant="body2"
-                    sx={{ color: '#ffffff', fontWeight: 600, fontSize: '0.85rem' }}
-                  >
-                    {val}
-                  </Typography>
-                </Box>
-              ))}
-            </Stack>
-          </Grid>
+            <Typography
+  sx={{
+    color: '#ffff',
+    fontWeight: 800,
+    fontSize: '1.3rem',
+    letterSpacing: '0.08em',
+    textTransform: 'uppercase',
+    mb: 2,
+  }}
+>
+  Our Approach
+</Typography>
+{/* Our Approach */}
+<Stack spacing={2}>
+  {VALUES.map((item) => (
+    <Box
+      key={item.title}
+      sx={{
+        display: 'flex',
+        alignItems: 'flex-start',
+        gap: 1.5,
+      }}
+    >
+      <Box
+        sx={{
+          width: 20,
+          height: 20,
+          mt: 0.3,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexShrink: 0,
+        }}
+      >
+        <CheckIcon sx={{ color: '#f5c842', fontSize: 18 }} />
+      </Box>
+
+      <Box>
+        <Typography
+          sx={{
+            color: '#f5c842',
+            fontWeight: 700,
+            fontSize: '0.95rem',
+            mb: 0.3,
+          }}
+        >
+          {item.title}
+        </Typography>
+
+        <Typography
+          sx={{
+            color: 'rgba(255,255,255,0.7)',
+            fontSize: '0.9rem',
+            lineHeight: 1.6,
+          }}
+        >
+          {item.description}
+        </Typography>
+      </Box>
+    </Box>
+  ))}
+</Stack>          </Grid>
 
           {/* Right: pillar cards */}
           <Grid size={{ xs: 12, md: 6 }} sx={{ display: 'flex', alignItems: 'center' }}>

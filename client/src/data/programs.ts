@@ -1,4 +1,5 @@
 export interface Program {
+  title: string
   label: string
   day: string
   time: string
@@ -9,6 +10,7 @@ export interface Program {
 
 export const PROGRAMS: Program[] = [
   {
+    title: 'Senior Program',
     label: 'Open',
     day: 'Saturday',
     time: 'White: 6:45pm – 9:00pm · Navy: 4:45pm – 7:00pm',
@@ -17,6 +19,7 @@ export const PROGRAMS: Program[] = [
     squads: ['Open Team White', 'Open Team Navy'],
   },
   {
+    title: 'Senior Program',
     label: '16s & Under',
     day: 'Saturday & Sunday',
     time: 'White: 2:45pm – 5:00pm (Sat) · Navy: 5:45pm – 8:00pm (Sun)',
@@ -25,6 +28,7 @@ export const PROGRAMS: Program[] = [
     squads: ['Special Group', '16&U White', '16&U Navy'],
   },
   {
+    title: 'Junior Program',
     label: '14s & Under',
     day: 'Sunday',
     time: 'Navy: 3:45pm – 6:00pm · 14&U: 1:45pm – 4:00pm',
@@ -33,6 +37,7 @@ export const PROGRAMS: Program[] = [
     squads: ['14&U Navy', '14&U'],
   },
   {
+    title: 'Junior Program',
     label: '12s & Under',
     day: 'Friday',
     time: '6:15pm – 8:30pm',
@@ -41,6 +46,7 @@ export const PROGRAMS: Program[] = [
     squads: ['12&U'],
   },
   {
+    title: 'Junior Program',  
     label: '10s & Under',
     day: 'Friday',
     time: '4:45pm – 6:30pm',

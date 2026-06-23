@@ -136,8 +136,8 @@ export default function Navbar() {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => openApplyModal()}
-                  sx={{ ml: 2, whiteSpace: 'nowrap', flexShrink: 0 }}
+                  onClick={() => openApplyModal(-1)}
+                  sx={{ ml: 2, whiteSpace: 'nowrap', flexShrink: 0, color: '#012152', bgcolor: '#f5c842', '&:hover': { bgcolor: '#f5c842', filter: 'brightness(0.9)' } }}
                 >
                   Join Program
                 </Button>
@@ -216,7 +216,9 @@ export default function Navbar() {
             variant="contained"
             color="primary"
             fullWidth
-            onClick={() => { openApplyModal(); setDrawerOpen(false) }}
+            onClick={() => { openApplyModal(-1); setDrawerOpen(false) }}
+            sx={{color: '#012152', bgcolor: '#f5c842', '&:hover': { bgcolor: '#f5c842', filter: 'brightness(0.9)' } }}
+
           >
             Join Program
           </Button>

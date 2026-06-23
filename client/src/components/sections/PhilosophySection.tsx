@@ -249,7 +249,7 @@ export default function PhilosophySection() {
             <Typography
               variant="h2"
               sx={{
-                fontSize: { xs: '1.4em', md: '2rem' },
+                fontSize: { xs: '1.3em', md: '3rem'},
                 color: '#ffffff',
                 mb: 2,
                 fontWeight: 900,

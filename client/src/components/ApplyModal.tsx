@@ -69,12 +69,22 @@ export default function ApplyModal() {
   const [error, setError] = useState<string | null>(null)
 
   // Sync the selected program whenever the modal is opened
-  useEffect(() => {
-    if (open) {
-      setProgramIndex(selectedIndex)
-    }
-  }, [open, selectedIndex])
+useEffect(() => {
+  if (open) {
+    setProgramIndex(selectedIndex === -1 ? 0 : selectedIndex)
+  }
+}, [open, selectedIndex])
 
+const showAllPrograms = selectedIndex === -1
+
+const selectedProgram =
+  selectedIndex >= 0 ? PROGRAMS[selectedIndex] : null
+
+const availablePrograms = showAllPrograms
+  ? PROGRAMS
+  : PROGRAMS.filter(
+      (p) => p.title === selectedProgram?.title
+    )
   const program = PROGRAMS[programIndex]
 
   const handleClose = () => {
@@ -108,7 +118,7 @@ export default function ApplyModal() {
         setSubmitted(true)
       }
     } catch {
-      setError('Could not reach the server. Please email us at info@tandhcricket.com.au')
+      setError('Could not reach the server. Please email us at coach@tandhcricket.com.au')
     } finally {
       setLoading(false)
     }
@@ -170,9 +180,19 @@ export default function ApplyModal() {
               <TextField fullWidth select label="Program" name="program" value={programIndex} onChange={handleProgramChange} size="small" sx={inputSx}
                 slotProps={{ select: { MenuProps: { slotProps: { paper: { sx: { bgcolor: '#021a4a', color: '#fff' } } } } } }}
               >
-                {PROGRAMS.map((p, i) => (
-                  <MenuItem key={p.label} value={i}>{p.label}</MenuItem>
-                ))}
+                {availablePrograms.map((p) => {
+                  const index = PROGRAMS.findIndex(
+                    (program) =>
+                      program.title === p.title &&
+                      program.label === p.label
+                  )
+
+                  return (
+                    <MenuItem key={p.label} value={index}>
+                      {p.label}
+                    </MenuItem>
+                  )
+                })}
               </TextField>
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>

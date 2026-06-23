@@ -197,14 +197,12 @@
 // }
 
 
-import React, { useState } from 'react'
+import React from 'react'
 import { Box, Container, Typography, Stack, Button } from '@mui/material'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { PROGRAMS } from '../../data/programs'
 import { useApplyModal } from '../../context/ApplyModalContext'
 
-const SENIOR_INDEXES = [0, 1]
-const JUNIOR_INDEXES = [2, 3, 4]
 
 const SUMMARIES = {
   senior: `Our senior programs are designed for competitive cricketers looking to sharpen their game at a high level. The Open and 16s squads train alongside experienced coaches including active BBL players, focusing on match-ready technique, game awareness, and physical conditioning. Whether you're pushing for representative selection or want to compete at your best in club cricket, our senior programs give you the professional edge.`,
@@ -212,12 +210,18 @@ const SUMMARIES = {
 }
 
 export default function ProgramsSection() {
-  const [tab, setTab] = useState<'senior' | 'junior'>('senior')
+  // const [tab, setTab] = useState<'senior' | 'junior'>('senior')
   const { openApplyModal } = useApplyModal()
 
-  const indexes = tab === 'senior' ? SENIOR_INDEXES : JUNIOR_INDEXES
-  const programs = indexes.map((i) => PROGRAMS[i])
+  // const indexes = tab === 'senior' ? SENIOR_INDEXES : JUNIOR_INDEXES
+  // const programs = indexes.map((i) => PROGRAMS[i])
+const seniorPrograms = PROGRAMS.filter(
+  (p) => p.title === 'Senior Program'
+)
 
+const juniorPrograms = PROGRAMS.filter(
+  (p) => p.title === 'Junior Program'
+)
   return (
     <Box
       id="programs"
@@ -238,132 +242,200 @@ export default function ProgramsSection() {
             Programs
           </Typography>
 
-          <Stack direction="row" spacing={1.5}>
-            {(['senior', 'junior'] as const).map((t) => (
-              <Button
-                key={t}
-                onClick={() => setTab(t)}
-                sx={{
-                  bgcolor: tab === t ? '#f5c842' : 'rgba(255,255,255,0.06)',
-                  color: tab === t ? '#021a4a' : 'rgba(255,255,255,0.7)',
-                  fontWeight: 700,
-                  borderRadius: 2,
-                  px: 3,
-                  py: 1,
-                  fontSize: '0.9rem',
-                  '&:hover': {
-                    bgcolor: tab === t ? '#e0b030' : 'rgba(255,255,255,0.1)',
-                  },
-                }}
-              >
-                {t === 'senior' ? 'Senior programs' : 'Junior programs'}
-              </Button>
-            ))}
-          </Stack>
         </Box>
 
         {/* Photo + content */}
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: { xs: 'column', md: 'row' },
-            gap: { xs: 4, md: 8 },
-            alignItems: 'flex-start',
-          }}
-        >
-          {/* Photo */}
-          <Box
-            sx={{
-              width: { xs: '100%', md: '45%' },
-              aspectRatio: '4/3',
-              borderRadius: 4,
-              overflow: 'hidden',
-              bgcolor: 'rgba(255,255,255,0.06)',
-              flexShrink: 0,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Box
-              component="img"
-              src={`/images/programs/${tab}.jpg`}
-              alt={tab}
-              sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              onError={(e: any) => { e.target.style.display = 'none' }}
-            />
-          </Box>
+<Stack spacing={10}>
 
-          {/* Text */}
-          <Box sx={{ flex: 1 }}>
-            <Typography
-              variant="h3"
-              sx={{
-                fontFamily: '"Bebas Neue", sans-serif',
-                fontSize: { xs: '2.4rem', md: '3rem' },
-                color: '#fff',
-                letterSpacing: '0.04em',
-                mb: 3,
-              }}
-            >
-              {tab === 'senior' ? 'Senior Programs' : 'Junior Programs'}
+  {/* SENIOR */}
+  <Box
+    sx={{
+      display: 'flex',
+      flexDirection: { xs: 'column', md: 'row' },
+      gap: { xs: 4, md: 8 },
+      alignItems: 'flex-start',
+    }}
+  >
+    <Box
+      sx={{
+        width: { xs: '100%', md: '45%' },
+        aspectRatio: '4/3',
+        borderRadius: 4,
+        overflow: 'hidden',
+      }}
+    >
+      <Box
+        component="img"
+        src="/images/programs/senior.jpg"
+        alt="Senior Programs"
+        sx={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+        }}
+      />
+    </Box>
+
+    <Box sx={{ flex: 1 }}>
+      <Typography
+        variant="h3"
+        sx={{
+          fontFamily: '"Bebas Neue", sans-serif',
+          fontSize: { xs: '2rem', md: '2.8rem' },
+          color: '#fff',
+          mb: 1,
+        }}
+      >
+        OPEN • 16s&U
+      </Typography>
+
+      <Typography
+        sx={{
+          color: 'rgba(255,255,255,0.7)',
+          lineHeight: 1.9,
+          mb: 4,
+        }}
+      >
+        {SUMMARIES.senior}
+      </Typography>
+
+      <Stack spacing={2} sx={{ mb: 4 }}>
+        {seniorPrograms.map((program) => (
+          <Box key={program.label}>
+            <Typography sx={{ color: '#f5c842', fontWeight: 700 }}>
+              {program.label}
             </Typography>
 
-            <Typography
-              variant="body1"
-              sx={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.9, mb: 4, fontSize: '1rem' }}
-            >
-              {SUMMARIES[tab]}
+            <Typography sx={{ color: 'rgba(255,255,255,0.6)' }}>
+              {program.day}
             </Typography>
 
-            {/* Program breakdown from PROGRAMS data */}
-            <Stack spacing={2} sx={{ mb: 4 }}>
-              {programs.map((program) => (
-                <Box key={program.label}>
-                  
-                  <Typography sx={{ color: '#f5c842', fontWeight: 700, fontSize: '0.9rem', mb: 0.5 }}>
-                    {program.label}
-                  </Typography>
+            <Typography sx={{ color: 'rgba(255,255,255,0.6)' }}>
+              {program.time}
+            </Typography>
 
-                  <Typography sx={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.85rem', lineHeight: 1.6 }}>
-                    {program.day} 
-                  </Typography>
-                  
-                  <Typography sx={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.85rem', lineHeight: 1.6 }}>
-                    {program.time}
-                  </Typography>
+            <Typography sx={{ color: 'rgba(255,255,255,0.45)' }}>
+              {program.dates}
+            </Typography>
 
-                  <Typography sx={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.82rem' }}>
-                    {program.dates}
-                  </Typography>
-
-                  <Typography sx={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.82rem' }}>
-                    Coaches: {program.coaches}
-                  </Typography>
-
-                </Box>
-              ))}
-            </Stack>
-
-            <Button
-              variant="contained"
-              endIcon={<ArrowForwardIcon />}
-              onClick={() => openApplyModal(indexes[0])}
-              sx={{
-                bgcolor: '#f5c842',
-                color: '#021a4a',
-                fontWeight: 700,
-                px: 4,
-                py: 1.4,
-                fontSize: '0.95rem',
-                '&:hover': { bgcolor: '#e0b030' },
-              }}
-            >
-              Apply for {tab === 'senior' ? 'Senior' : 'Junior'} program
-            </Button>
+            <Typography sx={{ color: 'rgba(255,255,255,0.45)' }}>
+              Coaches: {program.coaches}
+            </Typography>
           </Box>
-        </Box>
+        ))}
+      </Stack>
 
+      <Button
+        variant="contained"
+        endIcon={<ArrowForwardIcon />}
+        onClick={() => openApplyModal(0)}
+        sx={{
+          bgcolor: '#f5c842',
+          color: '#021a4a',
+          fontWeight: 700,
+          '&:hover': { bgcolor: '#e0b030' },
+        }}
+      >
+        Register
+      </Button>
+    </Box>
+  </Box>
+
+  {/* JUNIOR */}
+  <Box
+    sx={{
+      display: 'flex',
+      flexDirection: { xs: 'column', md: 'row' },
+      gap: { xs: 4, md: 8 },
+      alignItems: 'flex-start',
+    }}
+  >
+    <Box
+      sx={{
+        width: { xs: '100%', md: '45%' },
+        aspectRatio: '4/3',
+        borderRadius: 4,
+        overflow: 'hidden',
+      }}
+    >
+      <Box
+        component="img"
+        src="/images/programs/junior.jpg"
+        alt="Junior Programs"
+        sx={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+        }}
+      />
+    </Box>
+
+    <Box sx={{ flex: 1 }}>
+      <Typography
+        variant="h3"
+        sx={{
+          fontFamily: '"Bebas Neue", sans-serif',
+          fontSize: { xs: '2rem', md: '2.8rem' },
+          color: '#fff',
+          mb: 1,
+        }}
+      >
+        14s&U • 12s&U • 10s&U
+      </Typography>
+
+      <Typography
+        sx={{
+          color: 'rgba(255,255,255,0.7)',
+          lineHeight: 1.9,
+          mb: 4,
+        }}
+      >
+        {SUMMARIES.junior}
+      </Typography>
+
+      <Stack spacing={2} sx={{ mb: 4 }}>
+        {juniorPrograms.map((program) => (
+          <Box key={program.label}>
+            <Typography sx={{ color: '#f5c842', fontWeight: 700 }}>
+              {program.label}
+            </Typography>
+
+            <Typography sx={{ color: 'rgba(255,255,255,0.6)' }}>
+              {program.day}
+            </Typography>
+
+            <Typography sx={{ color: 'rgba(255,255,255,0.6)' }}>
+              {program.time}
+            </Typography>
+
+            <Typography sx={{ color: 'rgba(255,255,255,0.45)' }}>
+              {program.dates}
+            </Typography>
+
+            <Typography sx={{ color: 'rgba(255,255,255,0.45)' }}>
+              Coaches: {program.coaches}
+            </Typography>
+          </Box>
+        ))}
+      </Stack>
+
+      <Button
+        variant="contained"
+        endIcon={<ArrowForwardIcon />}
+        onClick={() => openApplyModal(2)}
+        sx={{
+          bgcolor: '#f5c842',
+          color: '#021a4a',
+          fontWeight: 700,
+          '&:hover': { bgcolor: '#e0b030' },
+        }}
+      >
+        Register
+      </Button>
+    </Box>
+  </Box>
+
+</Stack>
       </Container>
     </Box>
   )

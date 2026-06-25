@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
 import {
   Box, Container, Typography, Card, CardContent, Chip, Grid, Avatar,
-  Dialog, DialogContent, IconButton,
+  Dialog, DialogContent, IconButton, Button,
 } from '@mui/material'
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
 import PublicIcon from '@mui/icons-material/Public'
 import CloseIcon from '@mui/icons-material/Close'
 import { REPRESENTATIVES, AUSTRALIAN_REPRESENTATIVES } from '../data/representatives'
 import type { Representative, AustralianRepresentative } from '../data/representatives'
+import { useNavigate } from 'react-router-dom'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 
 const API_URL = 'https://tandh-backend-deployment-production.up.railway.app'
 
@@ -185,6 +187,7 @@ const cardHoverSx = {
 export default function RepresentativesPage() {
   const [selectedState, setSelectedState] = useState<Representative | null>(null)
   const [selectedAus, setSelectedAus] = useState<AustralianRepresentative | null>(null)
+  const navigate = useNavigate()
 
   return (
     <Box
@@ -206,6 +209,17 @@ export default function RepresentativesPage() {
       />
 
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, pt: { xs: 10, md: 12 }, pb: { xs: 8, md: 12 } }}>
+        {/* Back button */}
+        <Box sx={{ mb: 3 }}>
+          <Button
+            startIcon={<ArrowBackIcon />}
+            onClick={() => navigate({ pathname: '/', hash: '#explore' })}
+            sx={{ color: 'rgba(255,255,255,0.6)', '&:hover': { color: '#f5c842' }, pl: 0 }}
+          >
+            Return to Home
+          </Button>
+        </Box>
+
         {/* Header */}
         <Box sx={{ textAlign: 'center', mb: { xs: 4, md: 6 } }}>
           <Chip

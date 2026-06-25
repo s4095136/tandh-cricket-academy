@@ -3,11 +3,14 @@ import { Box, Container, Typography, Card, CardContent, Chip, Grid, Button } fro
 import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { TOURS } from '../data/tours'
 import { useTourApplyModal } from '../context/TourApplyModalContext'
+import { useNavigate } from 'react-router-dom'
 
 export default function ToursPage() {
   const { openTourApplyModal } = useTourApplyModal()
+  const navigate = useNavigate()
 
   const completedTours = TOURS.filter((t) => t.status === 'completed')
   const upcomingTours = TOURS.filter((t) => t.status === 'upcoming')
@@ -34,6 +37,17 @@ export default function ToursPage() {
       />
 
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, pt: { xs: 9, md: 10 }, pb: { xs: 8, md: 12 } }}>
+        {/* Back button */}
+        <Box sx={{ mb: 3 }}>
+          <Button
+            startIcon={<ArrowBackIcon />}
+            onClick={() => navigate({ pathname: '/', hash: '#explore' })}
+            sx={{ color: 'rgba(255,255,255,0.6)', '&:hover': { color: '#f5c842' }, pl: 0 }}
+          >
+            Return to Home
+          </Button>
+        </Box>
+
         {/* Header */}
         <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 7 } }}>
           <Chip

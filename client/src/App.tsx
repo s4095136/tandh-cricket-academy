@@ -20,6 +20,7 @@ import ProgramsSection from './components/sections/ProgramsSection'
 import CoachesSection from './components/sections/CoachesSection'
 import TestimonialsSection from './components/sections/TestimonialsSection'
 import ContactSection from './components/sections/ContactSection'
+import ExplorePreviewSection from './components/sections/ExplorePreviewSection'
 
 // Pages
 import ToursPage from './pages/ToursPage'
@@ -62,7 +63,7 @@ function ScrollToTop() {
       let targetY = 0
       let node: HTMLElement | null = el as HTMLElement
       while (node) { targetY += node.offsetTop; node = node.offsetParent as HTMLElement | null }
-      if (hash === '#philosophy') {
+      if (hash === '#philosophy' || hash === '#explore') {
         const navbar = document.querySelector('header.MuiAppBar-root')
         const navH = navbar ? navbar.getBoundingClientRect().height : 0
         targetY = Math.max(0, targetY - navH)
@@ -95,6 +96,7 @@ function HomePage() {
       <HeroSection />
       <PhilosophySection />
       <SectionReveal><ProgramsSection /></SectionReveal>
+      <SectionReveal><ExplorePreviewSection /></SectionReveal>
       <SectionReveal><TestimonialsSection /></SectionReveal>
     </main>
   )

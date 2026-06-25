@@ -2,6 +2,8 @@ import React from 'react'
 import { Box, Container, Typography, Stack } from '@mui/material'
 import CheckIcon from '@mui/icons-material/Check'
 
+const BASE = 'https://tandh-backend-deployment-production.up.railway.app'
+
 const philosophyValues = [
   {
     title: 'Positive & Supportive Environment',
@@ -48,17 +50,16 @@ const developmentValues = [
   },
 ]
 
-
 function SectionBlock({
   title,
   items,
+  image,
   grid = false,
-  imageSide,
 }: {
   title: string
   items: { title: string; description: string }[]
+  image: string
   grid?: boolean
-  imageSide?: 'right'
 }) {
   return (
     <Box
@@ -67,80 +68,68 @@ function SectionBlock({
         borderRadius: 3,
         overflow: 'hidden',
         mb: 4,
-        minHeight: { xs: 'auto', md: 320 },
-        display: imageSide ? 'flex' : 'block',
-        flexDirection: { xs: 'column', md: 'row' },
+        minHeight: { xs: 'auto', md: 340 },
       }}
     >
-      {/* Mobile image — top (only when imageSide is set) */}
-      {imageSide && (
-        <Box
-          sx={{
-            display: { xs: 'block', md: 'none' },
-            height: '45vh',
-            position: 'relative',
-            overflow: 'hidden',
-            flexShrink: 0,
-          }}
-        >
-          <Box
-            component="img"
-            src={'https://tandh-backend-deployment-production.up.railway.app/images/philosophy/tombbl.png'}
-            alt=""
-            sx={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.7, objectPosition: 'center bottom' }}
-          />
-          <Box
-            sx={{
-              position: 'absolute',
-              inset: 0,
-              background: 'linear-gradient(to top, rgba(1,13,42,1) 0%, transparent 10%)',
-            }}
-          />
-        </Box>
-      )}
+      {/* Background image */}
+      <Box
+        component="img"
+        src={image}
+        alt=""
+sx={{
+  position: 'absolute',
+  inset: 0,
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
 
-      {/* Background image (full cover — only when no imageSide) */}
-      {!imageSide && (
-        <>
-          <Box
-            component="img"
-            src={'https://tandh-backend-deployment-production.up.railway.app/images/philosophy/group.png'}
-            alt=""
-            sx={{
-              position: 'absolute',
-              inset: 0,
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              opacity: 2,
-              zIndex: 0,
-            }}
-          />
-          <Box
-            sx={{
-              position: 'absolute',
-              inset: 0,
-              bgcolor: 'rgba(1,13,42,0.6)',
-              zIndex: 1,
-            }}
-          />
-        </>
-      )}
+  // Zoom Tom slightly on mobile
+  transform: image.includes('tombbl')
+    ? {
+        xs: 'scale(1.3)',
+        md: 'scale(1)',
+      }
+    : 'scale(1)',
+
+  // Position each image differently
+  objectPosition: image.includes('tombbl')
+    ? {
+        xs: 'center center', // Tom centred on mobile
+        md: 'center 30%',
+      }
+    : {
+        xs: '30% center', // Hanni moved slightly right on mobile
+        md: 'center 20%',
+      },
+
+  opacity: 1,
+  zIndex: 0,
+}}
+      />
+
+      {/* Dark overlay */}
+      <Box
+        sx={{
+          position: 'absolute',
+          inset: 0,
+background:
+  'linear-gradient(90deg, rgba(1,13,42,0.9) 0%, rgba(1,13,42,0.75) 35%, rgba(1,13,42,0.45) 70%, rgba(1,13,42,0.3) 100%)',          zIndex: 1,
+        }}
+      />
 
       {/* Content */}
       <Box
         sx={{
           position: 'relative',
           zIndex: 2,
-          p: { xs: 3, md: 5 },
-          flex: 1,
-          bgcolor: imageSide ? 'rgba(255,255,255,0.03)' : 'transparent',
+          p: { xs: 3, md: 10 },
         }}
       >
         <Typography
           sx={{
             color: '#fff',
             fontWeight: 900,
+            
             fontSize: { xs: '1.4rem', md: '2rem' },
             textTransform: 'uppercase',
             letterSpacing: '0.06em',
@@ -154,21 +143,53 @@ function SectionBlock({
         {grid ? (
           <Box
             sx={{
+              pt: { xs: 2, md: 6 }, 
               display: 'grid',
               gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(5, 1fr)' },
               gap: 3,
             }}
           >
             {items.map((item) => (
-              <Box key={item.title}>
-                <CheckIcon sx={{ color: '#f5c842', fontSize: 24, mb: 1 }} />
-                <Typography sx={{ color: '#f5c842', fontWeight: 800, fontSize: '0.85rem', mb: 0.8, lineHeight: 1.3 }}>
-                  {item.title}
-                </Typography>
-                <Typography sx={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.78rem', lineHeight: 1.7 }}>
-                  {item.description}
-                </Typography>
-              </Box>
+<Box key={item.title}>
+  <Box
+    sx={{
+      display: 'flex',
+      alignItems: 'flex-start',
+      gap: 1,
+      mb: 1,
+    }}
+  >
+    <CheckIcon
+      sx={{
+        color: '#f5c842',
+        fontSize: 20,
+        mt: '2px',
+        flexShrink: 0,
+      }}
+    />
+
+    <Typography
+      sx={{
+        color: '#f5c842',
+        fontWeight: 800,
+        fontSize: '0.9rem',
+        lineHeight: 1.3,
+      }}
+    >
+      {item.title}
+    </Typography>
+  </Box>
+
+  <Typography
+    sx={{
+      color: 'rgba(255,255,255,0.75)',
+      fontSize: '0.8rem',
+      lineHeight: 1.8,
+    }}
+  >
+    {item.description}
+  </Typography>
+</Box>
             ))}
           </Box>
         ) : (
@@ -189,33 +210,6 @@ function SectionBlock({
           </Stack>
         )}
       </Box>
-
-      {/* Desktop image — right side */}
-      {imageSide && (
-        <Box
-          sx={{
-            display: { xs: 'none', md: 'block' },
-            width: '40%',
-            flexShrink: 0,
-            position: 'relative',
-            overflow: 'hidden',
-          }}
-        >
-          <Box
-            component="img"
-            src={'https://tandh-backend-deployment-production.up.railway.app/images/philosophy/tombbl.png'}
-            alt=""
-            sx={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-          />
-          <Box
-            sx={{
-              position: 'absolute',
-              inset: 0,
-              background: 'linear-gradient(to right, rgba(2,26,74,0.95) 0%, transparent 60%)',
-            }}
-          />
-        </Box>
-      )}
     </Box>
   )
 }
@@ -262,9 +256,7 @@ export default function PhilosophySection() {
 
           <Box sx={{ width: 60, height: 4, bgcolor: '#f5c842', borderRadius: 2, mb: 3 }} />
 
-          <Typography
-            sx={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.85, maxWidth: 680, fontSize: '0.95rem' }}
-          >
+          <Typography sx={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.85, maxWidth: 680, fontSize: '0.95rem' }}>
             At T&H Cricket, we are passionate about developing cricketers for success, both on and off the field.
             Our programs are built on strong technical foundations, combined with a focus on game awareness,
             tactical understanding, and continuous personal development. Whether you're picking up a bat for
@@ -273,14 +265,20 @@ export default function PhilosophySection() {
           </Typography>
         </Box>
 
-{/* Player Development — full background image, grid layout */}
-<SectionBlock title="Player Development" items={philosophyValues} grid />
+        <SectionBlock
+          title="Player Development"
+          items={philosophyValues}
+          image={`${BASE}/images/philosophy/hanni.png`}
+          grid
+        />
 
-{/* Cricket Excellence — image on right desktop, top mobile */}
-<SectionBlock title="Cricket Excellence" items={developmentValues} imageSide="right" />
+        <SectionBlock
+          title="Cricket Excellence"
+          items={developmentValues}
+          image={`${BASE}/images/philosophy/tombbl.png`}
+        />
 
       </Container>
     </Box>
   )
 }
-

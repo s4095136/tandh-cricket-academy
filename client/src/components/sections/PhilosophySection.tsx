@@ -77,7 +77,7 @@ function SectionBlock({
         <Box
           sx={{
             display: { xs: 'block', md: 'none' },
-            height: 220,
+            height: '45vh',
             position: 'relative',
             overflow: 'hidden',
             flexShrink: 0,
@@ -87,13 +87,13 @@ function SectionBlock({
             component="img"
             src={'https://tandh-backend-deployment-production.up.railway.app/images/philosophy/tombbl.png'}
             alt=""
-            sx={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.7 }}
+            sx={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.7, objectPosition: 'center bottom' }}
           />
           <Box
             sx={{
               position: 'absolute',
               inset: 0,
-              background: 'linear-gradient(to top, rgba(1,13,42,1) 0%, transparent 60%)',
+              background: 'linear-gradient(to top, rgba(1,13,42,1) 0%, transparent 10%)',
             }}
           />
         </Box>

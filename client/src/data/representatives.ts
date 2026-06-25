@@ -93,7 +93,7 @@ export const REPRESENTATIVES: Representative[] = [
   {
     id: 11,
     name: 'Shaurya Mahadik',
-    image: null,
+    image: '/images/coaches/shaurya-mahadik.png',
     honours: ['U12 School Sports Victoria (2024/25)'],
   },
   {

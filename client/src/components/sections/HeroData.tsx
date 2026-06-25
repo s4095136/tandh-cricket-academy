@@ -19,7 +19,7 @@ export const COACH_GROUPS = [
     coaches: [
       { name: 'Hanni Harb', image: '/images/coaches/hanni-harb.png', role: 'Co-Founder & Head Coach' },
       { name: 'Tom Rogers', image: '/images/coaches/tom-rogers1.png', role: 'Co-Founder & Senior Coach' },
-      { name: 'Jacob Harb', image: '', role: 'Co-Founder' },
+      { name: 'Jacob Harb', image: '/images/coaches/jacob-harb.png', role: 'Co-Founder' },
       // { name: 'Maahirah Hussain', image: '/images/coaches/maahirah-hussain.png', role: 'Co-Founder & Senior Coach' },
     ],
   },

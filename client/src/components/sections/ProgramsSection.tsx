@@ -204,11 +204,11 @@ import { PROGRAMS } from '../../data/programs'
 import { useApplyModal } from '../../context/ApplyModalContext'
 
 const PROGRAM_IMAGES = [
-  '/images/programs/open.jpg',
-  '/images/programs/16s.jpg',
-  '/images/programs/14s.jpg',
-  '/images/programs/12s.jpg',
-  '/images/programs/10s.jpg',
+  'https://tandh-backend-deployment-production.up.railway.app/images/programs/open.png',
+  'https://tandh-backend-deployment-production.up.railway.app/images/programs/16s.png',
+  'https://tandh-backend-deployment-production.up.railway.app/images/programs/14s.png',
+  'https://tandh-backend-deployment-production.up.railway.app/images/programs/12s.png',
+  'https://tandh-backend-deployment-production.up.railway.app/images/programs/10s.png',
 ]
 
 export default function ProgramsSection() {

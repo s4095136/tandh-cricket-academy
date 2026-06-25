@@ -203,25 +203,17 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { PROGRAMS } from '../../data/programs'
 import { useApplyModal } from '../../context/ApplyModalContext'
 
-
-const SUMMARIES = {
-  senior: `Our senior programs are designed for competitive cricketers looking to sharpen their game at a high level. The Open and 16s squads train alongside experienced coaches including active BBL players, focusing on match-ready technique, game awareness, and physical conditioning. Whether you're pushing for representative selection or want to compete at your best in club cricket, our senior programs give you the professional edge.`,
-  junior: `Our junior programs provide a fun, structured environment for players aged 10–14 to develop their cricket skills and love for the game. With small group sizes, age-appropriate coaching, and a supportive atmosphere, juniors build confidence, technique, and teamwork across batting, bowling and fielding. Every session is designed to challenge players at their level while keeping cricket enjoyable.`,
-}
+const PROGRAM_IMAGES = [
+  '/images/programs/open.jpg',
+  '/images/programs/16s.jpg',
+  '/images/programs/14s.jpg',
+  '/images/programs/12s.jpg',
+  '/images/programs/10s.jpg',
+]
 
 export default function ProgramsSection() {
-  // const [tab, setTab] = useState<'senior' | 'junior'>('senior')
   const { openApplyModal } = useApplyModal()
 
-  // const indexes = tab === 'senior' ? SENIOR_INDEXES : JUNIOR_INDEXES
-  // const programs = indexes.map((i) => PROGRAMS[i])
-const seniorPrograms = PROGRAMS.filter(
-  (p) => p.title === 'Senior Program'
-)
-
-const juniorPrograms = PROGRAMS.filter(
-  (p) => p.title === 'Junior Program'
-)
   return (
     <Box
       id="programs"
@@ -234,208 +226,163 @@ const juniorPrograms = PROGRAMS.filter(
       <Container maxWidth="lg">
 
         {/* Header */}
-        <Box sx={{ mb: { xs: 5, md: 6 } }}>
+        <Box sx={{ mb: { xs: 5, md: 8 } }}>
           <Typography variant="overline" sx={{ display: 'block', mb: 1, color: '#f5c842' }}>
             2026 Season · May – August
           </Typography>
-          <Typography variant="h2" sx={{ fontSize: { xs: '2.8rem', md: '3.8rem' }, color: '#ffffff', mb: 4 }}>
-            Programs
+          <Typography
+            variant="h2"
+            sx={{ fontSize: { xs: '2.8rem', md: '3.8rem' }, color: '#ffffff', mb: 2 }}
+          >
+            Development Today.
+            <br />
+            <Box component="span" sx={{ color: '#f5c842' }}>Excellence Tomorrow.</Box>
           </Typography>
-
+          <Box sx={{ width: 48, height: 3, bgcolor: '#f5c842', borderRadius: 2, mb: 2 }} />
+          <Typography sx={{ color: 'rgba(255,255,255,0.6)', maxWidth: 480, lineHeight: 1.8 }}>
+            Programs tailored to meet players where they are — and take them where they want to go.
+          </Typography>
         </Box>
 
-        {/* Photo + content */}
-<Stack spacing={10}>
+        {/* Programs grid — layout 3 style */}
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: {
+              xs: '1fr',
+              sm: 'repeat(2, 1fr)',
+              md: 'repeat(3, 1fr)',
+              lg: 'repeat(5, 1fr)',
+            },
+            gap: 2,
+          }}
+        >
+          {PROGRAMS.map((program, i) => (
+            <Box
+              key={program.label}
+              sx={{
+                position: 'relative',
+                borderRadius: 3,
+                overflow: 'hidden',
+                minHeight: { xs: 280, md: 380 },
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'flex-end',
+                cursor: 'pointer',
+                transition: 'transform 0.25s ease',
+                '&:hover': {
+                  transform: 'translateY(-6px)',
+                },
+                '&:hover .overlay': {
+                  bgcolor: 'rgba(1,13,42,0.5)',
+                },
+                '&:hover .register-btn': {
+                  opacity: 1,
+                  transform: 'translateY(0)',
+                },
+              }}
+            >
+              {/* Background image */}
+              <Box
+                component="img"
+                src={PROGRAM_IMAGES[i]}
+                alt={program.label}
+                sx={{
+                  position: 'absolute',
+                  inset: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  zIndex: 0,
+                }}
+                onError={(e: any) => {
+                  e.target.style.display = 'none'
+                }}
+              />
 
-  {/* SENIOR */}
-  <Box
-    sx={{
-      display: 'flex',
-      flexDirection: { xs: 'column', md: 'row' },
-      gap: { xs: 4, md: 8 },
-      alignItems: 'flex-start',
-    }}
-  >
-    <Box
-      sx={{
-        width: { xs: '100%', md: '45%' },
-        aspectRatio: '4/3',
-        borderRadius: 4,
-        overflow: 'hidden',
-      }}
-    >
-      <Box
-        component="img"
-        src="/images/programs/senior.jpg"
-        alt="Senior Programs"
-        sx={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-        }}
-      />
-    </Box>
+              {/* Fallback bg if no image */}
+              <Box
+                sx={{
+                  position: 'absolute',
+                  inset: 0,
+                  bgcolor: 'rgba(2,26,74,0.9)',
+                  zIndex: 0,
+                }}
+              />
 
-    <Box sx={{ flex: 1 }}>
-      <Typography
-        variant="h3"
-        sx={{
-          fontFamily: '"Bebas Neue", sans-serif',
-          fontSize: { xs: '2rem', md: '2.8rem' },
-          color: '#fff',
-          mb: 1,
-        }}
-      >
-        OPEN • 16s&U
-      </Typography>
+              {/* Gradient overlay */}
+              <Box
+                className="overlay"
+                sx={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'linear-gradient(to top, rgba(1,13,42,0.97) 0%, rgba(1,13,42,0.4) 60%, transparent 100%)',
+                  zIndex: 1,
+                  transition: 'background 0.25s ease',
+                }}
+              />
 
-      <Typography
-        sx={{
-          color: 'rgba(255,255,255,0.7)',
-          lineHeight: 1.9,
-          mb: 4,
-        }}
-      >
-        {SUMMARIES.senior}
-      </Typography>
+              {/* Content */}
+              <Box sx={{ position: 'relative', zIndex: 2, p: 2.5 }}>
+                <Typography
+                  variant="overline"
+                  sx={{ color: '#f5c842', fontSize: '0.65rem', letterSpacing: '0.12em', display: 'block', mb: 0.5 }}
+                >
+                  Our Programs
+                </Typography>
 
-      <Stack spacing={2} sx={{ mb: 4 }}>
-        {seniorPrograms.map((program) => (
-          <Box key={program.label}>
-            <Typography sx={{ color: '#f5c842', fontWeight: 700 }}>
-              {program.label}
-            </Typography>
+                <Typography
+                  sx={{
+                    color: '#fff',
+                    fontWeight: 900,
+                    fontSize: { xs: '1.2rem', md: '1.4rem' },
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.04em',
+                    lineHeight: 1.1,
+                    mb: 1,
+                  }}
+                >
+                  {program.label}
+                </Typography>
 
-            <Typography sx={{ color: 'rgba(255,255,255,0.6)' }}>
-              {program.day}
-            </Typography>
+                <Box sx={{ width: 32, height: 2, bgcolor: '#f5c842', borderRadius: 1, mb: 1.5 }} />
 
-            <Typography sx={{ color: 'rgba(255,255,255,0.6)' }}>
-              {program.time}
-            </Typography>
+                <Typography sx={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.75rem', mb: 0.5 }}>
+                  {program.day}
+                </Typography>
+                <Typography sx={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.75rem', mb: 0.5 }}>
+                  {program.time}
+                </Typography>
+                <Typography sx={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.72rem', mb: 2 }}>
+                  {program.dates}
+                </Typography>
 
-            <Typography sx={{ color: 'rgba(255,255,255,0.45)' }}>
-              {program.dates}
-            </Typography>
+                <Button
+                  className="register-btn"
+                  size="small"
+                  endIcon={<ArrowForwardIcon sx={{ fontSize: '0.8rem !important' }} />}
+                  onClick={() => openApplyModal(i)}
+                  sx={{
+                    bgcolor: '#f5c842',
+                    color: '#021a4a',
+                    fontWeight: 700,
+                    fontSize: '0.75rem',
+                    px: 2,
+                    py: 0.8,
+                    borderRadius: 2,
+                    opacity: { xs: 1, md: 0 },
+                    transform: { xs: 'none', md: 'translateY(8px)' },
+                    transition: 'opacity 0.2s ease, transform 0.2s ease',
+                    '&:hover': { bgcolor: '#e0b030' },
+                  }}
+                >
+                  Register
+                </Button>
+              </Box>
+            </Box>
+          ))}
+        </Box>
 
-            <Typography sx={{ color: 'rgba(255,255,255,0.45)' }}>
-              Coaches: {program.coaches}
-            </Typography>
-          </Box>
-        ))}
-      </Stack>
-
-      <Button
-        variant="contained"
-        endIcon={<ArrowForwardIcon />}
-        onClick={() => openApplyModal(0)}
-        sx={{
-          bgcolor: '#f5c842',
-          color: '#021a4a',
-          fontWeight: 700,
-          '&:hover': { bgcolor: '#e0b030' },
-        }}
-      >
-        Register
-      </Button>
-    </Box>
-  </Box>
-
-  {/* JUNIOR */}
-  <Box
-    sx={{
-      display: 'flex',
-      flexDirection: { xs: 'column', md: 'row' },
-      gap: { xs: 4, md: 8 },
-      alignItems: 'flex-start',
-    }}
-  >
-    <Box
-      sx={{
-        width: { xs: '100%', md: '45%' },
-        aspectRatio: '4/3',
-        borderRadius: 4,
-        overflow: 'hidden',
-      }}
-    >
-      <Box
-        component="img"
-        src="/images/programs/junior.jpg"
-        alt="Junior Programs"
-        sx={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-        }}
-      />
-    </Box>
-
-    <Box sx={{ flex: 1 }}>
-      <Typography
-        variant="h3"
-        sx={{
-          fontFamily: '"Bebas Neue", sans-serif',
-          fontSize: { xs: '2rem', md: '2.8rem' },
-          color: '#fff',
-          mb: 1,
-        }}
-      >
-        14s&U • 12s&U • 10s&U
-      </Typography>
-
-      <Typography
-        sx={{
-          color: 'rgba(255,255,255,0.7)',
-          lineHeight: 1.9,
-          mb: 4,
-        }}
-      >
-        {SUMMARIES.junior}
-      </Typography>
-
-      <Stack spacing={2} sx={{ mb: 4 }}>
-        {juniorPrograms.map((program) => (
-          <Box key={program.label}>
-            <Typography sx={{ color: '#f5c842', fontWeight: 700 }}>
-              {program.label}
-            </Typography>
-
-            <Typography sx={{ color: 'rgba(255,255,255,0.6)' }}>
-              {program.day}
-            </Typography>
-
-            <Typography sx={{ color: 'rgba(255,255,255,0.6)' }}>
-              {program.time}
-            </Typography>
-
-            <Typography sx={{ color: 'rgba(255,255,255,0.45)' }}>
-              {program.dates}
-            </Typography>
-
-            <Typography sx={{ color: 'rgba(255,255,255,0.45)' }}>
-              Coaches: {program.coaches}
-            </Typography>
-          </Box>
-        ))}
-      </Stack>
-
-      <Button
-        variant="contained"
-        endIcon={<ArrowForwardIcon />}
-        onClick={() => openApplyModal(2)}
-        sx={{
-          bgcolor: '#f5c842',
-          color: '#021a4a',
-          fontWeight: 700,
-          '&:hover': { bgcolor: '#e0b030' },
-        }}
-      >
-        Register
-      </Button>
-    </Box>
-  </Box>
-
-</Stack>
       </Container>
     </Box>
   )

@@ -282,25 +282,27 @@ export default function ProgramsSection() {
                 },
               }}
             >
-              {/* Background image */}
-              <Box
-                component="img"
-                src={PROGRAM_IMAGES[i]}
-                alt={program.label}
-                sx={{
-                  position: 'absolute',
-                  inset: 0,
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  zIndex: 0,
-                }}
-                onError={(e: any) => {
-                  e.target.style.display = 'none'
-                }}
-              />
+{/* Background image */}
+<Box
+  component="img"
+  src={PROGRAM_IMAGES[i]}
+  alt={program.label}
+  sx={{
+    position: 'absolute',
+    inset: 0,
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    zIndex: 0,
+    opacity: 0.65, // Increase/decrease visibility
+    filter: 'brightness(1.15) contrast(1.05)',
+  }}
+  onError={(e: any) => {
+    e.target.style.display = 'none'
+  }}
+/>
 
-              {/* Fallback bg if no image */}
+              {/* Fallback bg if no image
               <Box
                 sx={{
                   position: 'absolute',
@@ -308,9 +310,9 @@ export default function ProgramsSection() {
                   bgcolor: 'rgba(2,26,74,0.9)',
                   zIndex: 0,
                 }}
-              />
+              /> */}
 
-              {/* Gradient overlay */}
+              Gradient overlay
               <Box
                 className="overlay"
                 sx={{

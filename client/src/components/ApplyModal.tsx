@@ -176,25 +176,52 @@ const availablePrograms = showAllPrograms
           </Box>
         ) : (
           <Grid container spacing={2} sx={{ pt: 1 }}>
-            <Grid size={{ xs: 12 }}>
-              <TextField fullWidth select label="Program" name="program" value={programIndex} onChange={handleProgramChange} size="small" sx={inputSx}
-                slotProps={{ select: { MenuProps: { slotProps: { paper: { sx: { bgcolor: '#021a4a', color: '#fff' } } } } } }}
-              >
-                {availablePrograms.map((p) => {
-                  const index = PROGRAMS.findIndex(
-                    (program) =>
-                      program.title === p.title &&
-                      program.label === p.label
-                  )
-
-                  return (
-                    <MenuItem key={p.label} value={index}>
-                      {p.label}
-                    </MenuItem>
-                  )
-                })}
-              </TextField>
-            </Grid>
+<Grid size={{ xs: 12 }}>
+  {showAllPrograms ? (
+    <TextField
+      fullWidth
+      select
+      label="Program"
+      value={programIndex}
+      onChange={handleProgramChange}
+      size="small"
+      sx={inputSx}
+      slotProps={{
+        select: {
+          MenuProps: {
+            slotProps: {
+              paper: {
+                sx: {
+                  bgcolor: '#021a4a',
+                  color: '#fff',
+                },
+              },
+            },
+          },
+        },
+      }}
+    >
+      {PROGRAMS.map((p, index) => (
+        <MenuItem key={p.label} value={index}>
+          {p.label}
+        </MenuItem>
+      ))}
+    </TextField>
+  ) : (
+    <TextField
+      fullWidth
+      label="Program"
+      value={program.label}
+      size="small"
+slotProps={{
+    input: {
+      readOnly: true,
+    },
+  }}
+        sx={inputSx}
+    />
+  )}
+</Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <TextField fullWidth label="Full name" name="name" value={form.name} onChange={handleChange} required size="small" sx={inputSx} />
             </Grid>

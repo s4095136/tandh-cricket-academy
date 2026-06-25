@@ -4,6 +4,7 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
 import PublicIcon from '@mui/icons-material/Public'
 import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { useNavigate } from 'react-router-dom'
 import { REPRESENTATIVES, AUSTRALIAN_REPRESENTATIVES } from '../../data/representatives'
 import { TOURS } from '../../data/tours'
@@ -18,22 +19,18 @@ function getInitials(name: string): string {
   return (first[0] + (parts[1]?.[0] ?? '')).toUpperCase()
 }
 
-// Top reps by honour count
 const topReps = [...REPRESENTATIVES]
   .sort((a, b) => b.honours.length - a.honours.length)
-  .slice(0, 6)
+  .slice(0, 5)
 
-// Upcoming tours first, then completed
 const sortedTours = [...TOURS].sort((a, b) =>
   a.status === 'upcoming' && b.status !== 'upcoming' ? -1 :
   b.status === 'upcoming' && a.status !== 'upcoming' ? 1 : 0
 ).slice(0, 5)
 
-// ── Representatives panel ────────────────────────────────────────────────────
+// ── Representatives panel ─────────────────────────────────────────────────────
 
-interface RepsPanelProps {
-  coachImages: Record<string, string>
-}
+interface RepsPanelProps { coachImages: Record<string, string> }
 
 function RepsPanel({ coachImages }: RepsPanelProps) {
   const navigate = useNavigate()
@@ -45,106 +42,135 @@ function RepsPanel({ coachImages }: RepsPanelProps) {
     return undefined
   }
 
+  const ausRep = AUSTRALIAN_REPRESENTATIVES[0]
+
   return (
     <Box
       sx={{
         flex: 1,
-        bgcolor: 'rgba(255,255,255,0.04)',
-        border: '1px solid rgba(255,255,255,0.08)',
-        borderRadius: 4,
-        overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
+        bgcolor: 'rgba(255,255,255,0.03)',
+        border: '1px solid rgba(255,255,255,0.07)',
+        borderRadius: 4,
+        overflow: 'hidden',
+        backdropFilter: 'blur(8px)',
       }}
     >
-      {/* Header */}
-      <Box sx={{ px: 3, pt: 3, pb: 1.5, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
-          <EmojiEventsIcon sx={{ color: '#f5c842', fontSize: '1.1rem' }} />
-          <Typography sx={{ color: '#f5c842', fontWeight: 800, fontSize: '0.72rem', letterSpacing: '0.12em' }}>
-            REPRESENTATIVES
-          </Typography>
+      {/* Panel header */}
+      <Box
+        sx={{
+          px: 3, pt: 3, pb: 2,
+          background: 'linear-gradient(135deg, rgba(245,200,66,0.08) 0%, transparent 100%)',
+          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Box
+            sx={{
+              width: 36, height: 36, borderRadius: 2,
+              bgcolor: 'rgba(245,200,66,0.12)',
+              border: '1px solid rgba(245,200,66,0.2)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
+          >
+            <EmojiEventsIcon sx={{ color: '#f5c842', fontSize: '1.1rem' }} />
+          </Box>
+          <Box>
+            <Typography sx={{ color: '#f5c842', fontWeight: 800, fontSize: '0.68rem', letterSpacing: '0.14em' }}>
+              REPRESENTATIVES
+            </Typography>
+            <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '1rem', lineHeight: 1.2 }}>
+              Our Players on the Big Stage
+            </Typography>
+          </Box>
         </Box>
-        <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '1.15rem' }}>
-          Our Players on the Big Stage
-        </Typography>
+        <Chip
+          label={`${REPRESENTATIVES.length + AUSTRALIAN_REPRESENTATIVES.length}`}
+          size="small"
+          sx={{ bgcolor: 'rgba(245,200,66,0.12)', color: '#f5c842', fontWeight: 700, fontSize: '0.72rem', border: '1px solid rgba(245,200,66,0.2)' }}
+        />
       </Box>
 
-      {/* Scrollable content with fade */}
-      <Box sx={{ position: 'relative', height: { xs: 340, md: 380 }, overflow: 'hidden' }}>
-        <Box sx={{ px: 3, pt: 2, pb: 1 }}>
+      {/* Content with fade */}
+      <Box sx={{ position: 'relative', flex: 1, height: { xs: 320, md: 360 }, overflow: 'hidden' }}>
+        <Box sx={{ px: 3, pt: 2.5, pb: 1 }}>
 
-          {/* Australian rep — gold highlight */}
-          {AUSTRALIAN_REPRESENTATIVES.slice(0, 1).map((player) => (
+          {/* Australian rep — gold feature card */}
+          {ausRep && (
             <Box
-              key={player.id}
               sx={{
                 display: 'flex', alignItems: 'center', gap: 2,
-                bgcolor: 'rgba(245,200,66,0.07)',
-                border: '1px solid rgba(245,200,66,0.25)',
-                borderRadius: 3, p: 1.5, mb: 2,
+                background: 'linear-gradient(135deg, rgba(245,200,66,0.1) 0%, rgba(245,200,66,0.04) 100%)',
+                border: '1px solid rgba(245,200,66,0.2)',
+                borderRadius: 3, p: 1.75, mb: 2.5,
+                position: 'relative', overflow: 'hidden',
               }}
             >
+              {/* Glow */}
+              <Box sx={{ position: 'absolute', top: -20, right: -20, width: 80, height: 80, borderRadius: '50%', bgcolor: 'rgba(245,200,66,0.08)', filter: 'blur(20px)', pointerEvents: 'none' }} />
               <Avatar
-                src={getImage(player.name, player.image)}
+                src={getImage(ausRep.name, ausRep.image)}
                 sx={{
-                  width: 56, height: 56,
+                  width: 54, height: 54,
                   border: '2px solid #f5c842',
-                  bgcolor: 'rgba(245,200,66,0.12)',
+                  bgcolor: 'rgba(245,200,66,0.15)',
                   color: '#f5c842',
                   fontFamily: '"Bebas Neue", sans-serif',
-                  fontSize: '1.1rem',
+                  fontSize: '1rem',
                   flexShrink: 0,
                   '& img': { objectFit: 'cover', objectPosition: 'center 5%' },
                 }}
               >
-                {getInitials(player.name)}
+                {getInitials(ausRep.name)}
               </Avatar>
-              <Box>
-                <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '0.92rem' }}>
-                  {player.name}
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '0.9rem' }}>
+                  {ausRep.name}
                 </Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.3 }}>
-                  <PublicIcon sx={{ color: '#f5c842', fontSize: '0.78rem' }} />
-                  <Typography sx={{ color: '#f5c842', fontSize: '0.73rem', fontWeight: 600 }}>
+                  <PublicIcon sx={{ color: '#f5c842', fontSize: '0.75rem' }} />
+                  <Typography sx={{ color: '#f5c842', fontSize: '0.7rem', fontWeight: 700 }}>
                     Australian Representative
                   </Typography>
                 </Box>
               </Box>
+              <Chip label="AUS" size="small" sx={{ bgcolor: 'rgba(245,200,66,0.15)', color: '#f5c842', fontWeight: 800, fontSize: '0.65rem', border: '1px solid rgba(245,200,66,0.3)' }} />
             </Box>
-          ))}
+          )}
 
-          {/* State reps */}
-          {topReps.map((player) => (
+          {/* State reps list */}
+          {topReps.map((player, i) => (
             <Box
               key={player.id}
               sx={{
                 display: 'flex', alignItems: 'center', gap: 1.5,
-                py: 1,
-                borderBottom: '1px solid rgba(255,255,255,0.05)',
+                py: 0.9,
+                borderBottom: i < topReps.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
               }}
             >
               <Avatar
                 src={getImage(player.name, player.image)}
                 sx={{
-                  width: 46, height: 46,
-                  border: '1.5px solid rgba(245,200,66,0.5)',
-                  bgcolor: 'rgba(245,200,66,0.1)',
+                  width: 38, height: 38,
+                  border: '1.5px solid rgba(245,200,66,0.3)',
+                  bgcolor: 'rgba(245,200,66,0.08)',
                   color: '#f5c842',
                   fontFamily: '"Bebas Neue", sans-serif',
-                  fontSize: '0.85rem',
+                  fontSize: '0.78rem',
                   flexShrink: 0,
                   '& img': { objectFit: 'cover', objectPosition: 'center 5%' },
                 }}
               >
                 {getInitials(player.name)}
               </Avatar>
-              <Typography sx={{ color: 'rgba(255,255,255,0.88)', fontWeight: 600, fontSize: '0.88rem', flexGrow: 1 }}>
+              <Typography sx={{ color: 'rgba(255,255,255,0.85)', fontWeight: 600, fontSize: '0.85rem', flexGrow: 1 }}>
                 {player.name}
               </Typography>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.4 }}>
-                <EmojiEventsIcon sx={{ color: '#f5c842', fontSize: '0.72rem' }} />
-                <Typography sx={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.72rem' }}>
+                <EmojiEventsIcon sx={{ color: 'rgba(245,200,66,0.6)', fontSize: '0.7rem' }} />
+                <Typography sx={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.7rem' }}>
                   {player.honours.length}
                 </Typography>
               </Box>
@@ -152,18 +178,18 @@ function RepsPanel({ coachImages }: RepsPanelProps) {
           ))}
         </Box>
 
-        {/* Fade out */}
+        {/* Gradient fade */}
         <Box
           sx={{
-            position: 'absolute', bottom: 0, left: 0, right: 0, height: 110,
-            background: 'linear-gradient(to bottom, transparent, rgba(2,10,35,0.98))',
+            position: 'absolute', bottom: 0, left: 0, right: 0, height: 100,
+            background: 'linear-gradient(to bottom, transparent, rgba(1,10,30,0.98))',
             pointerEvents: 'none',
           }}
         />
       </Box>
 
-      {/* Button */}
-      <Box sx={{ px: 3, pb: 3, pt: 2, textAlign: 'center' }}>
+      {/* CTA */}
+      <Box sx={{ px: 3, pb: 3, pt: 1.5 }}>
         <Button
           variant="outlined"
           endIcon={<ArrowForwardIcon />}
@@ -171,117 +197,182 @@ function RepsPanel({ coachImages }: RepsPanelProps) {
           fullWidth
           sx={{
             color: '#f5c842',
-            borderColor: 'rgba(245,200,66,0.35)',
-            py: 1.1, fontWeight: 600,
-            '&:hover': { borderColor: '#f5c842', bgcolor: 'rgba(245,200,66,0.07)' },
+            borderColor: 'rgba(245,200,66,0.3)',
+            py: 1, fontWeight: 700, fontSize: '0.82rem',
+            borderRadius: 2.5,
+            '&:hover': { borderColor: '#f5c842', bgcolor: 'rgba(245,200,66,0.06)' },
           }}
         >
-          Explore Representatives
+          View All Representatives
         </Button>
       </Box>
     </Box>
   )
 }
 
-// ── Tours panel ──────────────────────────────────────────────────────────────
+// ── Tours panel ───────────────────────────────────────────────────────────────
 
 function ToursPanel() {
   const navigate = useNavigate()
+  const upcoming = sortedTours.filter(t => t.status === 'upcoming')
+  const completed = sortedTours.filter(t => t.status === 'completed')
+
   return (
     <Box
       sx={{
         flex: 1,
-        bgcolor: 'rgba(255,255,255,0.04)',
-        border: '1px solid rgba(255,255,255,0.08)',
-        borderRadius: 4,
-        overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
+        bgcolor: 'rgba(255,255,255,0.03)',
+        border: '1px solid rgba(255,255,255,0.07)',
+        borderRadius: 4,
+        overflow: 'hidden',
+        backdropFilter: 'blur(8px)',
       }}
     >
-      {/* Header */}
-      <Box sx={{ px: 3, pt: 3, pb: 1.5, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
-          <FlightTakeoffIcon sx={{ color: '#f5c842', fontSize: '1.1rem' }} />
-          <Typography sx={{ color: '#f5c842', fontWeight: 800, fontSize: '0.72rem', letterSpacing: '0.12em' }}>
-            TOURS
-          </Typography>
+      {/* Panel header */}
+      <Box
+        sx={{
+          px: 3, pt: 3, pb: 2,
+          background: 'linear-gradient(135deg, rgba(100,160,255,0.07) 0%, transparent 100%)',
+          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Box
+            sx={{
+              width: 36, height: 36, borderRadius: 2,
+              bgcolor: 'rgba(100,160,255,0.1)',
+              border: '1px solid rgba(100,160,255,0.2)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
+          >
+            <FlightTakeoffIcon sx={{ color: '#7eb8f5', fontSize: '1.1rem' }} />
+          </Box>
+          <Box>
+            <Typography sx={{ color: '#7eb8f5', fontWeight: 800, fontSize: '0.68rem', letterSpacing: '0.14em' }}>
+              TOURS
+            </Typography>
+            <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '1rem', lineHeight: 1.2 }}>
+              Cricket Around the World
+            </Typography>
+          </Box>
         </Box>
-        <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '1.15rem' }}>
-          Cricket Around the World
-        </Typography>
+        {upcoming.length > 0 && (
+          <Chip
+            label={`${upcoming.length} upcoming`}
+            size="small"
+            sx={{ bgcolor: 'rgba(245,200,66,0.12)', color: '#f5c842', fontWeight: 700, fontSize: '0.68rem', border: '1px solid rgba(245,200,66,0.2)' }}
+          />
+        )}
       </Box>
 
-      {/* Scrollable content with fade */}
-      <Box sx={{ position: 'relative', height: { xs: 340, md: 380 }, overflow: 'hidden' }}>
-        <Box sx={{ px: 3, pt: 2, pb: 1 }}>
-          {sortedTours.map((tour) => (
-            <Box
-              key={tour.id}
-              sx={{
-                py: 1.5,
-                borderBottom: '1px solid rgba(255,255,255,0.05)',
-              }}
-            >
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, mb: 0.4 }}>
-                <Typography sx={{ color: 'rgba(255,255,255,0.92)', fontWeight: 700, fontSize: '0.9rem', lineHeight: 1.3 }}>
-                  {tour.name}
-                </Typography>
-                <Chip
-                  label={tour.status === 'upcoming' ? 'Upcoming' : tour.year}
-                  size="small"
-                  sx={{
-                    height: 20, fontSize: '0.65rem', fontWeight: 700, flexShrink: 0,
-                    bgcolor: tour.status === 'upcoming' ? 'rgba(245,200,66,0.15)' : 'rgba(255,255,255,0.07)',
-                    color: tour.status === 'upcoming' ? '#f5c842' : 'rgba(255,255,255,0.5)',
-                    border: tour.status === 'upcoming' ? '1px solid rgba(245,200,66,0.3)' : '1px solid rgba(255,255,255,0.1)',
-                  }}
-                />
-              </Box>
-              <Typography sx={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.76rem' }}>
-                {tour.location}
+      {/* Content */}
+      <Box sx={{ position: 'relative', flex: 1, height: { xs: 320, md: 360 }, overflow: 'hidden' }}>
+        <Box sx={{ px: 3, pt: 2.5, pb: 1 }}>
+
+          {/* Upcoming tours */}
+          {upcoming.length > 0 && (
+            <Box sx={{ mb: 2 }}>
+              <Typography sx={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.12em', mb: 1.25 }}>
+                UPCOMING
               </Typography>
-              {tour.status === 'upcoming' && (
-                <Typography sx={{ color: 'rgba(245,200,66,0.7)', fontSize: '0.72rem', mt: 0.3 }}>
-                  {tour.dates}
-                </Typography>
-              )}
+              {upcoming.map((tour) => (
+                <Box
+                  key={tour.id}
+                  sx={{
+                    display: 'flex', alignItems: 'center', gap: 2, mb: 1.5,
+                    background: 'linear-gradient(135deg, rgba(245,200,66,0.06) 0%, rgba(245,200,66,0.02) 100%)',
+                    border: '1px solid rgba(245,200,66,0.15)',
+                    borderRadius: 2.5, p: 1.5,
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 36, height: 36, borderRadius: 2,
+                      bgcolor: 'rgba(245,200,66,0.1)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                    }}
+                  >
+                    <FlightTakeoffIcon sx={{ color: '#f5c842', fontSize: '1rem' }} />
+                  </Box>
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                    <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '0.85rem', lineHeight: 1.2 }}>
+                      {tour.name}
+                    </Typography>
+                    <Typography sx={{ color: 'rgba(245,200,66,0.75)', fontSize: '0.7rem', mt: 0.2 }}>
+                      {tour.dates ?? tour.location}
+                    </Typography>
+                  </Box>
+                  <Chip label="Soon" size="small" sx={{ bgcolor: 'rgba(245,200,66,0.15)', color: '#f5c842', fontWeight: 700, fontSize: '0.62rem', border: '1px solid rgba(245,200,66,0.25)' }} />
+                </Box>
+              ))}
             </Box>
-          ))}
+          )}
+
+          {/* Completed tours */}
+          {completed.length > 0 && (
+            <Box>
+              <Typography sx={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.12em', mb: 1.25 }}>
+                COMPLETED
+              </Typography>
+              {completed.map((tour, i) => (
+                <Box
+                  key={tour.id}
+                  sx={{
+                    display: 'flex', alignItems: 'center', gap: 1.5, py: 0.9,
+                    borderBottom: i < completed.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+                  }}
+                >
+                  <CheckCircleIcon sx={{ color: 'rgba(77,214,138,0.5)', fontSize: '0.95rem', flexShrink: 0 }} />
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                    <Typography sx={{ color: 'rgba(255,255,255,0.8)', fontWeight: 600, fontSize: '0.84rem' }}>
+                      {tour.name}
+                    </Typography>
+                    <Typography sx={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.7rem' }}>
+                      {tour.location} · {tour.year}
+                    </Typography>
+                  </Box>
+                </Box>
+              ))}
+            </Box>
+          )}
         </Box>
 
-        {/* Fade out */}
+        {/* Gradient fade */}
         <Box
           sx={{
-            position: 'absolute', bottom: 0, left: 0, right: 0, height: 110,
-            background: 'linear-gradient(to bottom, transparent, rgba(2,10,35,0.98))',
+            position: 'absolute', bottom: 0, left: 0, right: 0, height: 80,
+            background: 'linear-gradient(to bottom, transparent, rgba(1,10,30,0.98))',
             pointerEvents: 'none',
           }}
         />
       </Box>
 
-      {/* Button */}
-      <Box sx={{ px: 3, pb: 3, pt: 2, textAlign: 'center' }}>
+      {/* CTA */}
+      <Box sx={{ px: 3, pb: 3, pt: 1.5 }}>
         <Button
           variant="outlined"
           endIcon={<ArrowForwardIcon />}
           onClick={() => navigate('/tours')}
           fullWidth
           sx={{
-            color: '#f5c842',
-            borderColor: 'rgba(245,200,66,0.35)',
-            py: 1.1, fontWeight: 600,
-            '&:hover': { borderColor: '#f5c842', bgcolor: 'rgba(245,200,66,0.07)' },
+            color: '#7eb8f5',
+            borderColor: 'rgba(126,184,245,0.3)',
+            py: 1, fontWeight: 700, fontSize: '0.82rem',
+            borderRadius: 2.5,
+            '&:hover': { borderColor: '#7eb8f5', bgcolor: 'rgba(126,184,245,0.06)' },
           }}
         >
-          Explore Tours
+          View All Tours
         </Button>
       </Box>
     </Box>
   )
 }
 
-// ── Main section ─────────────────────────────────────────────────────────────
+// ── Main section ──────────────────────────────────────────────────────────────
 
 export default function ExplorePreviewSection() {
   const [coachImages, setCoachImages] = useState<Record<string, string>>({})
@@ -301,30 +392,49 @@ export default function ExplorePreviewSection() {
     <Box
       id="explore"
       sx={{
-        background: 'linear-gradient(150deg, #010d2a 0%, #021a4a 50%, #032053 100%)',
-        py: { xs: 6, md: 10 },
+        py: { xs: 8, md: 12 },
         position: 'relative',
         overflow: 'hidden',
+        background: 'linear-gradient(160deg, #010d2a 0%, #011535 40%, #021a4a 100%)',
       }}
     >
+      {/* Background grid */}
       <Box
         sx={{
           position: 'absolute', inset: 0,
-          backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.03) 1px, transparent 0)`,
-          backgroundSize: '40px 40px',
+          backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.025) 1px, transparent 0)`,
+          backgroundSize: '36px 36px',
           pointerEvents: 'none',
         }}
       />
+
+      {/* Ambient glows */}
+      <Box sx={{ position: 'absolute', top: '10%', left: '5%', width: 400, height: 400, borderRadius: '50%', bgcolor: 'rgba(245,200,66,0.04)', filter: 'blur(80px)', pointerEvents: 'none' }} />
+      <Box sx={{ position: 'absolute', bottom: '10%', right: '5%', width: 360, height: 360, borderRadius: '50%', bgcolor: 'rgba(100,160,255,0.05)', filter: 'blur(80px)', pointerEvents: 'none' }} />
+
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
-        <Box sx={{ textAlign: 'center', mb: 5 }}>
-          <Typography variant="h2" sx={{ fontSize: { xs: '1.9rem', sm: '2.6rem' }, color: '#fff', mb: 1 }}>
-            Explore More
+
+        {/* Section heading */}
+        <Box sx={{ mb: { xs: 5, md: 7 } }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
+            <Box sx={{ height: 2, width: 32, bgcolor: '#f5c842', borderRadius: 1 }} />
+            <Typography sx={{ color: '#f5c842', fontWeight: 800, fontSize: '0.7rem', letterSpacing: '0.16em' }}>
+              EXPLORE MORE
+            </Typography>
+          </Box>
+          <Typography
+            variant="h2"
+            sx={{ fontSize: { xs: '2.2rem', sm: '3rem', md: '3.5rem' }, color: '#fff', fontWeight: 900, lineHeight: 1.1, mb: 1.5 }}
+          >
+            Beyond the{' '}
+            <Box component="span" sx={{ color: '#f5c842' }}>Boundary</Box>
           </Typography>
-          <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.95rem' }}>
-            Discover our representatives and tours around the world.
+          <Typography sx={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.95rem', maxWidth: 460 }}>
+            Our players represent at the highest levels. Our teams travel the world. Explore what T&H Cricket looks like beyond the training ground.
           </Typography>
         </Box>
 
+        {/* Panels */}
         <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3, alignItems: 'stretch' }}>
           <RepsPanel coachImages={coachImages} />
           <ToursPanel />

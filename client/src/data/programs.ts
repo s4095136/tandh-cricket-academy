@@ -6,6 +6,7 @@ export interface Program {
   coaches: string
   dates: string
   squads: string[]
+  description: string
 }
 
 export const PROGRAMS: Program[] = [
@@ -17,6 +18,7 @@ export const PROGRAMS: Program[] = [
     coaches: 'Hanni, Alan, Tom, Simon & Aiman',
     dates: '2 May – 30 Aug 2026',
     squads: ['Open Team White', 'Open Team Navy'],
+    description: 'Our senior Open program is designed for players ready to compete at a high level. Two squads — White and Navy — train on Saturday evenings with a strong focus on performance cricket, advanced skill refinement, match-day preparation and tactical development. Coached by our most experienced staff.',
   },
   {
     title: 'Senior Program',
@@ -26,6 +28,7 @@ export const PROGRAMS: Program[] = [
     coaches: 'Hanni, Alan, Aiman, Hashim, Daksh, Ritin & Krish',
     dates: '2 May – 31 Aug 2026',
     squads: ['Special Group', '16&U White', '16&U Navy'],
+    description: 'The 16s & Under program bridges junior and senior cricket. Players train across Saturday and Sunday with three squad levels — including a high-performance Special Group — covering batting, bowling, fielding and game strategy. A large, dedicated coaching team ensures every player gets personalised attention.',
   },
   {
     title: 'Junior Program',
@@ -35,6 +38,7 @@ export const PROGRAMS: Program[] = [
     coaches: 'Hanni, Aiman & Ritwik',
     dates: '3 May – 31 Aug 2026',
     squads: ['14&U Navy', '14&U'],
+    description: 'The 14s & Under program develops players in a structured Sunday environment. Two squads allow players to be placed at the right level of challenge. Sessions cover core batting and bowling techniques, fielding drills and building the habits needed to move into senior cricket.',
   },
   {
     title: 'Junior Program',
@@ -44,15 +48,17 @@ export const PROGRAMS: Program[] = [
     coaches: 'Hanni, Aiman, Ali Khan & Ceriac',
     dates: '1 May – 29 Aug 2026',
     squads: ['12&U'],
+    description: 'Friday evening sessions for players 12 and under. This program builds fundamental cricket skills — batting technique, basic bowling mechanics and sharp fielding — in a fun, energetic environment. Players develop game sense and confidence while training alongside peers at a similar stage.',
   },
   {
-    title: 'Junior Program',  
+    title: 'Junior Program',
     label: '10s & Under',
     day: 'Friday',
     time: '4:45pm – 6:30pm',
     coaches: 'Hanni, Richard, Ritwik, Rehit & Humza',
     dates: '1 May – 29 Aug 2026',
     squads: ['10&U'],
+    description: 'Our youngest program is all about sparking a love for the game. Friday afternoon sessions for players 10 and under focus on fun, movement and the core fundamentals of cricket. Small groups, patient coaches and age-appropriate activities make this the perfect starting point for young cricketers.',
   },
 ]
 

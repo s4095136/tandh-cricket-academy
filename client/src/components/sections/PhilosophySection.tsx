@@ -48,7 +48,6 @@ const developmentValues = [
   },
 ]
 
-const IMAGE_URL = 'https://tandh-backend-deployment-production.up.railway.app/images/coaches/tom-rogers.png'
 
 function SectionBlock({
   title,
@@ -86,7 +85,7 @@ function SectionBlock({
         >
           <Box
             component="img"
-            src={IMAGE_URL}
+            src={'https://tandh-backend-deployment-production.up.railway.app/images/philosophy/tombbl.png'}
             alt=""
             sx={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.7 }}
           />
@@ -113,7 +112,7 @@ function SectionBlock({
               width: '100%',
               height: '100%',
               objectFit: 'cover',
-              opacity: 0.45,
+              opacity: 2,
               zIndex: 0,
             }}
           />

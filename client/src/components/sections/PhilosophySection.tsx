@@ -203,7 +203,7 @@ function SectionBlock({
         >
           <Box
             component="img"
-            src={IMAGE_URL}
+            src={'https://tandh-backend-deployment-production.up.railway.app/images/philosophy/tombbl.png'}
             alt=""
             sx={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
           />

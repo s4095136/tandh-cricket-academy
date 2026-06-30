@@ -1,5 +1,6 @@
 import React from 'react'
-import { Dialog, DialogContent, Box, Typography, Avatar, Chip } from '@mui/material'
+import { Dialog, DialogContent, Box, Typography, Avatar, Chip, IconButton } from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
 import { CLOUDINARY_BASE } from '../../config/cloudinary'
 
 // const API_URL = 'https://tandh-backend-deployment-production.up.railway.app'
@@ -56,8 +57,20 @@ export default function CoachDialog({ coach, onClose }: Props) {
               alignItems: 'center',
               gap: 3,
               borderBottom: '1px solid rgba(255,255,255,0.08)',
+              position: 'relative',
             }}
           >
+            <IconButton
+              onClick={onClose}
+              size="small"
+              sx={{
+                position: 'absolute', top: 12, right: 12,
+                color: 'rgba(255,255,255,0.5)',
+                '&:hover': { color: '#fff', bgcolor: 'rgba(255,255,255,0.08)' },
+              }}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
             <Avatar
 src={`${CLOUDINARY}/${coach.image
   ?.replace('/images/coaches/', '')

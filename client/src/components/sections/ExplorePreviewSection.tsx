@@ -22,9 +22,14 @@ function getInitials(name: string): string {
   return (first[0] + (parts[1]?.[0] ?? '')).toUpperCase()
 }
 
-const topReps = [...REPRESENTATIVES]
+const ausNames = new Set(AUSTRALIAN_REPRESENTATIVES.map(r => r.name.toLowerCase()))
+
+const sortedDomestic = [...REPRESENTATIVES]
+  .filter(r => !ausNames.has(r.name.toLowerCase()))
   .sort((a, b) => b.honours.length - a.honours.length)
-  .slice(0, 5)
+
+const topStateRep = sortedDomestic[0] ?? null
+const topReps = sortedDomestic.slice(1, 5)
 
 const sortedTours = [...TOURS].sort((a, b) =>
   a.status === 'upcoming' && b.status !== 'upcoming' ? -1 :
@@ -55,11 +60,21 @@ const ausRep = AUSTRALIAN_REPRESENTATIVES[0]
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
-        bgcolor: 'rgba(255,255,255,0.03)',
         border: '1px solid rgba(255,255,255,0.07)',
         borderRadius: 4,
         overflow: 'hidden',
-        backdropFilter: 'blur(8px)',
+        position: 'relative',
+        backgroundImage: 'url(https://res.cloudinary.com/dnubhsrlt/image/upload/f_auto,q_auto/vishwa-aus.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center top',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          inset: 0,
+          background: 'linear-gradient(160deg, rgba(1,13,42,0.55) 0%, rgba(2,26,74,0.62) 50%, rgba(1,10,30,0.75) 100%)',
+          zIndex: 0,
+        },
+        '& > *': { position: 'relative', zIndex: 1 },
       }}
     >
       {/* Panel header */}
@@ -104,21 +119,28 @@ const ausRep = AUSTRALIAN_REPRESENTATIVES[0]
 
           {/* Australian rep — gold feature card */}
           {ausRep && (
+            <>
+            {/* AUSTRALIAN REPRESENTATIVE label */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.25 }}>
+              <Box sx={{ width: 3, height: 12, borderRadius: 1, bgcolor: '#f5c842', flexShrink: 0 }} />
+              <Typography sx={{ color: '#f5c842', fontSize: '0.58rem', fontWeight: 800, letterSpacing: '0.16em' }}>
+                AUSTRALIAN REPRESENTATIVE
+              </Typography>
+            </Box>
             <Box
               sx={{
                 display: 'flex', alignItems: 'center', gap: 2,
-                background: 'linear-gradient(135deg, rgba(245,200,66,0.1) 0%, rgba(245,200,66,0.04) 100%)',
-                border: '1px solid rgba(245,200,66,0.2)',
-                borderRadius: 3, p: 1.75, mb: 2.5,
+                background: 'linear-gradient(120deg, rgba(245,200,66,0.13) 0%, rgba(245,200,66,0.05) 60%, transparent 100%)',
+                border: '1px solid rgba(245,200,66,0.25)',
+                borderLeft: '3px solid rgba(245,200,66,0.7)',
+                borderRadius: 2.5, p: 1.75, mb: 2.5,
                 position: 'relative', overflow: 'hidden',
               }}
             >
-              {/* Glow */}
-              <Box sx={{ position: 'absolute', top: -20, right: -20, width: 80, height: 80, borderRadius: '50%', bgcolor: 'rgba(245,200,66,0.08)', filter: 'blur(20px)', pointerEvents: 'none' }} />
               <Avatar
                 src={getImage(ausRep.name, ausRep.image)}
                 sx={{
-                  width: 54, height: 54,
+                  width: 50, height: 50,
                   border: '2px solid #f5c842',
                   bgcolor: 'rgba(245,200,66,0.15)',
                   color: '#f5c842',
@@ -131,51 +153,105 @@ const ausRep = AUSTRALIAN_REPRESENTATIVES[0]
                 {getInitials(ausRep.name)}
               </Avatar>
               <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '0.9rem' }}>
+                <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '0.88rem', lineHeight: 1.2 }}>
                   {ausRep.name}
                 </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.3 }}>
-                  <PublicIcon sx={{ color: '#f5c842', fontSize: '0.75rem' }} />
-                  <Typography sx={{ color: '#f5c842', fontSize: '0.7rem', fontWeight: 700 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.4 }}>
+                  <PublicIcon sx={{ color: '#f5c842', fontSize: '0.72rem' }} />
+                  <Typography sx={{ color: '#f5c842', fontSize: '0.68rem', fontWeight: 700 }}>
                     Australian Representative
                   </Typography>
                 </Box>
               </Box>
-              <Chip label="AUS" size="small" sx={{ bgcolor: 'rgba(245,200,66,0.15)', color: '#f5c842', fontWeight: 800, fontSize: '0.65rem', border: '1px solid rgba(245,200,66,0.3)' }} />
+              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 0.5 }}>
+                <Chip label="🇦🇺 AUS" size="small" sx={{ bgcolor: 'rgba(245,200,66,0.18)', color: '#f5c842', fontWeight: 800, fontSize: '0.62rem', border: '1px solid rgba(245,200,66,0.35)', height: 20 }} />
+              </Box>
+            </Box>
+            </>
+          )}
+
+          {/* STATE REPRESENTATIVES label + featured card */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.25 }}>
+            <Box sx={{ width: 3, height: 12, borderRadius: 1, bgcolor: 'rgba(126,184,245,0.6)', flexShrink: 0 }} />
+            <Typography sx={{ color: 'rgba(126,184,245,0.8)', fontSize: '0.58rem', fontWeight: 800, letterSpacing: '0.16em' }}>
+              STATE REPRESENTATIVES
+            </Typography>
+          </Box>
+
+          {/* Top state rep — blue feature card (smaller than Vishwa's) */}
+          {topStateRep && (
+            <Box
+              sx={{
+                display: 'flex', alignItems: 'center', gap: 1.5,
+                background: 'linear-gradient(120deg, rgba(126,184,245,0.1) 0%, rgba(126,184,245,0.04) 60%, transparent 100%)',
+                border: '1px solid rgba(126,184,245,0.2)',
+                borderLeft: '3px solid rgba(126,184,245,0.6)',
+                borderRadius: 2, p: 1.25, mb: 1.5,
+                position: 'relative', overflow: 'hidden',
+              }}
+            >
+              <Avatar
+                src={getImage(topStateRep.name, topStateRep.image)}
+                sx={{
+                  width: 42, height: 42,
+                  border: '2px solid rgba(126,184,245,0.7)',
+                  bgcolor: 'rgba(126,184,245,0.12)',
+                  color: '#7eb8f5',
+                  fontFamily: '"Bebas Neue", sans-serif',
+                  fontSize: '0.85rem',
+                  flexShrink: 0,
+                  '& img': { objectFit: 'cover', objectPosition: 'center 5%' },
+                }}
+              >
+                {getInitials(topStateRep.name)}
+              </Avatar>
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '0.82rem', lineHeight: 1.2 }}>
+                  {topStateRep.name}
+                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.3 }}>
+                  <EmojiEventsIcon sx={{ color: '#7eb8f5', fontSize: '0.68rem' }} />
+                  <Typography sx={{ color: '#7eb8f5', fontSize: '0.64rem', fontWeight: 700 }}>
+                    {topStateRep.honours.length} State Honours
+                  </Typography>
+                </Box>
+              </Box>
+              <Chip label="VIC" size="small" sx={{ bgcolor: 'rgba(126,184,245,0.15)', color: '#7eb8f5', fontWeight: 800, fontSize: '0.6rem', border: '1px solid rgba(126,184,245,0.3)', height: 18 }} />
             </Box>
           )}
 
-          {/* State reps list */}
           {topReps.map((player, i) => (
             <Box
               key={player.id}
               sx={{
                 display: 'flex', alignItems: 'center', gap: 1.5,
-                py: 0.9,
-                borderBottom: i < topReps.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+                py: 1,
+                px: 1,
+                borderRadius: 1.5,
+                borderBottom: i < topReps.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
               }}
             >
               <Avatar
                 src={getImage(player.name, player.image)}
                 sx={{
-                  width: 38, height: 38,
-                  border: '1.5px solid rgba(245,200,66,0.3)',
+                  width: 36, height: 36,
+                  border: '1.5px solid rgba(245,200,66,0.28)',
                   bgcolor: 'rgba(245,200,66,0.08)',
                   color: '#f5c842',
                   fontFamily: '"Bebas Neue", sans-serif',
-                  fontSize: '0.78rem',
+                  fontSize: '0.72rem',
                   flexShrink: 0,
                   '& img': { objectFit: 'cover', objectPosition: 'center 5%' },
                 }}
               >
                 {getInitials(player.name)}
               </Avatar>
-              <Typography sx={{ color: 'rgba(255,255,255,0.85)', fontWeight: 600, fontSize: '0.85rem', flexGrow: 1 }}>
+              <Typography sx={{ color: 'rgba(255,255,255,0.82)', fontWeight: 600, fontSize: '0.83rem', flexGrow: 1, lineHeight: 1.2 }}>
                 {player.name}
               </Typography>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.4 }}>
-                <EmojiEventsIcon sx={{ color: 'rgba(245,200,66,0.6)', fontSize: '0.7rem' }} />
-                <Typography sx={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.7rem' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, bgcolor: 'rgba(245,200,66,0.07)', border: '1px solid rgba(245,200,66,0.15)', borderRadius: 1, px: 0.75, py: 0.25 }}>
+                <EmojiEventsIcon sx={{ color: 'rgba(245,200,66,0.7)', fontSize: '0.65rem' }} />
+                <Typography sx={{ color: 'rgba(245,200,66,0.8)', fontSize: '0.65rem', fontWeight: 700 }}>
                   {player.honours.length}
                 </Typography>
               </Box>
@@ -228,11 +304,21 @@ function ToursPanel() {
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
-        bgcolor: 'rgba(255,255,255,0.03)',
         border: '1px solid rgba(255,255,255,0.07)',
         borderRadius: 4,
         overflow: 'hidden',
-        backdropFilter: 'blur(8px)',
+        position: 'relative',
+        backgroundImage: 'url(https://res.cloudinary.com/dnubhsrlt/image/upload/f_auto,q_auto/tour.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center center',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          inset: 0,
+          background: 'linear-gradient(160deg, rgba(1,13,42,0.55) 0%, rgba(2,26,74,0.62) 50%, rgba(1,10,30,0.75) 100%)',
+          zIndex: 0,
+        },
+        '& > *': { position: 'relative', zIndex: 1 },
       }}
     >
       {/* Panel header */}

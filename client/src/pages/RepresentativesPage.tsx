@@ -15,6 +15,70 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { CLOUDINARY_BASE } from '../config/cloudinary'
 const CLOUDINARY = CLOUDINARY_BASE
 
+function RepresentativeBanner({
+  image,
+  title,
+}: {
+  image: string
+  title?: string
+}) {
+  return (
+    <Box
+      sx={{
+        height: { xs: 220, md: 340 },
+        borderRadius: 4,
+        overflow: 'hidden',
+        mb: 4,
+
+        backgroundImage: `url(${image})`,
+        backgroundSize: 'cover',
+
+        backgroundPosition: {
+          xs: 'center top',
+          md: 'center 30%'        },
+
+        position: 'relative',
+
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          inset: 0,
+          background:
+            'linear-gradient(to right, rgba(1,13,42,.85), rgba(1,13,42,.25))',
+        },
+      }}
+    >
+      {title && (
+        <Box
+          sx={{
+            position: 'absolute',
+            bottom: 28,
+            left: 32,
+            zIndex: 1,
+          }}
+        >
+          <Typography
+            sx={{
+              color: "#fff",
+              fontWeight: 900,
+              fontSize: {
+                xs: "2rem",
+                md: "3rem",
+              },
+            }}
+          >
+            {title}
+          </Typography>
+        </Box>
+      )}
+    </Box>
+  )
+}
+const topPlayers = REPRESENTATIVES.slice(0, 3)
+
+const middlePlayers = REPRESENTATIVES.slice(3, 6)
+
+const bottomPlayers = REPRESENTATIVES.slice(6)
 
 function getInitials(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean)
@@ -250,6 +314,9 @@ export default function RepresentativesPage() {
           </Typography>
         </Box>
 
+<RepresentativeBanner
+    image={`${CLOUDINARY}/vish-aus.jpg`}
+/>
         {/* Australian Representatives */}
         <Box sx={{ mb: { xs: 4, md: 6 } }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 4 }}>
@@ -333,6 +400,9 @@ export default function RepresentativesPage() {
               State Representatives
             </Typography>
           </Box>
+<RepresentativeBanner
+    image={`${CLOUDINARY}/aiman-vic.jpg`}
+/>
 
           <Grid container spacing={3}>
             {[...REPRESENTATIVES].sort((a, b) => b.honours.length - a.honours.length).map((player) => (

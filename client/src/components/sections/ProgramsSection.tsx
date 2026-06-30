@@ -12,14 +12,16 @@ import type { Program } from '../../data/programs'
 import { PROGRAMS, DAY_COLOR } from '../../data/programs'
 import { useApplyModal } from '../../context/ApplyModalContext'
 
-const PROGRAM_IMAGES = [
-  'https://tandh-backend-deployment-production.up.railway.app/images/programs/open.png',
-  'https://tandh-backend-deployment-production.up.railway.app/images/programs/16s.png',
-  'https://tandh-backend-deployment-production.up.railway.app/images/programs/14s.png',
-  'https://tandh-backend-deployment-production.up.railway.app/images/programs/12s.png',
-  'https://tandh-backend-deployment-production.up.railway.app/images/programs/10s.png',
-]
+import { CLOUDINARY_BASE } from '../../config/cloudinary'
 
+
+const PROGRAM_IMAGES = [
+  `${CLOUDINARY_BASE}/open.png`,
+  `${CLOUDINARY_BASE}/16s.png`,
+  `${CLOUDINARY_BASE}/14s.png`,
+  `${CLOUDINARY_BASE}/12s.png`,
+  `${CLOUDINARY_BASE}/10s.png`,
+]
 function ProgramDialog({
   program,
   index,

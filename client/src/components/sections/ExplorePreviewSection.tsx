@@ -10,6 +10,9 @@ import { REPRESENTATIVES, AUSTRALIAN_REPRESENTATIVES } from '../../data/represen
 import { TOURS } from '../../data/tours'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000'
+import { CLOUDINARY_BASE } from '../../config/cloudinary'
+
+const CLOUDINARY = CLOUDINARY_BASE
 
 function getInitials(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean)
@@ -35,14 +38,16 @@ interface RepsPanelProps { coachImages: Record<string, string> }
 function RepsPanel({ coachImages }: RepsPanelProps) {
   const navigate = useNavigate()
 
-  function getImage(name: string, fallback: string | null): string | undefined {
-    const db = coachImages[name.toLowerCase()]
-    if (db) return `${API_URL}${db}`
-    if (fallback) return `${API_URL}${fallback}`
-    return undefined
-  }
+function getImage(name: string, fallback: string | null): string | undefined {
+  const db = coachImages[name.toLowerCase()]
 
-  const ausRep = AUSTRALIAN_REPRESENTATIVES[0]
+  if (db) return `${CLOUDINARY}/${db}`
+  if (fallback) return `${CLOUDINARY}/${fallback}`
+
+  return undefined
+}
+
+const ausRep = AUSTRALIAN_REPRESENTATIVES[0]
 
   return (
     <Box

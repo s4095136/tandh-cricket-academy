@@ -3,6 +3,9 @@ import { Box, Container, Typography, Stack } from '@mui/material'
 import CheckIcon from '@mui/icons-material/Check'
 
 const BASE = 'https://tandh-backend-deployment-production.up.railway.app'
+import { CLOUDINARY_BASE } from '../../config/cloudinary'
+const CLOUDINARY = CLOUDINARY_BASE
+
 
 const philosophyValues = [
   {
@@ -268,14 +271,14 @@ export default function PhilosophySection() {
         <SectionBlock
           title="Player Development"
           items={philosophyValues}
-          image={`${BASE}/images/philosophy/hanni.png`}
+          image={`${CLOUDINARY}/hanni.png`}
           grid
         />
 
         <SectionBlock
           title="Cricket Excellence"
           items={developmentValues}
-          image={`${BASE}/images/philosophy/tombbl.png`}
+          image={`${CLOUDINARY}/tombbl.png`}
         />
 
       </Container>

@@ -26,6 +26,11 @@ import 'swiper/css/pagination'
 
 const API_URL = 'https://tandh-backend-deployment-production.up.railway.app'
 
+import { CLOUDINARY_BASE } from '../../config/cloudinary'
+
+const CLOUDINARY = CLOUDINARY_BASE
+
+
 interface Coach {
   id: number
   initials: string

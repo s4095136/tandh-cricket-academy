@@ -2,8 +2,11 @@ import React from 'react'
 import { Box, Typography } from '@mui/material'
 import { SPONSOR_GROUPS } from './HeroData'
 
-const API_URL =
-  'https://tandh-backend-deployment-production.up.railway.app'
+// const API_URL =
+//   'https://tandh-backend-deployment-production.up.railway.app'
+
+import { CLOUDINARY_BASE } from '../../config/cloudinary'
+const CLOUDINARY = CLOUDINARY_BASE
 
 export default function SponsorsPanel() {
   return (
@@ -42,7 +45,7 @@ export default function SponsorsPanel() {
             >
               <Box
                 component="img"
-                src={`${API_URL}${sponsor.image}`}
+                src={`${CLOUDINARY}/${sponsor.image}`}
                 alt={sponsor.name}
                 sx={{ height: 40, width: 'auto', maxWidth: 90, objectFit: 'contain' }}
               />
@@ -94,7 +97,7 @@ function SponsorList() {
                 >
                   <Box
                     component="img"
-                    src={`${API_URL}${sponsor.image}`}
+                    src={`${CLOUDINARY}/${sponsor.image}`}
                     alt={sponsor.name}
                     sx={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
                   />

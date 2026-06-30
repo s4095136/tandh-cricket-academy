@@ -11,7 +11,10 @@ import type { Representative, AustralianRepresentative } from '../data/represent
 import { useNavigate } from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 
-const API_URL = 'https://tandh-backend-deployment-production.up.railway.app'
+// const API_URL = 'https://tandh-backend-deployment-production.up.railway.app'
+import { CLOUDINARY_BASE } from '../config/cloudinary'
+const CLOUDINARY = CLOUDINARY_BASE
+
 
 function getInitials(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean)
@@ -43,7 +46,7 @@ function StateDialog({ player, onClose }: { player: Representative | null; onClo
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2.5 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <Avatar
-                src={player.image ? `${API_URL}${player.image}` : undefined}
+                src={player.image ? `${CLOUDINARY}/${player.image}` : undefined}
                 sx={{
                   width: 80, height: 80,
                   border: '2px solid #f5c842',
@@ -115,7 +118,7 @@ function AusDialog({ player, onClose }: { player: AustralianRepresentative | nul
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2.5 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <Avatar
-                src={player.image ? `${API_URL}${player.image}` : undefined}
+                src={player.image ? `${CLOUDINARY}/${player.image}` : undefined}
                 sx={{
                   width: 80, height: 80,
                   border: '2px solid #f5c842',
@@ -273,7 +276,7 @@ export default function RepresentativesPage() {
                     <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2.5 }}>
                         <Avatar
-                          src={player.image ? `${API_URL}${player.image}` : undefined}
+                          src={player.image ? `${CLOUDINARY}/${player.image}` : undefined}
                           sx={{
                             width: 68, height: 68,
                             border: '2px solid #f5c842',
@@ -347,7 +350,7 @@ export default function RepresentativesPage() {
                   <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2.5 }}>
                       <Avatar
-                        src={player.image ? `${API_URL}${player.image}` : undefined}
+                        src={player.image ? `${CLOUDINARY}/${player.image}` : undefined}
                         sx={{
                           width: 68, height: 68,
                           border: '2px solid #f5c842',

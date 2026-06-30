@@ -1,7 +1,11 @@
 import React from 'react'
 import { Box, Typography, Avatar } from '@mui/material'
 import { COACH_GROUPS, AVATAR_HOVER_SX } from './HeroData'
-const API_URL = 'https://tandh-backend-deployment-production.up.railway.app'
+// const API_URL = 'https://tandh-backend-deployment-production.up.railway.app'
+
+import { CLOUDINARY_BASE } from '../../config/cloudinary'
+const CLOUDINARY = CLOUDINARY_BASE
+
 
 export default function CoachRoster({ onCoachClick }: { onCoachClick: (name: string) => void }) {
   return (
@@ -39,7 +43,9 @@ export default function CoachRoster({ onCoachClick }: { onCoachClick: (name: str
                 }}
               >
                 <Avatar
-                  src={`${API_URL}${coach.image}`}
+                  src={`${CLOUDINARY}/${coach.image
+                    ?.replace('/images/coaches/', '')
+                    ?.replace('/images/', '')}`}
                   sx={{ width: 68, height: 68, '& img': {
       objectFit: 'cover',
       objectPosition:

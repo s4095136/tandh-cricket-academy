@@ -1,6 +1,10 @@
 import React from 'react'
 import { Dialog, DialogContent, Box, Typography, Avatar, Chip } from '@mui/material'
-const API_URL = 'https://tandh-backend-deployment-production.up.railway.app'
+import { CLOUDINARY_BASE } from '../../config/cloudinary'
+
+// const API_URL = 'https://tandh-backend-deployment-production.up.railway.app'
+// const API_URL_LOCAL = 'http://localhost:5000'
+const CLOUDINARY = CLOUDINARY_BASE
 
 interface Coach {
   id: number
@@ -55,8 +59,10 @@ export default function CoachDialog({ coach, onClose }: Props) {
             }}
           >
             <Avatar
-              src={`${API_URL}${coach.image}`}
-              sx={{ width: 140, height: 140, flexShrink: 0, border: '4px solid #f5c842', '& img': {
+src={`${CLOUDINARY}/${coach.image
+  ?.replace('/images/coaches/', '')
+  ?.replace('/images/', '')}`}
+                sx={{ width: 140, height: 140, flexShrink: 0, border: '4px solid #f5c842', '& img': {
               objectFit: 'cover',
               objectPosition:
                 coach.name === 'Alan Chandwick'

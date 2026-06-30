@@ -6,7 +6,11 @@ import { useNavigate } from 'react-router-dom'
 import { REPRESENTATIVES, AUSTRALIAN_REPRESENTATIVES } from '../../data/representatives'
 
 // const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000'
-const API_URL = 'https://tandh-backend-deployment-production.up.railway.app'
+// const API_URL = 'https://tandh-backend-deployment-production.up.railway.app'
+
+import { CLOUDINARY_BASE } from '../../config/cloudinary'
+const CLOUDINARY = CLOUDINARY_BASE
+
 
 function getInitials(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean)
@@ -85,7 +89,7 @@ export default function RepresentativesPreviewSection() {
             }}
           >
             <Avatar
-              src={player.image ? `${API_URL}${player.image}` : undefined}
+              src={player.image ? `${CLOUDINARY}${player.image}` : undefined}
               sx={{
                 width: 52, height: 52,
                 border: '2px solid #f5c842',
@@ -129,7 +133,7 @@ export default function RepresentativesPreviewSection() {
               }}
             >
               <Avatar
-                src={player.image ? `${API_URL}${player.image}` : undefined}
+                src={player.image ? `${CLOUDINARY}${player.image}` : undefined}
                 sx={{
                   width: 44, height: 44,
                   border: '1.5px solid #f5c842',

@@ -1,12 +1,91 @@
-import React from 'react'
-import { Box, Container, Typography, Card, CardContent, Chip, Grid, Button } from '@mui/material'
+import React, { useState, useEffect } from 'react'
+import { Box, Container, Typography, Card, CardContent, Chip, Grid, Button, GlobalStyles, IconButton } from '@mui/material'
 import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { TOURS } from '../data/tours'
+import { CLOUDINARY_BASE } from '../config/cloudinary'
+
+const TOUR_IMAGES: Record<number, string[]> = {
+  2: [`${CLOUDINARY_BASE}/sale1.jpg`],
+  3: Array.from({ length: 8 }, (_, i) => `${CLOUDINARY_BASE}/mackay${i + 1}.jpg`),
+  4: Array.from({ length: 16 }, (_, i) => `${CLOUDINARY_BASE}/london${i + 1}.jpg`),
+}
 import { useTourApplyModal } from '../context/TourApplyModalContext'
 import { useNavigate } from 'react-router-dom'
+
+
+function CompletedTourRow({ tour, images, containIndices = new Set<number>() }: { tour: (typeof TOURS)[0]; images: string[]; containIndices?: Set<number> }) {
+  const [idx, setIdx] = useState(0)
+  const [tick, setTick] = useState(0)
+
+  const go = (next: number) => { setIdx((next + images.length) % images.length); setTick((t) => t + 1) }
+
+  useEffect(() => {
+    if (images.length <= 1) return
+    const timer = setInterval(() => setIdx((i) => (i + 1) % images.length), 3000)
+    return () => clearInterval(timer)
+  }, [images.length, tick])
+
+  return (
+    <Card sx={{
+      bgcolor: 'rgba(255,255,255,0.05)',
+      border: '1px solid rgba(255,255,255,0.1)',
+      borderRadius: 4,
+      overflow: 'hidden',
+    }}>
+      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, height: { md: 320 } }}>
+        {/* Left: text */}
+        <Box sx={{ flex: 1, p: { xs: 2.5, md: 4 }, display: 'flex', flexDirection: 'column', justifyContent: 'center', borderRight: { md: '1px solid rgba(255,255,255,0.08)' } }}>
+          <Chip label={tour.year} size="small" sx={{ mb: 1.5, alignSelf: 'flex-start', bgcolor: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.75)', fontWeight: 700 }} />
+          <Typography variant="h5" sx={{ color: '#fff', mb: 0.5, fontWeight: 700 }}>{tour.name}</Typography>
+          <Typography sx={{ color: '#f5c842', fontWeight: 600, fontSize: '0.85rem', mb: 1.5 }}>
+            {tour.location}{tour.dates ? ` · ${tour.dates}` : ''}
+          </Typography>
+          <Typography sx={{ color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, fontSize: '0.9rem', mb: 2 }}>
+            {tour.description}
+          </Typography>
+          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+            {tour.highlights.map((h) => (
+              <Chip key={h} label={h} size="small" sx={{ bgcolor: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.7)', fontSize: '0.7rem' }} />
+            ))}
+          </Box>
+        </Box>
+
+        {/* Right: slideshow */}
+        <Box sx={{ width: { xs: '100%', md: '45%' }, flexShrink: 0, position: 'relative', overflow: 'hidden', height: { xs: 220, md: '100%' }, bgcolor: 'rgba(0,0,0,0.2)' }}>
+          {images.length > 0 ? (
+            <>
+              {images.map((src, i) => (
+                <Box key={i} component="img" src={src} sx={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: containIndices.has(i) ? 'contain' : 'cover', opacity: i === idx ? 1 : 0, transition: 'opacity 0.6s ease' }} />
+              ))}
+              {images.length > 1 && (
+                <>
+                  <IconButton onClick={() => go(idx - 1)} sx={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', bgcolor: 'rgba(0,0,0,0.4)', color: '#fff', p: 0.5, '&:hover': { bgcolor: 'rgba(0,0,0,0.7)', color: '#f5c842' } }}>
+                    <ArrowBackIcon fontSize="small" />
+                  </IconButton>
+                  <IconButton onClick={() => go(idx + 1)} sx={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', bgcolor: 'rgba(0,0,0,0.4)', color: '#fff', p: 0.5, '&:hover': { bgcolor: 'rgba(0,0,0,0.7)', color: '#f5c842' } }}>
+                    <ArrowForwardIcon fontSize="small" />
+                  </IconButton>
+                  <Box sx={{ position: 'absolute', bottom: 10, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 0.75 }}>
+                    {images.map((_, i) => (
+                      <Box key={i} onClick={() => setIdx(i)} sx={{ width: 6, height: 6, borderRadius: '50%', bgcolor: i === idx ? '#f5c842' : 'rgba(255,255,255,0.4)', cursor: 'pointer', transition: 'background 0.3s' }} />
+                    ))}
+                  </Box>
+                </>
+              )}
+            </>
+          ) : (
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+              <Typography sx={{ color: 'rgba(255,255,255,0.2)', fontSize: '0.8rem' }}>No photos yet</Typography>
+            </Box>
+          )}
+        </Box>
+      </Box>
+    </Card>
+  )
+}
 
 export default function ToursPage() {
   const { openTourApplyModal } = useTourApplyModal()
@@ -25,16 +104,37 @@ export default function ToursPage() {
         overflow: 'hidden',
       }}
     >
-      {/* Background dots */}
-      <Box
-        sx={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.03) 1px, transparent 0)`,
-          backgroundSize: '40px 40px',
-          pointerEvents: 'none',
-        }}
-      />
+      <GlobalStyles styles={{
+        '@keyframes flyHorizontal': {
+          '0%':   { transform: 'translateX(-130vw)' },
+          '100%': { transform: 'translateX(280vw)' },
+        },
+      }} />
+      {[0, -7].map((delay) => (
+        <Box
+          key={delay}
+          sx={{
+            position: 'absolute',
+            top: { xs: '3.3%', md: '4.5%' },
+            left: 0,
+            pointerEvents: 'none',
+            animation: `flyHorizontal 14s ${delay}s linear infinite`,
+          }}
+        >
+          <Box sx={{ position: 'relative', display: 'inline-block', fontSize: { xs: 150, md: 240 }, lineHeight: 1 }}>
+            {[
+              { offset: '-1.1em', opacity: 0.40 },
+              { offset: '-2.1em', opacity: 0.25 },
+              { offset: '-3.1em', opacity: 0.14 },
+              { offset: '-4.1em', opacity: 0.07 },
+              { offset: '-5.1em', opacity: 0.03 },
+            ].map(({ offset, opacity }, i) => (
+              <Box key={i} sx={{ position: 'absolute', left: offset, top: 0, fontSize: 'inherit', lineHeight: 1, color: `rgba(245,200,66,${opacity})` }}>✈</Box>
+            ))}
+            <Box sx={{ position: 'relative', color: 'rgba(245,200,66,0.65)' }}>✈</Box>
+          </Box>
+        </Box>
+      ))}
 
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, pt: { xs: 9, md: 10 }, pb: { xs: 8, md: 12 } }}>
         {/* Back button */}
@@ -173,59 +273,16 @@ export default function ToursPage() {
         <Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 4 }}>
             <CheckCircleIcon sx={{ color: '#f5c842' }} />
-            <Typography
-              variant="h2"
-              sx={{ fontSize: { xs: '2rem', md: '2.6rem' }, color: '#ffffff' }}
-            >
+            <Typography variant="h2" sx={{ fontSize: { xs: '2rem', md: '2.6rem' }, color: '#ffffff' }}>
               Completed Tours
             </Typography>
           </Box>
 
-          <Grid container spacing={3}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
             {completedTours.map((tour) => (
-              <Grid key={tour.id} size={{ xs: 12, sm: 6, md: 3 }}>
-                <Card
-                  sx={{
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    bgcolor: 'rgba(255,255,255,0.05)',
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    borderRadius: 4,
-                    transition: 'transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease',
-                    '&:hover': {
-                      transform: 'translateY(-5px)',
-                      bgcolor: 'rgba(255,255,255,0.08)',
-                      boxShadow: '0 12px 32px rgba(0,0,0,0.35)',
-                    },
-                  }}
-                >
-                  <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                    <Chip
-                      label={tour.year}
-                      size="small"
-                      sx={{
-                        alignSelf: 'flex-start',
-                        mb: 2,
-                        bgcolor: 'rgba(255,255,255,0.08)',
-                        color: 'rgba(255,255,255,0.75)',
-                        fontWeight: 700,
-                      }}
-                    />
-                    <Typography variant="h6" sx={{ color: '#fff', mb: 0.5 }}>
-                      {tour.name}
-                    </Typography>
-                    <Typography sx={{ color: '#f5c842', fontWeight: 600, fontSize: '0.85rem', mb: 1.5 }}>
-                      {tour.location}{tour.dates ? ` · ${tour.dates}` : ''}
-                    </Typography>
-                    <Typography sx={{ color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, fontSize: '0.9rem' }}>
-                      {tour.description}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
+              <CompletedTourRow key={tour.id} tour={tour} images={TOUR_IMAGES[tour.id] ?? []} containIndices={tour.id === 4 ? new Set([2, 5, 6, 9]) : undefined} />
             ))}
-          </Grid>
+          </Box>
         </Box>
       </Container>
     </Box>

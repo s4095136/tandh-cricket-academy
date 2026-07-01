@@ -10,16 +10,18 @@ export interface Tour {
 }
 
 export const TOURS: Tour[] = [
-  {
-    id: 1,
-    name: 'New Zealand Tour',
-    location: 'New Zealand',
-    year: '2020',
+    {
+    id: 4,
+    name: 'England Tour',
+    location: 'England',
+    year: '2025',
+    dates: 'End of June - early July 2025',
     status: 'completed',
     description:
-      'Our players travelled across New Zealand for a series of matches and training sessions against local junior sides, combining high-level competition with sightseeing and team bonding.',
-    highlights: ['Matches against NZ junior clubs', 'Team bonding & sightseeing', 'International match exposure'],
+      'A standout tour of England, with our players experiencing the home of cricket - playing matches, visiting iconic grounds and training alongside English clubs.',
+    highlights: ['Matches against English clubs', 'Visits to iconic cricket grounds', 'Home-of-cricket experience'],
   },
+
   {
     id: 2,
     name: 'Sale Tour',
@@ -41,17 +43,17 @@ export const TOURS: Tour[] = [
       'Our squad headed up to Mackay, Queensland for an action-packed tour featuring matches against local Queensland sides and training in warm-weather conditions.',
     highlights: ['Matches vs Queensland clubs', 'Warm-weather training', 'Squad bonding'],
   },
-  {
-    id: 4,
-    name: 'England Tour',
-    location: 'England',
-    year: '2025',
-    dates: 'End of June - early July 2025',
+    {
+    id: 1,
+    name: 'New Zealand Tour',
+    location: 'New Zealand',
+    year: '2020',
     status: 'completed',
     description:
-      'A standout tour of England, with our players experiencing the home of cricket - playing matches, visiting iconic grounds and training alongside English clubs.',
-    highlights: ['Matches against English clubs', 'Visits to iconic cricket grounds', 'Home-of-cricket experience'],
+      'Our players travelled across New Zealand for a series of matches and training sessions against local junior sides, combining high-level competition with sightseeing and team bonding.',
+    highlights: ['Matches against NZ junior clubs', 'Team bonding & sightseeing', 'International match exposure'],
   },
+
   {
     id: 5,
     name: 'Sri Lanka Tour',

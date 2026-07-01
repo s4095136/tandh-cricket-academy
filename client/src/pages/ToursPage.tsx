@@ -34,6 +34,8 @@ function CompletedTourRow({ tour, images, containIndices = new Set<number>() }: 
       border: '1px solid rgba(255,255,255,0.1)',
       borderRadius: 4,
       overflow: 'hidden',
+      maxWidth: images.length === 0 ? 480 : '100%',
+      mx: images.length === 0 ? 'auto' : 0,
     }}>
       <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, height: { md: 320 } }}>
         {/* Left: text */}
@@ -54,8 +56,8 @@ function CompletedTourRow({ tour, images, containIndices = new Set<number>() }: 
         </Box>
 
         {/* Right: slideshow */}
-        <Box sx={{ width: { xs: '100%', md: '45%' }, flexShrink: 0, position: 'relative', overflow: 'hidden', height: { xs: 220, md: '100%' }, bgcolor: 'rgba(0,0,0,0.2)' }}>
-          {images.length > 0 ? (
+        {images.length > 0 && <Box sx={{ width: { xs: '100%', md: '45%' }, flexShrink: 0, position: 'relative', overflow: 'hidden', height: { xs: 220, md: '100%' }, bgcolor: 'rgba(0,0,0,0.2)' }}>
+          {true ? (
             <>
               {images.map((src, i) => (
                 <Box key={i} component="img" src={src} sx={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: containIndices.has(i) ? 'contain' : 'cover', opacity: i === idx ? 1 : 0, transition: 'opacity 0.6s ease' }} />
@@ -76,12 +78,8 @@ function CompletedTourRow({ tour, images, containIndices = new Set<number>() }: 
                 </>
               )}
             </>
-          ) : (
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-              <Typography sx={{ color: 'rgba(255,255,255,0.2)', fontSize: '0.8rem' }}>No photos yet</Typography>
-            </Box>
-          )}
-        </Box>
+          ) : null}
+        </Box>}
       </Box>
     </Card>
   )

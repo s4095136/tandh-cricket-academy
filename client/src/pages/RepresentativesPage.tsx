@@ -388,6 +388,8 @@ const ACTION_SHOTS: Record<string, string> = {
   'abhik-nomula.png': 'abhik-vic.jpg',
   'sarim-tamoor.png': 'sarim-vic.jpg',
   'aayan-nadeem.png' : 'aayan-vic.jpg',
+  'jujhar-singh-tamber.png': 'jujhar-vic.jpg',
+
 }
 
 // Background position per player — tweak xs (mobile) and md (desktop) independently
@@ -404,6 +406,8 @@ const BG_POSITIONS: Record<string, { xs: string; md: string }> = {
   'sarim-tamoor.png':     { xs: 'center 10%', md: 'center 10%' },
   'jujhar-singh-tamber.png':{ xs: 'center 10%', md: 'center 10%' },
   'shaurya-mahadik.png':  { xs: 'center 10%', md: 'center 10%' },
+  'jujhar-vic.jpg': { xs: 'center 30%', md: 'center 30%' },
+
 }
 
 function cardBgSrc(image: string | null): string {

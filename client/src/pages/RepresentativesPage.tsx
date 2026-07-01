@@ -8,7 +8,7 @@ import PublicIcon from '@mui/icons-material/Public'
 import CloseIcon from '@mui/icons-material/Close'
 import { REPRESENTATIVES, AUSTRALIAN_REPRESENTATIVES } from '../data/representatives'
 import type { Representative, AustralianRepresentative } from '../data/representatives'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 
 import { CLOUDINARY_BASE } from '../config/cloudinary'
@@ -420,6 +420,8 @@ export default function RepresentativesPage() {
   const [selectedState, setSelectedState] = useState<Representative | null>(null)
   const [selectedAus, setSelectedAus] = useState<AustralianRepresentative | null>(null)
   const navigate = useNavigate()
+  const location = useLocation()
+  const fromExplore = (location.state as any)?.from === 'explore'
 
   // Filter Vishwa out of state grid — he's merged into the Australian card
   const stateReps = [...REPRESENTATIVES]
@@ -445,10 +447,10 @@ export default function RepresentativesPage() {
         <Box sx={{ mb: 3 }}>
           <Button
             startIcon={<ArrowBackIcon />}
-            onClick={() => navigate({ pathname: '/', hash: '#explore' })}
+            onClick={() => fromExplore ? navigate('/#explore') : navigate('/')}
             sx={{ color: 'rgba(255,255,255,0.6)', '&:hover': { color: '#f5c842' }, pl: 0 }}
           >
-            Return to Home
+            {fromExplore ? 'Back' : 'Home'}
           </Button>
         </Box>
 

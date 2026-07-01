@@ -274,7 +274,7 @@ const ausRep = AUSTRALIAN_REPRESENTATIVES[0]
         <Button
           variant="outlined"
           endIcon={<ArrowForwardIcon />}
-          onClick={() => navigate('/representatives')}
+          onClick={() => navigate('/representatives', { state: { from: 'explore' } })}
           fullWidth
           sx={{
             color: '#f5c842',
@@ -446,7 +446,7 @@ function ToursPanel() {
         <Button
           variant="outlined"
           endIcon={<ArrowForwardIcon />}
-          onClick={() => navigate('/tours')}
+          onClick={() => navigate('/tours', { state: { from: 'explore' } })}
           fullWidth
           sx={{
             color: '#7eb8f5',

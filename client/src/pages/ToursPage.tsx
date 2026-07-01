@@ -13,7 +13,7 @@ const TOUR_IMAGES: Record<number, string[]> = {
   4: Array.from({ length: 16 }, (_, i) => `${CLOUDINARY_BASE}/london${i + 1}.jpg`),
 }
 import { useTourApplyModal } from '../context/TourApplyModalContext'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 
 function CompletedTourRow({ tour, images, containIndices = new Set<number>() }: { tour: (typeof TOURS)[0]; images: string[]; containIndices?: Set<number> }) {
@@ -88,6 +88,8 @@ function CompletedTourRow({ tour, images, containIndices = new Set<number>() }: 
 export default function ToursPage() {
   const { openTourApplyModal } = useTourApplyModal()
   const navigate = useNavigate()
+  const location = useLocation()
+  const fromExplore = (location.state as any)?.from === 'explore'
 
   const completedTours = TOURS.filter((t) => t.status === 'completed')
   const upcomingTours = TOURS.filter((t) => t.status === 'upcoming')
@@ -137,10 +139,10 @@ export default function ToursPage() {
         <Box sx={{ mb: 3 }}>
           <Button
             startIcon={<ArrowBackIcon />}
-            onClick={() => navigate({ pathname: '/', hash: '#explore' })}
+            onClick={() => fromExplore ? navigate('/#explore') : navigate('/')}
             sx={{ color: 'rgba(255,255,255,0.6)', '&:hover': { color: '#f5c842' }, pl: 0 }}
           >
-            Return to Home
+            {fromExplore ? 'Back' : 'Home'}
           </Button>
         </Box>
 

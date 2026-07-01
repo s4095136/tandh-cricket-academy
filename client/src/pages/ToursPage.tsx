@@ -125,9 +125,9 @@ export default function ToursPage() {
               { offset: '-4.1em', opacity: 0.07 },
               { offset: '-5.1em', opacity: 0.03 },
             ].map(({ offset, opacity }, i) => (
-              <Box key={i} sx={{ position: 'absolute', left: offset, top: 0, fontSize: 'inherit', lineHeight: 1, color: `rgba(245,200,66,${opacity})`, fontFamily: 'Arial, sans-serif' }}>✈</Box>
+              <Box key={i} sx={{ position: 'absolute', left: offset, top: 0, fontSize: 'inherit', lineHeight: 1, color: `rgba(245,200,66,${opacity})` }}>{'✈︎'}</Box>
             ))}
-            <Box sx={{ position: 'relative', color: 'rgba(245,200,66,0.65)', fontFamily: 'Arial, sans-serif' }}>✈</Box>
+            <Box sx={{ position: 'relative', color: 'rgba(245,200,66,0.65)' }}>{'✈︎'}</Box>
           </Box>
         </Box>
       ))}

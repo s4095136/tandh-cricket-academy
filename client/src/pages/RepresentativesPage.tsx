@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Box, Container, Typography, Card, CardContent, Chip, Grid, Avatar,
   Dialog, DialogContent, IconButton, Button,
@@ -15,70 +15,71 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { CLOUDINARY_BASE } from '../config/cloudinary'
 const CLOUDINARY = CLOUDINARY_BASE
 
-function RepresentativeBanner({
-  image,
-  title,
-}: {
-  image: string
-  title?: string
-}) {
-  return (
-    <Box
-      sx={{
-        height: { xs: 220, md: 340 },
-        borderRadius: 4,
-        overflow: 'hidden',
-        mb: 4,
 
-        backgroundImage: `url(${image})`,
-        backgroundSize: 'cover',
+// function RepresentativeBanner({
+//   image,
+//   title,
+// }: {
+//   image: string
+//   title?: string
+// }) {
+//   return (
+//     <Box
+//       sx={{
+//         height: { xs: 220, md: 340 },
+//         borderRadius: 4,
+//         overflow: 'hidden',
+//         mb: 4,
 
-        backgroundPosition: {
-          xs: 'center top',
-          md: 'center 30%'        },
+//         backgroundImage: `url(${image})`,
+//         backgroundSize: 'cover',
 
-        position: 'relative',
+//         backgroundPosition: {
+//           xs: 'center top',
+//           md: 'center 30%'        },
 
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          inset: 0,
-          background:
-            'linear-gradient(to right, rgba(1,13,42,.85), rgba(1,13,42,.25))',
-        },
-      }}
-    >
-      {title && (
-        <Box
-          sx={{
-            position: 'absolute',
-            bottom: 28,
-            left: 32,
-            zIndex: 1,
-          }}
-        >
-          <Typography
-            sx={{
-              color: "#fff",
-              fontWeight: 900,
-              fontSize: {
-                xs: "2rem",
-                md: "3rem",
-              },
-            }}
-          >
-            {title}
-          </Typography>
-        </Box>
-      )}
-    </Box>
-  )
-}
-const topPlayers = REPRESENTATIVES.slice(0, 3)
+//         position: 'relative',
 
-const middlePlayers = REPRESENTATIVES.slice(3, 6)
+//         '&::before': {
+//           content: '""',
+//           position: 'absolute',
+//           inset: 0,
+//           background:
+//             'linear-gradient(to right, rgba(1,13,42,.85), rgba(1,13,42,.25))',
+//         },
+//       }}
+//     >
+//       {title && (
+//         <Box
+//           sx={{
+//             position: 'absolute',
+//             bottom: 28,
+//             left: 32,
+//             zIndex: 1,
+//           }}
+//         >
+//           <Typography
+//             sx={{
+//               color: "#fff",
+//               fontWeight: 900,
+//               fontSize: {
+//                 xs: "2rem",
+//                 md: "3rem",
+//               },
+//             }}
+//           >
+//             {title}
+//           </Typography>
+//         </Box>
+//       )}
+//     </Box>
+//   )
+// }
+// const topPlayers = REPRESENTATIVES.slice(0, 3)
 
-const bottomPlayers = REPRESENTATIVES.slice(6)
+// const middlePlayers = REPRESENTATIVES.slice(3, 6)
+
+// const bottomPlayers = REPRESENTATIVES.slice(6)
 
 function getInitials(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean)
@@ -256,6 +257,13 @@ export default function RepresentativesPage() {
   const [selectedAus, setSelectedAus] = useState<AustralianRepresentative | null>(null)
   const navigate = useNavigate()
 
+  const STATE_PHOTOS = ['aiman-vic1.jpg', 'reyaan-vic.jpg', 'noura-vic.jpg', 'ali-vic.jpg', 'ritin-vic.jpg']
+  const [bgIndex, setBgIndex] = useState(0)
+  useEffect(() => {
+    const id = setInterval(() => setBgIndex(i => (i + 1) % STATE_PHOTOS.length), 3500)
+    return () => clearInterval(id)
+  }, [])
+
   return (
     <Box
       component="main"
@@ -272,6 +280,7 @@ export default function RepresentativesPage() {
           backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.03) 1px, transparent 0)`,
           backgroundSize: '40px 40px',
           pointerEvents: 'none',
+          zIndex: 1,
         }}
       />
 
@@ -314,9 +323,6 @@ export default function RepresentativesPage() {
           </Typography>
         </Box>
 
-<RepresentativeBanner
-    image={`${CLOUDINARY}/vish-aus.jpg`}
-/>
         {/* Australian Representatives */}
         <Box sx={{ mb: { xs: 4, md: 6 } }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 4 }}>
@@ -326,7 +332,20 @@ export default function RepresentativesPage() {
             </Typography>
           </Box>
 
-          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Box
+            sx={{
+              borderRadius: 4, overflow: 'hidden', position: 'relative',
+              backgroundImage: `url(${CLOUDINARY}/vish-aus.jpg)`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center 20%',
+              '&::before': {
+                content: '""', position: 'absolute', inset: 0,
+                background: 'linear-gradient(135deg, rgba(1,13,42,0.72) 0%, rgba(2,26,74,0.65) 100%)',
+                zIndex: 0,
+              },
+            }}
+          >
+            <Box sx={{ position: 'relative', zIndex: 1, p: { xs: 2, md: 3 }, display: 'flex', justifyContent: 'center' }}>
             <Grid container spacing={3} sx={{ maxWidth: 560 }}>
               {AUSTRALIAN_REPRESENTATIVES.map((player) => (
                 <Grid key={player.id} size={{ xs: 12 }}>
@@ -351,7 +370,6 @@ export default function RepresentativesPage() {
                             color: '#f5c842',
                             fontFamily: '"Bebas Neue", sans-serif',
                             fontSize: '1.3rem',
-                            letterSpacing: '0.05em',
                             flexShrink: 0,
                             '& img': { objectFit: 'cover', objectPosition: 'center 5%' },
                           }}
@@ -389,6 +407,7 @@ export default function RepresentativesPage() {
                 </Grid>
               ))}
             </Grid>
+            </Box>
           </Box>
         </Box>
 
@@ -400,10 +419,23 @@ export default function RepresentativesPage() {
               State Representatives
             </Typography>
           </Box>
-<RepresentativeBanner
-    image={`${CLOUDINARY}/aiman-vic.jpg`}
-/>
 
+          <Box sx={{ borderRadius: 4, overflow: 'hidden', position: 'relative' }}>
+            {STATE_PHOTOS.map((src, i) => (
+              <Box
+                key={src}
+                sx={{
+                    position: 'absolute', inset: 0,
+                  backgroundImage: `url(${CLOUDINARY}/${src})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center 15%',
+                  opacity: i === bgIndex ? 0.45 : 0,
+                  transition: 'opacity 1.2s ease-in-out',
+                }}
+              />
+            ))}
+            <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(1,13,42,0.7) 0%, rgba(2,26,74,0.62) 100%)', zIndex: 1 }} />
+            <Box sx={{ position: 'relative', zIndex: 2, p: { xs: 2, md: 3 } }}>
           <Grid container spacing={3}>
             {[...REPRESENTATIVES].sort((a, b) => b.honours.length - a.honours.length).map((player) => (
               <Grid key={player.id} size={{ xs: 12, sm: 6, md: 4 }}>
@@ -422,13 +454,12 @@ export default function RepresentativesPage() {
                       <Avatar
                         src={player.image ? `${CLOUDINARY}/${player.image}` : undefined}
                         sx={{
-                          width: 68, height: 68,
+                          width: 56, height: 56,
                           border: '2px solid #f5c842',
                           bgcolor: 'rgba(245,200,66,0.12)',
                           color: '#f5c842',
                           fontFamily: '"Bebas Neue", sans-serif',
-                          fontSize: '1.3rem',
-                          letterSpacing: '0.05em',
+                          fontSize: '1.1rem',
                           flexShrink: 0,
                           '& img': { objectFit: 'cover', objectPosition: 'center 5%' },
                         }}
@@ -440,7 +471,7 @@ export default function RepresentativesPage() {
                           {player.name}
                         </Typography>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.4 }}>
-                          <EmojiEventsIcon sx={{ color: '#f5c842', fontSize: '0.95rem' }} />
+                          <EmojiEventsIcon sx={{ color: '#f5c842', fontSize: '0.9rem' }} />
                           <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.78rem' }}>
                             {player.honours.length} representative honour{player.honours.length > 1 ? 's' : ''}
                           </Typography>
@@ -474,6 +505,8 @@ export default function RepresentativesPage() {
               </Grid>
             ))}
           </Grid>
+            </Box>
+          </Box>
         </Box>
       </Container>
 

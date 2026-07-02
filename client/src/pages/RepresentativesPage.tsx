@@ -384,11 +384,12 @@ const ACTION_SHOTS: Record<string, string> = {
   'noura-abdulqadeer.png': 'noura-vic.jpg',
   'ali-khan.png': 'ali-vic.jpg',
   'ritin-raman.png': 'ritin-vic.jpg',
-  'shaurya-mahadik.png': 'shaurya-vic.jpg',
+  'shaurya-mahadik1.png': 'shaurya-vic.jpg',
   'abhik-nomula.png': 'abhik-vic.jpg',
-  'sarim-tamoor.png': 'sarim-vic.jpg',
-  'aayan-nadeem.png' : 'aayan-vic.jpg',
+  'sarim-tamoor.png': 'sarim-vic1.jpg',
+  'aayan-nadeem.png' : 'aayan-vic1.jpg',
   'jujhar-singh-tamber.png': 'jujhar-vic.jpg',
+  'santosh-remireddy.png': 'santosh-vic.jpg',
 
 }
 
@@ -400,10 +401,10 @@ const BG_POSITIONS: Record<string, { xs: string; md: string }> = {
   'noura-abdulqadeer.png':{ xs: 'center 15%', md: 'center 15%' },
   'ali-khan.png':         { xs: 'center 15%', md: 'center 15%' },
   'ritin-raman.png':      { xs: 'center 15%', md: 'center 15%' },
-  'aayan-nadeem.png':     { xs: 'center 10%', md: 'center 10%' },
+  'aayan-nadeem.png':     { xs: 'center 50%', md: 'center 10%' },
   'santosh-remireddy.png':{ xs: 'center 10%', md: 'center 10%' },
   'abhik-nomula.png':     { xs: 'center 10%', md: 'center 10%' },
-  'sarim-tamoor.png':     { xs: 'center 10%', md: 'center 10%' },
+  'sarim-tamoor.png':     { xs: 'center 10%', md: '50% 30%' },
   'jujhar-singh-tamber.png':{ xs: 'center 10%', md: 'center 10%' },
   'shaurya-mahadik.png':  { xs: 'center 10%', md: 'center 10%' },
   'jujhar-vic.jpg': { xs: 'center 30%', md: 'center 30%' },

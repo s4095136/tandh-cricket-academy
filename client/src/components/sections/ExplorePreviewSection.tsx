@@ -162,9 +162,21 @@ const ausRep = AUSTRALIAN_REPRESENTATIVES[0]
                     Australian Representative
                   </Typography>
                 </Box>
+                {(() => {
+                  const stateHonours = REPRESENTATIVES.find(r => r.name === ausRep.name)?.honours.length ?? 0
+                  return stateHonours > 0 ? (
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.3 }}>
+                      <EmojiEventsIcon sx={{ color: '#7eb8f5', fontSize: '0.68rem' }} />
+                      <Typography sx={{ color: '#7eb8f5', fontSize: '0.64rem', fontWeight: 700 }}>
+                        {stateHonours} State Honours
+                      </Typography>
+                    </Box>
+                  ) : null
+                })()}
               </Box>
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 0.5 }}>
                 <Chip label="🇦🇺 AUS" size="small" sx={{ bgcolor: 'rgba(245,200,66,0.18)', color: '#f5c842', fontWeight: 800, fontSize: '0.62rem', border: '1px solid rgba(245,200,66,0.35)', height: 20 }} />
+                <Chip label="VIC" size="small" sx={{ bgcolor: 'rgba(126,184,245,0.15)', color: '#7eb8f5', fontWeight: 800, fontSize: '0.62rem', border: '1px solid rgba(126,184,245,0.3)', height: 20 }} />
               </Box>
             </Box>
             </>

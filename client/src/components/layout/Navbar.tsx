@@ -13,7 +13,7 @@ import { scrollToSection } from '../../utils/scrollToSection'
 const NAV_LINKS = [
   { label: 'Philosophy', href: '#philosophy', type: 'anchor' as const },
   { label: 'Programs', href: '#programs', type: 'anchor' as const },
-  { label: 'State/National Representatives', href: '/representatives', type: 'route' as const },
+  { label: 'Our Representatives', href: '/representatives', type: 'route' as const },
   { label: 'Tours', href: '/tours', type: 'route' as const },
   { label: 'Explore More', href: '#explore', type: 'anchor' as const },
   { label: 'Reviews', href: '#testimonials', type: 'anchor' as const },

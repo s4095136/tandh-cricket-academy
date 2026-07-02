@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, Container, Typography, Card, CardContent, Grid, Avatar, Rating, IconButton, TextField, Button, MenuItem, Skeleton, Dialog, DialogContent } from '@mui/material'
+import { Box, Container, Typography, Card, CardContent, Grid, Avatar, Rating, IconButton, TextField, Button, MenuItem, Skeleton, Dialog, DialogContent, GlobalStyles } from '@mui/material'
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
@@ -219,7 +219,7 @@ function TestimonialCard({ t }: { t: Review }) {
   )
 }
 
-function WriteReviewForm() {
+function WriteReviewForm({ onClose }: { onClose?: () => void }) {
   const [form, setForm] = useState(EMPTY_REVIEW_FORM)
   const [rating, setRating] = useState<number | null>(5)
   const [loading, setLoading] = useState(false)
@@ -264,64 +264,44 @@ function WriteReviewForm() {
 
   if (submitted) {
     return (
-      <Card
-        sx={{
-          bgcolor: 'rgba(255,255,255,0.05)',
-          border: '1px solid rgba(255,255,255,0.1)',
-          borderRadius: 4,
-          textAlign: 'center',
-          py: 6,
-          px: 3,
-        }}
-      >
+      <Box sx={{ textAlign: 'center', py: 4, px: 2 }}>
         <Typography variant="h5" sx={{ fontFamily: '"Bebas Neue", sans-serif', color: '#f5c842', mb: 1 }}>
           Thanks for your review!
         </Typography>
         <Typography sx={{ color: 'rgba(255,255,255,0.6)', mb: 3 }}>
-          We really appreciate you taking the time to share your experience. It'll appear on this page once it's
-          been reviewed.
+          We really appreciate you taking the time to share your experience. It'll appear on this page once it's been reviewed.
         </Typography>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            setForm(EMPTY_REVIEW_FORM)
-            setRating(5)
-            setError(null)
-            setSubmitted(false)
-          }}
-          sx={{
-            color: '#f5c842',
-            borderColor: 'rgba(245,200,66,0.4)',
-            '&:hover': {
-              borderColor: '#f5c842',
-              bgcolor: 'rgba(245,200,66,0.08)',
-            },
-          }}
-        >
-          Submit another review
-        </Button>
-      </Card>
+        <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
+          <Button
+            variant="outlined"
+            onClick={() => { setForm(EMPTY_REVIEW_FORM); setRating(5); setError(null); setSubmitted(false) }}
+            sx={{ color: '#f5c842', borderColor: 'rgba(245,200,66,0.4)', '&:hover': { borderColor: '#f5c842', bgcolor: 'rgba(245,200,66,0.08)' } }}
+          >
+            Submit another review
+          </Button>
+          <Button variant="text" onClick={onClose} sx={{ color: 'rgba(255,255,255,0.5)', '&:hover': { color: '#fff' } }}>
+            Close
+          </Button>
+        </Box>
+      </Box>
     )
   }
 
   return (
-    <Card
-      sx={{
-        bgcolor: 'rgba(255,255,255,0.05)',
-        border: '1px solid rgba(255,255,255,0.1)',
-        borderRadius: 4,
-      }}
-    >
-      <CardContent sx={{ p: { xs: 3, md: 4 } }}>
-        <Typography
-          variant="h5"
-          sx={{ fontFamily: '"Bebas Neue", sans-serif', letterSpacing: '0.04em', color: '#fff', mb: 0.5 }}
-        >
-          Write a review
-        </Typography>
-        <Typography sx={{ color: 'rgba(255,255,255,0.5)', mb: 3 }}>
-          Let other families know what you think of T&H Cricket.
-        </Typography>
+    <Box sx={{ p: { xs: 3, md: 4 } }}>
+      <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', mb: 2 }}>
+        <Box>
+          <Typography variant="h5" sx={{ fontFamily: '"Bebas Neue", sans-serif', letterSpacing: '0.04em', color: '#fff', mb: 0.5 }}>
+            Write a review
+          </Typography>
+          <Typography sx={{ color: 'rgba(255,255,255,0.5)' }}>
+            Let other families know what you think of T&H Cricket.
+          </Typography>
+        </Box>
+        <IconButton onClick={onClose} sx={{ color: 'rgba(255,255,255,0.5)', '&:hover': { color: '#fff' }, mt: -0.5, mr: -1 }}>
+          <CloseIcon />
+        </IconButton>
+      </Box>
 
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, sm: 6 }}>
@@ -411,26 +391,81 @@ function WriteReviewForm() {
                 bgcolor: '#f5c842',
                 color: '#021a4a',
                 fontWeight: 700,
-                '&:hover': {
-                  bgcolor: '#e0b030',
-                },
-                '&.Mui-disabled': {
-                  bgcolor: 'rgba(245,200,66,0.3)',
-                  color: 'rgba(2,26,74,0.5)',
-                },
+                '&:hover': { bgcolor: '#e0b030' },
+                '&.Mui-disabled': { bgcolor: 'rgba(245,200,66,0.3)', color: 'rgba(2,26,74,0.5)' },
               }}
             >
               {loading ? 'Submitting...' : 'Submit review'}
             </Button>
           </Grid>
         </Grid>
-      </CardContent>
-    </Card>
+    </Box>
+  )
+}
+
+function RatingBreakdown({ testimonials }: { testimonials: Review[] }) {
+  if (testimonials.length === 0) return null
+
+  const avg = testimonials.reduce((s, t) => s + t.rating, 0) / testimonials.length
+  const counts = [5, 4, 3, 2, 1].map((star) => ({
+    star,
+    count: testimonials.filter((t) => Math.round(t.rating) === star).length,
+  }))
+  const max = Math.max(...counts.map((c) => c.count), 1)
+
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: { xs: 'column', sm: 'row' },
+        alignItems: { xs: 'flex-start', sm: 'center' },
+        gap: { xs: 3, sm: 5 },
+        bgcolor: 'rgba(255,255,255,0.04)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        borderRadius: 4,
+        px: { xs: 3, md: 5 },
+        py: { xs: 3, md: 4 },
+        mb: { xs: 6, md: 8 },
+      }}
+    >
+      {/* Big score */}
+      <Box sx={{ textAlign: 'center', flexShrink: 0 }}>
+        <Typography sx={{ fontSize: { xs: '3.5rem', md: '4.5rem' }, fontWeight: 700, color: '#fff', lineHeight: 1 }}>
+          {avg.toFixed(1)}
+        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 0.3, my: 0.75 }}>
+          {[1, 2, 3, 4, 5].map((s) => (
+            <Box key={s} sx={{ color: s <= Math.round(avg) ? '#f5c842' : 'rgba(255,255,255,0.2)', fontSize: '1.1rem' }}>★</Box>
+          ))}
+        </Box>
+        <Typography sx={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.8rem' }}>
+          {testimonials.length} review{testimonials.length !== 1 ? 's' : ''}
+        </Typography>
+      </Box>
+
+      {/* Divider */}
+      <Box sx={{ width: { xs: '100%', sm: '1px' }, height: { xs: '1px', sm: 80 }, bgcolor: 'rgba(255,255,255,0.08)', flexShrink: 0 }} />
+
+      {/* Bar chart */}
+      <Box sx={{ flex: 1, width: '100%' }}>
+        {counts.map(({ star, count }) => (
+          <Box key={star} sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 0.9 }}>
+            <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.78rem', width: 8, flexShrink: 0 }}>{star}</Typography>
+            <Box sx={{ color: '#f5c842', fontSize: '0.7rem', flexShrink: 0 }}>★</Box>
+            <Box sx={{ flex: 1, height: 7, bgcolor: 'rgba(255,255,255,0.08)', borderRadius: 4, overflow: 'hidden' }}>
+              <Box sx={{ width: `${(count / max) * 100}%`, height: '100%', bgcolor: '#f5c842', borderRadius: 4, transition: 'width 0.6s ease' }} />
+            </Box>
+            <Typography sx={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.75rem', width: 16, textAlign: 'right', flexShrink: 0 }}>{count}</Typography>
+          </Box>
+        ))}
+      </Box>
+    </Box>
   )
 }
 
 export default function TestimonialsSection() {
   const { testimonials, loading } = useTestimonials()
+  const [reviewOpen, setReviewOpen] = useState(false)
 
   const useSwiper = testimonials.length > 4
 
@@ -500,6 +535,8 @@ export default function TestimonialsSection() {
           />
         </Box>
 
+        {!loading && <RatingBreakdown testimonials={testimonials} />}
+
         {loading ? (
           /* ── LOADING SKELETON (reserves space so the layout doesn't jump) ── */
           <Grid container spacing={3}>
@@ -515,7 +552,8 @@ export default function TestimonialsSection() {
           </Grid>
         ) : useSwiper ? (
           /* ── SWIPER (more than 4 reviews) ── */
-          <Box sx={{ position: 'relative' }}>
+          <><GlobalStyles styles={{ '.testimonial-swiper.swiper': { overflowX: 'hidden !important', overflowY: 'visible !important' } }} />
+          <Box sx={{ position: 'relative', overflow: 'visible' }}>
             <IconButton
               className="testimonial-prev"
               sx={{
@@ -555,6 +593,7 @@ export default function TestimonialsSection() {
             </IconButton>
 
             <Swiper
+              className="testimonial-swiper"
               modules={[Navigation, Pagination, Autoplay]}
               navigation={{
                 prevEl: '.testimonial-prev',
@@ -577,7 +616,7 @@ export default function TestimonialsSection() {
                 </SwiperSlide>
               ))}
             </Swiper>
-          </Box>
+          </Box></>
         ) : (
           /* ── GRID (4 or fewer reviews) ── */
           <Grid container spacing={3}>
@@ -590,9 +629,28 @@ export default function TestimonialsSection() {
         )}
 
         {/* Write a review */}
-        <Box sx={{ maxWidth: 700, mx: 'auto', mt: { xs: 6, md: 10 } }}>
-          <WriteReviewForm />
+        <Box sx={{ textAlign: 'center', mt: { xs: 6, md: 10 } }}>
+          <Button
+            variant="outlined"
+            onClick={() => setReviewOpen(true)}
+            endIcon={<ArrowForwardIcon />}
+            sx={{ color: '#f5c842', borderColor: 'rgba(245,200,66,0.4)', fontWeight: 700, px: 3, py: 1.2, '&:hover': { borderColor: '#f5c842', bgcolor: 'rgba(245,200,66,0.08)' } }}
+          >
+            Write a review
+          </Button>
         </Box>
+        <Dialog
+          open={reviewOpen}
+          onClose={() => setReviewOpen(false)}
+          maxWidth="sm"
+          fullWidth
+          disableScrollLock
+          slotProps={{ paper: { sx: { bgcolor: '#021a4a', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 4, backgroundImage: 'none' } } }}
+        >
+          <DialogContent sx={{ p: 0 }}>
+            <WriteReviewForm onClose={() => setReviewOpen(false)} />
+          </DialogContent>
+        </Dialog>
       </Container>
     </Box>
   )

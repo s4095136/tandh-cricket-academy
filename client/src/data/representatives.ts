@@ -98,7 +98,7 @@ export const REPRESENTATIVES: Representative[] = [
   },
   {
     id: 12,
-    name: "Noura Abdul-Qadeer",
+    name: "Noura Abdul Qader",
     image: 'noura-abdulqadeer.png',
     honours: [
       'U12 School Sports Victoria (2022)',

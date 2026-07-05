@@ -25,6 +25,7 @@ import ExplorePreviewSection from './components/sections/ExplorePreviewSection'
 // Pages
 import ToursPage from './pages/ToursPage'
 import RepresentativesPage from './pages/RepresentativesPage'
+import OneOnOnePage from './pages/OneOnOnePage'
 
 function PageTransition({ children }: { children: React.ReactNode }) {
   const { pathname } = useLocation()
@@ -116,6 +117,7 @@ export default function App() {
                 <Route path="/" element={<PageTransition><HomePage /></PageTransition>} />
                 <Route path="/tours" element={<PageTransition><ToursPage /></PageTransition>} />
                 <Route path="/representatives" element={<PageTransition><RepresentativesPage /></PageTransition>} />
+                <Route path="/1on1" element={<PageTransition><OneOnOnePage /></PageTransition>} />
               </Routes>
               <Footer />
               <ApplyModal />

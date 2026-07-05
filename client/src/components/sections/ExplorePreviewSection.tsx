@@ -5,6 +5,7 @@ import PublicIcon from '@mui/icons-material/Public'
 import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import PersonIcon from '@mui/icons-material/Person'
 import { useNavigate } from 'react-router-dom'
 import { REPRESENTATIVES, AUSTRALIAN_REPRESENTATIVES } from '../../data/representatives'
 import { TOURS } from '../../data/tours'
@@ -475,6 +476,101 @@ function ToursPanel() {
   )
 }
 
+// ── 1-on-1 panel ─────────────────────────────────────────────────────────────
+
+const ONE_ON_ONE_COACHES = [
+  { name: 'Aiman Nadeem', image: 'aiman-nadeem.png', speciality: 'Batting & Fielding' },
+  { name: 'Aayan Nadeem', image: 'aayan-nadeem.png', speciality: 'Batting & Bowling' },
+  { name: 'Daksh Kumar',  image: 'daksh-kumar.png',  speciality: 'Bowling & Fitness' },
+  { name: 'Ali Khan',     image: 'ali-khan.png',     speciality: 'Batting & Strategy' },
+]
+
+function OneOnOnePanel() {
+  const navigate = useNavigate()
+  return (
+    <Box
+      sx={{
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        border: '1px solid rgba(255,255,255,0.07)',
+        borderRadius: 4,
+        overflow: 'hidden',
+        position: 'relative',
+        background: 'linear-gradient(160deg, rgba(1,13,42,0.95) 0%, rgba(2,26,74,0.92) 100%)',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          inset: 0,
+          background: 'linear-gradient(135deg, rgba(245,200,66,0.04) 0%, transparent 60%)',
+          zIndex: 0,
+        },
+        '& > *': { position: 'relative', zIndex: 1 },
+      }}
+    >
+      {/* Panel header */}
+      <Box
+        sx={{
+          px: 3, pt: 3, pb: 2,
+          background: 'linear-gradient(135deg, rgba(245,200,66,0.07) 0%, transparent 100%)',
+          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Box sx={{ width: 36, height: 36, borderRadius: 2, bgcolor: 'rgba(245,200,66,0.1)', border: '1px solid rgba(245,200,66,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <PersonIcon sx={{ color: '#f5c842', fontSize: '1.1rem' }} />
+          </Box>
+          <Box>
+            <Typography sx={{ color: '#f5c842', fontWeight: 800, fontSize: '0.68rem', letterSpacing: '0.14em' }}>
+              PRIVATE COACHING
+            </Typography>
+            <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '1rem', lineHeight: 1.2 }}>
+              1-on-1 Sessions
+            </Typography>
+          </Box>
+        </Box>
+        <Chip label="4 specialists" size="small" sx={{ bgcolor: 'rgba(245,200,66,0.12)', color: '#f5c842', fontWeight: 700, fontSize: '0.68rem', border: '1px solid rgba(245,200,66,0.2)' }} />
+      </Box>
+
+      {/* Coach avatars */}
+      <Box sx={{ px: 3, pt: 2.5, pb: 1, flex: 1 }}>
+        <Typography sx={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.12em', mb: 1.75 }}>
+          OUR SPECIALISTS
+        </Typography>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+          {ONE_ON_ONE_COACHES.map((coach) => (
+            <Box key={coach.name} sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <Avatar
+                src={`${CLOUDINARY}/${coach.image}`}
+                sx={{ width: 38, height: 38, border: '2px solid rgba(245,200,66,0.3)', '& img': { objectFit: 'cover', objectPosition: 'center 5%' } }}
+              />
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '0.82rem', lineHeight: 1.2 }}>{coach.name}</Typography>
+                <Typography sx={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.7rem' }}>{coach.speciality}</Typography>
+              </Box>
+              <Chip label="Available" size="small" sx={{ bgcolor: 'rgba(72,200,120,0.12)', color: '#48c878', fontWeight: 700, fontSize: '0.6rem', border: '1px solid rgba(72,200,120,0.25)', height: 18 }} />
+            </Box>
+          ))}
+        </Box>
+      </Box>
+
+      {/* CTA */}
+      <Box sx={{ px: 3, pb: 3, pt: 1.5 }}>
+        <Button
+          variant="outlined"
+          endIcon={<ArrowForwardIcon />}
+          onClick={() => navigate('/1on1', { state: { from: 'explore' } })}
+          fullWidth
+          sx={{ color: '#f5c842', borderColor: 'rgba(245,200,66,0.3)', py: 1, fontWeight: 700, fontSize: '0.82rem', borderRadius: 2.5, '&:hover': { borderColor: '#f5c842', bgcolor: 'rgba(245,200,66,0.06)' } }}
+        >
+          View 1-on-1 Coaching
+        </Button>
+      </Box>
+    </Box>
+  )
+}
+
 // ── Main section ──────────────────────────────────────────────────────────────
 
 export default function ExplorePreviewSection() {
@@ -541,6 +637,7 @@ export default function ExplorePreviewSection() {
         <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3, alignItems: 'stretch' }}>
           <RepsPanel coachImages={coachImages} />
           <ToursPanel />
+          <OneOnOnePanel />
         </Box>
       </Container>
     </Box>

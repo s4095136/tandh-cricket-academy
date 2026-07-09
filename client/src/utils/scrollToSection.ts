@@ -1,23 +1,12 @@
-// Smoothly scrolls to an in-page section, accounting for the fixed navbar.
-//
-// Used for any in-page anchor link (e.g. the Hero's "Learn more" button and
-// the Navbar's nav links) so they all share the same offset logic instead of
-// relying on the browser's native (instant, unoffset) anchor jump.
+// Scrolls to an in-page section anchor.
+// Manual offset calculation — avoids iOS Safari quirks with scroll-margin-top
+// and gives pixel-identical results on mobile and desktop.
 export function scrollToSection(href: string) {
-  const el = document.querySelector(href)
+  const el = document.querySelector(href) as HTMLElement | null
   if (!el) return
-
-  let targetY = el.getBoundingClientRect().top + window.scrollY
-
-  // The philosophy section is sized to exactly fill the viewport below the
-  // fixed navbar, so shift the scroll position up by the navbar's height -
-  // this tucks that empty space behind the navbar instead of having the
-  // section's own content start underneath it.
-  if (href === '#philosophy') {
-    const navbar = document.querySelector('header.MuiAppBar-root')
-    const navH = navbar ? navbar.getBoundingClientRect().height : 0
-    targetY = Math.max(0, targetY - navH)
-  }
-
-  window.scrollTo({ top: targetY, behavior: 'smooth' })
+  // Navbar is 64px on mobile (< 900px), 72px on desktop
+  const navH = window.innerWidth < 900 ? 64 : 72
+  const gap = 8
+  const top = window.scrollY + el.getBoundingClientRect().top - navH - gap
+  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' })
 }

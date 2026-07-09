@@ -3,4 +3,5 @@ node_modules/
 dist/
 .env
 .env.local
+.claude.json
 .DS_Store

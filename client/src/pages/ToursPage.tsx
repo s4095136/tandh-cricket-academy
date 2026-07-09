@@ -4,6 +4,19 @@ import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { motion, type Variants } from 'framer-motion'
+
+const MotionBox = motion(Box)
+const MotionTypography = motion(Typography)
+
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' as const } },
+}
+const stagger: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1 } },
+}
 import { TOURS } from '../data/tours'
 import { CLOUDINARY_BASE } from '../config/cloudinary'
 
@@ -147,38 +160,53 @@ export default function ToursPage() {
         </Box>
 
         {/* Header */}
-        <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 7 } }}>
-          <Chip
-            label="On tour"
-            size="small"
-            sx={{
-              mb: 3,
-              bgcolor: 'rgba(245,200,66,0.15)',
-              color: '#f5c842',
-              border: '1px solid rgba(245,200,66,0.3)',
-              fontWeight: 600,
-              letterSpacing: '0.05em',
-              fontSize: '0.72rem',
-            }}
-          />
-          <Typography
+        <MotionBox
+          variants={stagger}
+          initial="hidden"
+          animate="show"
+          sx={{ textAlign: 'center', mb: { xs: 6, md: 7 } }}
+        >
+          <MotionBox variants={fadeUp}>
+            <Chip
+              label="On tour"
+              size="small"
+              sx={{
+                mb: 3,
+                bgcolor: 'rgba(245,200,66,0.15)',
+                color: '#f5c842',
+                border: '1px solid rgba(245,200,66,0.3)',
+                fontWeight: 600,
+                letterSpacing: '0.05em',
+                fontSize: '0.72rem',
+              }}
+            />
+          </MotionBox>
+          <MotionTypography
+            variants={fadeUp}
             variant="h1"
             sx={{ fontSize: { xs: '3rem', sm: '4rem', md: '5.5rem' }, color: '#ffffff', mb: 1 }}
           >
             Our Tours
-          </Typography>
-          <Typography
+          </MotionTypography>
+          <MotionTypography
+            variants={fadeUp}
             variant="body1"
             sx={{ color: 'rgba(255,255,255,0.62)', maxWidth: 620, mx: 'auto', fontSize: { xs: '1rem', md: '1.05rem' } }}
           >
             From regional Victoria to the other side of the world - T&H Cricket players get the chance to
             compete, travel and grow together on tour.
-          </Typography>
-        </Box>
+          </MotionTypography>
+        </MotionBox>
 
         {/* Upcoming Tours */}
-        <Box sx={{ mb: { xs: 8, md: 10 } }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 4 }}>
+        <MotionBox
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={stagger}
+          sx={{ mb: { xs: 8, md: 10 } }}
+        >
+          <MotionBox variants={fadeUp} sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 4 }}>
             <FlightTakeoffIcon sx={{ color: '#f5c842' }} />
             <Typography
               variant="h2"
@@ -186,7 +214,7 @@ export default function ToursPage() {
             >
               Upcoming Tours
             </Typography>
-          </Box>
+          </MotionBox>
 
           <Grid container spacing={3}>
             {upcomingTours.map((tour) => (
@@ -265,23 +293,30 @@ export default function ToursPage() {
               </Grid>
             ))}
           </Grid>
-        </Box>
+        </MotionBox>
 
         {/* Completed Tours */}
-        <Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 4 }}>
+        <MotionBox
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={stagger}
+        >
+          <MotionBox variants={fadeUp} sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 4 }}>
             <CheckCircleIcon sx={{ color: '#f5c842' }} />
             <Typography variant="h2" sx={{ fontSize: { xs: '2rem', md: '2.6rem' }, color: '#ffffff' }}>
               Completed Tours
             </Typography>
-          </Box>
+          </MotionBox>
 
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+          <MotionBox variants={stagger} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
             {completedTours.map((tour) => (
-              <CompletedTourRow key={tour.id} tour={tour} images={TOUR_IMAGES[tour.id] ?? []} containIndices={tour.id === 4 ? new Set([2, 5, 6, 9]) : undefined} />
+              <MotionBox key={tour.id} variants={fadeUp}>
+                <CompletedTourRow tour={tour} images={TOUR_IMAGES[tour.id] ?? []} containIndices={tour.id === 4 ? new Set([2, 5, 6, 9]) : undefined} />
+              </MotionBox>
             ))}
-          </Box>
-        </Box>
+          </MotionBox>
+        </MotionBox>
       </Container>
     </Box>
   )

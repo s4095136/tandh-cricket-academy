@@ -33,9 +33,9 @@ function PageTransition({ children }: { children: React.ReactNode }) {
   return (
     <motion.div
       key={pathname}
-      initial={{ opacity: 0, scale: 0.98 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.9, ease: 'easeOut' }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
     >
       {children}
     </motion.div>
@@ -45,44 +45,56 @@ function PageTransition({ children }: { children: React.ReactNode }) {
 function ScrollToTop() {
   const { pathname, hash } = useLocation()
 
-  // Reset to top instantly on every navigation (no flash of old position).
+  // Disable browser scroll restoration once on mount — iOS Safari otherwise
+  // asynchronously restores the previous scroll position, overriding our reset.
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual'
+    }
+  }, [])
+
+  // Synchronous scroll — fires before first paint so the page appears already
+  // at the target position when PageTransition fades it in. This eliminates
+  // the "flash" where the hero is briefly visible before scrolling to a section.
   useLayoutEffect(() => {
-    document.documentElement.scrollTop = 0
-    document.body.scrollTop = 0
+    if (!hash) {
+      window.scrollTo(0, 0)
+      return
+    }
+    const el = document.querySelector(hash) as HTMLElement | null
+    if (!el) { window.scrollTo(0, 0); return }
+    const navH = window.innerWidth < 900 ? 64 : 72
+    // getBoundingClientRect().top at scrollY=0 is the element's absolute Y position
+    const top = el.getBoundingClientRect().top - navH - 8
+    window.scrollTo(0, Math.max(0, top))
   }, [pathname, hash])
 
-  // Defer hash scrolling by one frame so the new page has finished layout
-  // before we measure element positions — fixes incorrect scroll on mobile
-  // where getBoundingClientRect() returns 0 when called synchronously.
+  // Async correction — re-measures after 100ms in case image loading shifted
+  // the layout (especially on mobile). Keeps desktop-perfect, fixes mobile drift.
   useEffect(() => {
     if (!hash) return
-    const id = requestAnimationFrame(() => {
-      const el = document.querySelector(hash)
+    const timer = setTimeout(() => {
+      const el = document.querySelector(hash) as HTMLElement | null
       if (!el) return
-      // Use offsetTop chain instead of getBoundingClientRect so CSS transforms
-      // (e.g. framer-motion entrance animations) don't skew the target position.
-      let targetY = 0
-      let node: HTMLElement | null = el as HTMLElement
-      while (node) { targetY += node.offsetTop; node = node.offsetParent as HTMLElement | null }
-      if (hash === '#philosophy' || hash === '#explore') {
-        const navbar = document.querySelector('header.MuiAppBar-root')
-        const navH = navbar ? navbar.getBoundingClientRect().height : 0
-        targetY = Math.max(0, targetY - navH)
-      }
-      window.scrollTo({ top: targetY, behavior: 'instant' })
+      const navH = window.innerWidth < 900 ? 64 : 72
+      const top = window.scrollY + el.getBoundingClientRect().top - navH - 8
+      window.scrollTo(0, Math.max(0, top))
       window.history.replaceState(null, '', pathname)
-    })
-    return () => cancelAnimationFrame(id)
+    }, 100)
+    return () => clearTimeout(timer)
   }, [pathname, hash])
 
   return null
 }
 
 function SectionReveal({ children }: { children: React.ReactNode }) {
+  // Opacity-only — no y/scale transforms. Transforms shift the bounding rect
+  // that scrollIntoView measures, causing external-page navigation to land
+  // at the wrong scroll position. Pure fade avoids that entirely.
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.98, y: 24 }}
-      whileInView={{ opacity: 1, scale: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
       viewport={{ once: true, amount: 0.08 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
     >

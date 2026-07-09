@@ -2,7 +2,21 @@ import React, { useState } from 'react'
 import {
   Box, Container, Typography, Stack, Button,
   Dialog, DialogContent, IconButton, Chip, Fade,
+  useTheme, useMediaQuery,
 } from '@mui/material'
+import { motion, type Variants } from 'framer-motion'
+
+const MotionBox = motion(Box)
+const MotionTypography = motion(Typography)
+
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' as const } },
+}
+const stagger: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08 } },
+}
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import CloseIcon from '@mui/icons-material/Close'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
@@ -32,22 +46,36 @@ function ProgramDialog({
   onClose: () => void
 }) {
   const { openApplyModal } = useApplyModal()
+  const theme = useTheme()
+  const isMd = useMediaQuery(theme.breakpoints.up('md'))
   if (!program) return null
   const col = DAY_COLOR[program.day] ?? { bg: 'rgba(255,255,255,0.08)', text: '#fff' }
   const image = PROGRAM_IMAGES[index]
-const imagePositions = [
-  'center 65%',  // Open (index 0)
-  'center 35%',  // 16s  (index 1)
-  'center 10%',  // 14s  (index 2)
-  'center 50%',  // 12s  (index 3)
-  'center 20%',  // 10s  (index 4)
-]
+
+  // Per-program image positions — edit here to move each photo in the dialog
+  // Format: 'horizontal vertical' e.g. 'center 30%' or 'left 40%' or 'right 60%'
+  // xs = mobile, md = desktop
+  const imagePositionsRaw: (string | { xs: string; md: string })[] = [
+    'center 65%',                            // Open  (index 0)
+    'center 35%',                            // 16s   (index 1)
+    { xs: 'center 10%', md: '80% 15%' },  // 14s   (index 2)
+    'center 50%',                            // 12s   (index 3)
+    'center 20%',                            // 10s   (index 4)
+  ]
+
+
+  const imagePosition = (() => {
+    const pos = imagePositionsRaw[index]
+    return typeof pos === 'string' ? pos : (isMd ? pos.md : pos.xs)
+  })()
   return (
     <Dialog
       open={!!program}
       onClose={onClose}
       maxWidth="sm"
       fullWidth
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore — TransitionComponent is valid at runtime in MUI v9
       TransitionComponent={Fade}
       transitionDuration={{ enter: 220, exit: 150 }}
       slotProps={{ paper: { sx: { bgcolor: '#021a4a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 4, color: '#fff', overflow: 'hidden' } } }}
@@ -61,8 +89,8 @@ const imagePositions = [
             alt={program.label}
             sx={{
               width: '100%', height: '100%', objectFit: 'cover',
-            objectPosition: imagePositions[index],              
-            filter: 'brightness(0.8)',
+              objectPosition: imagePosition,
+              filter: 'brightness(1.05)',
             }}
             onError={(e: any) => { e.target.style.display = 'none' }}
           />
@@ -161,38 +189,58 @@ export default function ProgramsSection() {
     PROGRAM_IMAGES.forEach(src => { const img = new Image(); img.src = src })
   }, [])
 
+  // Per-card image positions — edit here to reframe each card photo
+  // Format: 'horizontal vertical' e.g. 'center 40%', 'left 30%', 'right 60%'
+  const cardImagePositions = [
+    'center 40%',   // Open  (index 0)
+    'center 30%',   // 16s   (index 1)
+    '60% 50%',   // 14s   (index 2)
+    'center 50%',   // 12s   (index 3)
+    'center 30%',   // 10s   (index 4)
+  ]
+
   return (
     <Box
-      id="programs"
       component="section"
       sx={{
         py: { xs: 8, md: 12 },
         background: 'linear-gradient(150deg, #010d2a 0%, #021a4a 50%, #032053 100%)',
       }}
     >
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" id="programs" sx={{ scrollMarginTop: { xs: '72px', md: '80px' } }}>
 
         {/* Header */}
-        <Box sx={{ mb: { xs: 5, md: 8 } }}>
-          <Typography variant="overline" sx={{ display: 'block', mb: 1, color: '#f5c842' }}>
+        <MotionBox
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+          sx={{ mb: { xs: 5, md: 8 } }}
+        >
+          <MotionTypography variants={fadeUp} variant="overline" sx={{ display: 'block', mb: 1, color: '#f5c842' }}>
             2026 Season · May – August
-          </Typography>
-          <Typography
+          </MotionTypography>
+          <MotionTypography
+            variants={fadeUp}
             variant="h2"
             sx={{ fontSize: { xs: '2.8rem', md: '3.8rem' }, color: '#ffffff', mb: 2 }}
           >
             Development Today.
             <br />
             <Box component="span" sx={{ color: '#f5c842' }}>Excellence Tomorrow.</Box>
-          </Typography>
-          <Box sx={{ width: 48, height: 3, bgcolor: '#f5c842', borderRadius: 2, mb: 2 }} />
-          <Typography sx={{ color: 'rgba(255,255,255,0.6)', maxWidth: 480, lineHeight: 1.8 }}>
-            Programs tailored to meet players where they are — and take them where they want to go.
-          </Typography>
-        </Box>
+          </MotionTypography>
+          <MotionBox variants={fadeUp} sx={{ width: 48, height: 3, bgcolor: '#f5c842', borderRadius: 2, mb: 2 }} />
+          <MotionTypography variants={fadeUp} sx={{ color: 'rgba(255,255,255,0.6)', maxWidth: 480, lineHeight: 1.8 }}>
+            Programs tailored to meet players where they are and take them where they want to go.
+          </MotionTypography>
+        </MotionBox>
 
         {/* Programs grid — layout 3 style */}
-        <Box
+        <MotionBox
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.1 }}
           sx={{
             display: 'grid',
             gridTemplateColumns: {
@@ -205,8 +253,9 @@ export default function ProgramsSection() {
           }}
         >
           {PROGRAMS.map((program, i) => (
-            <Box
+            <MotionBox
               key={program.label}
+              variants={fadeUp}
               onClick={() => setDialogProgram({ program, index: i })}
               sx={{
                 position: 'relative',
@@ -242,8 +291,9 @@ export default function ProgramsSection() {
     height: '100%',
     objectFit: 'cover',
     zIndex: 0,
-    opacity: 0.65, // Increase/decrease visibility
-    filter: 'brightness(1.15) contrast(1.05)',
+    opacity: 0.85,
+    filter: 'brightness(1.2) contrast(1.05)',
+    objectPosition: cardImagePositions[i],
   }}
   onError={(e: any) => {
     e.target.style.display = 'none'
@@ -329,9 +379,9 @@ export default function ProgramsSection() {
                   Register
                 </Button>
               </Box>
-            </Box>
+            </MotionBox>
           ))}
-        </Box>
+        </MotionBox>
 
       </Container>
 

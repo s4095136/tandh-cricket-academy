@@ -84,6 +84,7 @@ export const REPRESENTATIVES: Representative[] = [
       'U17 Vic Metro Team (2022/23)',
       'U19 Vic Metro Team (2023/24, 2024/25)',
       'U19 Victoria Combined Team (2023/24)',
+      'U19 Victoria Combined Team (2024/25)',
       'U23 Victoria 2nd XI Team (2025/26)',
       'Melbourne Stars Junior Academy (2024/25)',
       'Victoria Targeted Rookie Program (2025)',

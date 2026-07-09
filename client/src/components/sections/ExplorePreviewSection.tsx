@@ -1,5 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Container, Typography, Avatar, Chip, Button } from '@mui/material'
+import { motion, type Variants } from 'framer-motion'
+
+const MotionBox = motion(Box)
+const MotionTypography = motion(Typography)
+
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' as const } },
+}
+const stagger: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12 } },
+}
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
 import PublicIcon from '@mui/icons-material/Public'
 import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff'
@@ -373,7 +386,7 @@ function ToursPanel() {
       </Box>
 
       {/* Content */}
-      <Box sx={{ position: 'relative', flex: 1, height: { xs: 320, md: 360 }, overflow: 'hidden' }}>
+      <Box sx={{ position: 'relative', flex: 1, minHeight: { xs: 320, md: 360 }, overflow: 'hidden' }}>
         <Box sx={{ px: 3, pt: 2.5, pb: 1 }}>
 
           {/* Upcoming tours */}
@@ -479,92 +492,171 @@ function ToursPanel() {
 // ── 1-on-1 panel ─────────────────────────────────────────────────────────────
 
 const ONE_ON_ONE_COACHES = [
-  { name: 'Aiman Nadeem', image: 'aiman-nadeem.png', speciality: 'Batting & Fielding' },
-  { name: 'Aayan Nadeem', image: 'aayan-nadeem.png', speciality: 'Batting & Bowling' },
-  { name: 'Daksh Kumar',  image: 'daksh-kumar.png',  speciality: 'Bowling & Fitness' },
-  { name: 'Ali Khan',     image: 'ali-khan.png',     speciality: 'Batting & Strategy' },
+  { name: 'Aiman Nadeem', image: 'aiman-nadeem.png', role: 'Lead Coach', speciality: 'Batting & Fielding', pos: 'center 5%' },
+  { name: 'Aayan Nadeem', image: 'aayan-nadeem.png', role: 'Coach',      speciality: 'Batting & Bowling',  pos: 'center 5%' },
+  { name: 'Daksh Kumar',  image: 'daksh-kumar.png',  role: 'Coach',      speciality: 'Bowling & Fitness',  pos: 'center 5%' },
+  { name: 'Ali Khan',     image: 'ali-khan.png',     role: 'Lead Coach', speciality: 'Batting & Strategy', pos: 'center 5%' },
+]
+
+const BENEFITS = [
+  { icon: '🎯', label: 'Tailored to you' },
+  { icon: '📈', label: 'Fast progress' },
+  { icon: '🏆', label: 'Elite coaches' },
+  { icon: '📅', label: 'Flexible booking' },
 ]
 
 function OneOnOnePanel() {
   const navigate = useNavigate()
+  const featured = ONE_ON_ONE_COACHES[0]
+  const rest = ONE_ON_ONE_COACHES.slice(1)
+
   return (
     <Box
       sx={{
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
-        border: '1px solid rgba(255,255,255,0.07)',
+        border: '1px solid rgba(245,200,66,0.12)',
         borderRadius: 4,
         overflow: 'hidden',
         position: 'relative',
-        background: 'linear-gradient(160deg, rgba(1,13,42,0.95) 0%, rgba(2,26,74,0.92) 100%)',
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          inset: 0,
-          background: 'linear-gradient(135deg, rgba(245,200,66,0.04) 0%, transparent 60%)',
-          zIndex: 0,
-        },
+        background: 'linear-gradient(160deg, #05091a 0%, #010d2a 60%, #021a4a 100%)',
         '& > *': { position: 'relative', zIndex: 1 },
       }}
     >
+      {/* Gold top accent */}
+      <Box sx={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: 100, height: 2, background: 'linear-gradient(90deg, transparent, #f5c842, transparent)', zIndex: 2 }} />
+
+      {/* Ambient glow */}
+      <Box sx={{ position: 'absolute', top: -60, right: -60, width: 260, height: 260, borderRadius: '50%', background: 'radial-gradient(ellipse, rgba(245,200,66,0.07) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
+
       {/* Panel header */}
-      <Box
-        sx={{
-          px: 3, pt: 3, pb: 2,
-          background: 'linear-gradient(135deg, rgba(245,200,66,0.07) 0%, transparent 100%)',
-          borderBottom: '1px solid rgba(255,255,255,0.06)',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        }}
-      >
+      <Box sx={{
+        px: 3, pt: 3, pb: 2,
+        background: 'linear-gradient(135deg, rgba(245,200,66,0.06) 0%, transparent 100%)',
+        borderBottom: '1px solid rgba(245,200,66,0.08)',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <Box sx={{ width: 36, height: 36, borderRadius: 2, bgcolor: 'rgba(245,200,66,0.1)', border: '1px solid rgba(245,200,66,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <PersonIcon sx={{ color: '#f5c842', fontSize: '1.1rem' }} />
           </Box>
           <Box>
-            <Typography sx={{ color: '#f5c842', fontWeight: 800, fontSize: '0.68rem', letterSpacing: '0.14em' }}>
-              PRIVATE COACHING
-            </Typography>
-            <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '1rem', lineHeight: 1.2 }}>
-              1-on-1 Sessions
-            </Typography>
+            <Typography sx={{ color: '#f5c842', fontWeight: 800, fontSize: '0.68rem', letterSpacing: '0.14em' }}>PRIVATE COACHING</Typography>
+            <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '1rem', lineHeight: 1.2 }}>1-on-1 Sessions</Typography>
           </Box>
         </Box>
-        <Chip label="4 specialists" size="small" sx={{ bgcolor: 'rgba(245,200,66,0.12)', color: '#f5c842', fontWeight: 700, fontSize: '0.68rem', border: '1px solid rgba(245,200,66,0.2)' }} />
+        <Chip
+          label="Accepting Bookings"
+          size="small"
+          icon={<Box sx={{ width: 6, height: 6, borderRadius: '50%', bgcolor: '#48c878', ml: '6px !important', flexShrink: 0 }} />}
+          sx={{ bgcolor: 'rgba(72,200,120,0.1)', color: '#48c878', fontWeight: 700, fontSize: '0.62rem', border: '1px solid rgba(72,200,120,0.25)', pl: 0.5 }}
+        />
       </Box>
 
-      {/* Coach avatars */}
-      <Box sx={{ px: 3, pt: 2.5, pb: 1, flex: 1 }}>
-        <Typography sx={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.12em', mb: 1.75 }}>
-          OUR SPECIALISTS
+      {/* Featured coach card */}
+      <Box sx={{ px: 3, pt: 2.5 }}>
+        <Typography sx={{ color: 'rgba(255,255,255,0.28)', fontSize: '0.6rem', fontWeight: 800, letterSpacing: '0.16em', mb: 1.25 }}>
+          FEATURED COACH
         </Typography>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-          {ONE_ON_ONE_COACHES.map((coach) => (
-            <Box key={coach.name} sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-              <Avatar
-                src={`${CLOUDINARY}/${coach.image}`}
-                sx={{ width: 38, height: 38, border: '2px solid rgba(245,200,66,0.3)', '& img': { objectFit: 'cover', objectPosition: 'center 5%' } }}
-              />
-              <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '0.82rem', lineHeight: 1.2 }}>{coach.name}</Typography>
-                <Typography sx={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.7rem' }}>{coach.speciality}</Typography>
+        <Box sx={{
+          position: 'relative', borderRadius: '16px', overflow: 'hidden',
+          height: 180, mb: 2,
+          border: '1px solid rgba(245,200,66,0.18)',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+          backgroundImage: `url(${CLOUDINARY}/${featured.image})`,
+          backgroundSize: '75% auto',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center 15%',
+          bgcolor: '#01080f',
+        }}>
+          {/* Gradient overlay */}
+          <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(2,10,40,0.96) 0%, rgba(2,10,40,0.3) 55%, transparent 100%)' }} />
+          {/* Gold top-line */}
+          <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: 'linear-gradient(90deg, #f5c842 0%, rgba(245,200,66,0.3) 100%)' }} />
+          {/* Info overlay */}
+          <Box sx={{ position: 'absolute', bottom: 14, left: 16, right: 16, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+            <Box>
+              <Typography sx={{ color: '#f5c842', fontWeight: 700, fontSize: '0.6rem', letterSpacing: '0.12em', mb: 0.25 }}>
+                {featured.role.toUpperCase()}
+              </Typography>
+              <Typography sx={{ color: '#fff', fontWeight: 800, fontSize: '1rem', lineHeight: 1.1 }}>
+                {featured.name}
+              </Typography>
+              <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.7rem', mt: 0.25 }}>
+                {featured.speciality}
+              </Typography>
+            </Box>
+            <Chip label="Available" size="small" sx={{ bgcolor: 'rgba(72,200,120,0.15)', color: '#48c878', fontWeight: 700, fontSize: '0.6rem', border: '1px solid rgba(72,200,120,0.3)', height: 20 }} />
+          </Box>
+        </Box>
+
+        {/* Other coaches row */}
+        <Typography sx={{ color: 'rgba(255,255,255,0.28)', fontSize: '0.6rem', fontWeight: 800, letterSpacing: '0.16em', mb: 1.25 }}>
+          MORE COACHES
+        </Typography>
+        <Box sx={{ display: 'flex', gap: 1.5, mb: 2.5 }}>
+          {rest.map((coach) => (
+            <Box
+              key={coach.name}
+              sx={{
+                flex: 1, position: 'relative', borderRadius: '12px', overflow: 'hidden',
+                height: 100, border: '1px solid rgba(255,255,255,0.08)',
+                backgroundImage: `url(${CLOUDINARY}/${coach.image})`,
+                backgroundSize: '80% auto',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center 10%',
+                bgcolor: '#01080f',
+                transition: 'border-color 0.2s',
+                '&:hover': { borderColor: 'rgba(245,200,66,0.3)' },
+              }}
+            >
+              <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(1,8,30,0.92) 0%, transparent 55%)' }} />
+              <Box sx={{ position: 'absolute', bottom: 6, left: 7, right: 4 }}>
+                <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '0.62rem', lineHeight: 1.1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  {coach.name.split(' ')[0]}
+                </Typography>
               </Box>
-              <Chip label="Available" size="small" sx={{ bgcolor: 'rgba(72,200,120,0.12)', color: '#48c878', fontWeight: 700, fontSize: '0.6rem', border: '1px solid rgba(72,200,120,0.25)', height: 18 }} />
+            </Box>
+          ))}
+        </Box>
+
+        {/* Benefits grid */}
+        <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, mb: 2.5 }}>
+          {BENEFITS.map(({ icon, label }) => (
+            <Box
+              key={label}
+              sx={{
+                display: 'flex', alignItems: 'center', gap: 1,
+                bgcolor: 'rgba(255,255,255,0.03)',
+                border: '1px solid rgba(255,255,255,0.07)',
+                borderRadius: '10px',
+                px: 1.25, py: 0.9,
+              }}
+            >
+              <Typography sx={{ fontSize: '0.85rem', lineHeight: 1 }}>{icon}</Typography>
+              <Typography sx={{ color: 'rgba(255,255,255,0.65)', fontSize: '0.7rem', fontWeight: 600 }}>{label}</Typography>
             </Box>
           ))}
         </Box>
       </Box>
 
       {/* CTA */}
-      <Box sx={{ px: 3, pb: 3, pt: 1.5 }}>
+      <Box sx={{ px: 3, pb: 3, mt: 'auto' }}>
         <Button
-          variant="outlined"
+          variant="contained"
           endIcon={<ArrowForwardIcon />}
           onClick={() => navigate('/1on1', { state: { from: 'explore' } })}
           fullWidth
-          sx={{ color: '#f5c842', borderColor: 'rgba(245,200,66,0.3)', py: 1, fontWeight: 700, fontSize: '0.82rem', borderRadius: 2.5, '&:hover': { borderColor: '#f5c842', bgcolor: 'rgba(245,200,66,0.06)' } }}
+          sx={{
+            bgcolor: '#f5c842', color: '#021a4a',
+            py: 1.1, fontWeight: 800, fontSize: '0.85rem',
+            borderRadius: '12px',
+            boxShadow: '0 4px 20px rgba(245,200,66,0.25)',
+            '&:hover': { bgcolor: '#e0b030', boxShadow: '0 6px 28px rgba(245,200,66,0.35)' },
+          }}
         >
-          View 1-on-1 Coaching
+          Book a Session
         </Button>
       </Box>
     </Box>
@@ -589,7 +681,6 @@ export default function ExplorePreviewSection() {
 
   return (
     <Box
-      id="explore"
       sx={{
         py: { xs: 8, md: 12 },
         position: 'relative',
@@ -611,34 +702,47 @@ export default function ExplorePreviewSection() {
       <Box sx={{ position: 'absolute', top: '10%', left: '5%', width: 400, height: 400, borderRadius: '50%', bgcolor: 'rgba(245,200,66,0.04)', filter: 'blur(80px)', pointerEvents: 'none' }} />
       <Box sx={{ position: 'absolute', bottom: '10%', right: '5%', width: 360, height: 360, borderRadius: '50%', bgcolor: 'rgba(100,160,255,0.05)', filter: 'blur(80px)', pointerEvents: 'none' }} />
 
-      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
+      <Container maxWidth="lg" id="explore" sx={{ position: 'relative', zIndex: 1, scrollMarginTop: { xs: '72px', md: '80px' } }}>
 
         {/* Section heading */}
-        <Box sx={{ mb: { xs: 5, md: 7 } }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
+        <MotionBox
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+          sx={{ mb: { xs: 5, md: 7 } }}
+        >
+          <MotionBox variants={fadeUp} sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
             <Box sx={{ height: 2, width: 32, bgcolor: '#f5c842', borderRadius: 1 }} />
             <Typography sx={{ color: '#f5c842', fontWeight: 800, fontSize: '0.7rem', letterSpacing: '0.16em' }}>
               EXPLORE MORE
             </Typography>
-          </Box>
-          <Typography
+          </MotionBox>
+          <MotionTypography
+            variants={fadeUp}
             variant="h2"
             sx={{ fontSize: { xs: '2.2rem', sm: '3rem', md: '3.5rem' }, color: '#fff', fontWeight: 900, lineHeight: 1.1, mb: 1.5 }}
           >
             Beyond the{' '}
             <Box component="span" sx={{ color: '#f5c842' }}>Boundary</Box>
-          </Typography>
-          <Typography sx={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.95rem', maxWidth: 460 }}>
+          </MotionTypography>
+          <MotionTypography variants={fadeUp} sx={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.95rem', maxWidth: 460 }}>
             Our players represent at the highest levels. Our teams travel the world. Explore what T&H Cricket looks like beyond the training ground.
-          </Typography>
-        </Box>
+          </MotionTypography>
+        </MotionBox>
 
         {/* Panels */}
-        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3, alignItems: 'stretch' }}>
-          <RepsPanel coachImages={coachImages} />
-          <ToursPanel />
-          <OneOnOnePanel />
-        </Box>
+        <MotionBox
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.1 }}
+          sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3, alignItems: 'stretch' }}
+        >
+          <MotionBox variants={fadeUp} sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}><RepsPanel coachImages={coachImages} /></MotionBox>
+          <MotionBox variants={fadeUp} sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}><ToursPanel /></MotionBox>
+          <MotionBox variants={fadeUp} sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}><OneOnOnePanel /></MotionBox>
+        </MotionBox>
       </Container>
     </Box>
   )

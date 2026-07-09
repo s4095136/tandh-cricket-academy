@@ -1,5 +1,18 @@
 import React, { useState } from 'react'
 import { Box, Container, Typography, Card, CardContent, Grid, Avatar, Rating, IconButton, TextField, Button, MenuItem, Skeleton, Dialog, DialogContent, GlobalStyles } from '@mui/material'
+import { motion, type Variants } from 'framer-motion'
+
+const MotionBox = motion(Box)
+const MotionTypography = motion(Typography)
+
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' as const } },
+}
+const stagger: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1 } },
+}
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
@@ -471,7 +484,6 @@ export default function TestimonialsSection() {
 
   return (
     <Box
-      id="testimonials"
       component="section"
       sx={{
         py: { xs: 8, md: 12 },
@@ -491,39 +503,49 @@ export default function TestimonialsSection() {
         }}
       />
 
-      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
+      <Container maxWidth="lg" id="testimonials" sx={{ position: 'relative', zIndex: 1, scrollMarginTop: { xs: '72px', md: '80px' } }}>
         {/* Header */}
-        <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 8 } }}>
-          <Box
-            sx={{
-              display: 'inline-block',
-              bgcolor: 'rgba(255,255,255,0.08)',
-              border: '1px solid rgba(255,255,255,0.15)',
-              borderRadius: 10,
-              px: 2,
-              py: 0.5,
-              mb: 2,
-            }}
-          >
-            <Typography
-              variant="overline"
-              sx={{ color: '#f5c842', fontWeight: 800, letterSpacing: '0.12em', fontSize: '0.72rem' }}
+        <MotionBox
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+          sx={{ textAlign: 'center', mb: { xs: 6, md: 8 } }}
+        >
+          <MotionBox variants={fadeUp}>
+            <Box
+              sx={{
+                display: 'inline-block',
+                bgcolor: 'rgba(255,255,255,0.08)',
+                border: '1px solid rgba(255,255,255,0.15)',
+                borderRadius: 10,
+                px: 2,
+                py: 0.5,
+                mb: 2,
+              }}
             >
-              What families say
-            </Typography>
-          </Box>
-          <Typography
+              <Typography
+                variant="overline"
+                sx={{ color: '#f5c842', fontWeight: 800, letterSpacing: '0.12em', fontSize: '0.72rem' }}
+              >
+              Reviews
+              </Typography>
+            </Box>
+          </MotionBox>
+          <MotionTypography
+            variants={fadeUp}
             variant="h2"
             sx={{
-              fontSize: { xs: '2.8rem', md: '3.8rem' },
+              fontSize: { xs: '2rem', md: '3.8rem' },
               color: '#ffffff',
               fontWeight: 900,
               lineHeight: 1.1,
             }}
           >
-            Trusted by Melbourne families
-          </Typography>
-          <Box
+            What Families Say
+          </MotionTypography>
+          <MotionBox
+            variants={fadeUp}
             sx={{
               width: 60,
               height: 4,
@@ -533,7 +555,7 @@ export default function TestimonialsSection() {
               mt: 3,
             }}
           />
-        </Box>
+        </MotionBox>
 
         {!loading && <RatingBreakdown testimonials={testimonials} />}
 

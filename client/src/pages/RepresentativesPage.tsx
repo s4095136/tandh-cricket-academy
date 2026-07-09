@@ -3,6 +3,19 @@ import {
   Box, Container, Typography, Card, CardContent, Chip, Grid, Avatar,
   Dialog, DialogContent, IconButton, Button,
 } from '@mui/material'
+import { motion, type Variants } from 'framer-motion'
+
+const MotionBox = motion(Box)
+const MotionTypography = motion(Typography)
+
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' as const } },
+}
+const stagger: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08 } },
+}
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
 import PublicIcon from '@mui/icons-material/Public'
 import CloseIcon from '@mui/icons-material/Close'
@@ -42,79 +55,77 @@ function StateDialog({ player, onClose }: { player: Representative | null; onClo
       slotProps={{
         paper: {
           sx: {
-            border: '1px solid rgba(255,255,255,0.1)', borderRadius: 4, overflow: 'hidden',
-            ...(bg ? {
-              backgroundImage: `url(${bg})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center 15%',
-              '&::before': { content: '""', position: 'absolute', inset: 0, background: 'linear-gradient(160deg, rgba(1,13,42,0.42) 0%, rgba(2,26,74,0.35) 100%)', zIndex: 0 },
-            } : { bgcolor: '#021a4a' }),
+            bgcolor: '#021a4a',
+            border: '1px solid rgba(255,255,255,0.1)',
+            borderRadius: 4,
+            overflow: 'hidden',
           },
         },
       }}
     >
       {player && (
-        <DialogContent sx={{ p: 3, position: 'relative', zIndex: 1 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2.5 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <Avatar
-                src={player.image ? `${CLOUDINARY}/${player.image}` : undefined}
-                sx={{
-                  width: 80, height: 80,
-                  border: '2px solid #f5c842',
-                  bgcolor: 'rgba(245,200,66,0.12)',
-                  color: '#f5c842',
-                  fontFamily: '"Bebas Neue", sans-serif',
-                  fontSize: '1.5rem',
-                  '& img': { objectFit: 'cover', objectPosition: 'center 5%' },
-                }}
-              >
-                {getInitials(player.name)}
-              </Avatar>
-              <Box>
-                <Typography variant="h6" sx={{ color: '#fff', fontWeight: 700, fontSize: { xs: '1rem', sm: '1.25rem' }, whiteSpace: 'nowrap' }}>{player.name}</Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.4 }}>
-                  <EmojiEventsIcon sx={{ color: '#f5c842', fontSize: '0.95rem' }} />
-                  <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.78rem' }}>
-                    {player.honours.length} honour{player.honours.length > 1 ? 's' : ''}
-                  </Typography>
-                </Box>
+        <DialogContent sx={{ p: 0 }}>
+          {/* Full player image */}
+          <Box sx={{ position: 'relative' }}>
+            {bg ? (
+              <Box
+                component="img"
+                src={bg}
+                alt={player.name}
+                sx={{ width: '100%', height: 'auto', display: 'block' }}
+              />
+            ) : (
+              <Box sx={{ height: 300, bgcolor: 'rgba(245,200,66,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Typography sx={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: '4rem', color: '#f5c842', opacity: 0.4 }}>
+                  {getInitials(player.name)}
+                </Typography>
               </Box>
-            </Box>
-            <IconButton onClick={onClose} size="small" sx={{ color: 'rgba(255,255,255,0.5)', mt: -0.5 }}>
+            )}
+            {/* Gradient fade at bottom */}
+            <Box sx={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 120, background: 'linear-gradient(to top, #021a4a 0%, transparent 100%)' }} />
+            {/* Close button */}
+            <IconButton onClick={onClose} size="small" sx={{ position: 'absolute', top: 10, right: 10, color: '#fff', bgcolor: 'rgba(0,0,0,0.45)', '&:hover': { bgcolor: 'rgba(0,0,0,0.65)' } }}>
               <CloseIcon fontSize="small" />
             </IconButton>
+            {/* Name overlay at bottom */}
+            <Box sx={{ position: 'absolute', bottom: 0, left: 0, right: 0, px: 3, pb: 2 }}>
+              <Typography variant="h6" sx={{ color: '#fff', fontWeight: 700, fontSize: { xs: '1rem', sm: '1.25rem' } }}>{player.name}</Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.3 }}>
+                <EmojiEventsIcon sx={{ color: '#f5c842', fontSize: '0.85rem' }} />
+                <Typography sx={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.75rem' }}>
+                  {player.honours.length} Representative Honour{player.honours.length > 1 ? 's' : ''}
+                </Typography>
+              </Box>
+            </Box>
           </Box>
 
+          {/* Honours list */}
+          <Box sx={{ px: 3, pb: 3, pt: 2 }}>
+
           <Box sx={{ bgcolor: 'rgba(0,0,0,0.25)', borderRadius: 2, border: '1px solid rgba(255,255,255,0.06)' }}>
-            {(() => {
-              const MIN = 3
-              const padded = [...player.honours]
-              while (padded.length < MIN) padded.push('')
-              return padded.map((honour, idx) => {
-                const isEmpty = !honour
-                const { team, years } = honour ? parseHonour(honour) : { team: '', years: '' }
-                const nextIsReal = !isEmpty && !!padded[idx + 1]
-                return (
-                  <Box
-                    key={honour || `pad-${idx}`}
-                    sx={{
-                      display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2,
-                      px: 2, py: 1.2,
-                      borderBottom: nextIsReal ? '1px solid rgba(255,255,255,0.06)' : 'none',
-                      minHeight: 40,
-                    }}
-                  >
-                    {!isEmpty && <Typography sx={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.85rem', fontWeight: 600 }}>{team}</Typography>}
-                    {!isEmpty && years && (
-                      <Typography sx={{ color: '#f5c842', fontSize: '0.75rem', fontWeight: 700, flexShrink: 0, whiteSpace: 'nowrap' }}>
-                        {years}
-                      </Typography>
-                    )}
-                  </Box>
-                )
-              })
-            })()}
+            {player.honours.map((honour, idx) => {
+              const { team, years } = parseHonour(honour)
+              const isLast = idx === player.honours.length - 1
+              return (
+                <Box
+                  key={honour}
+                  sx={{
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2,
+                    px: 2, py: 1.2,
+                    borderBottom: !isLast ? '1px solid rgba(255,255,255,0.06)' : 'none',
+                    minHeight: 40,
+                  }}
+                >
+                  <Typography sx={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.85rem', fontWeight: 600 }}>{team}</Typography>
+                  {years && (
+                    <Typography sx={{ color: '#f5c842', fontSize: '0.75rem', fontWeight: 700, flexShrink: 0, whiteSpace: 'nowrap' }}>
+                      {years}
+                    </Typography>
+                  )}
+                </Box>
+              )
+            })}
+          </Box>
           </Box>
         </DialogContent>
       )}
@@ -135,106 +146,103 @@ function AusDialog({ player, onClose }: { player: AustralianRepresentative | nul
       slotProps={{
         paper: {
           sx: {
-            border: '1px solid rgba(245,200,66,0.3)', borderRadius: 4, overflow: 'hidden',
-            backgroundImage: `url(${CLOUDINARY}/vish-aus.jpg)`,
-            backgroundSize: 'cover',
-            backgroundPosition: '70% 20%',
-            '&::before': { content: '""', position: 'absolute', inset: 0, background: 'linear-gradient(160deg, rgba(1,13,42,0.42) 0%, rgba(2,26,74,0.35) 100%)', zIndex: 0 },
+            bgcolor: '#021a4a',
+            border: '1px solid rgba(245,200,66,0.3)',
+            borderRadius: 4,
+            overflow: 'hidden',
           },
         },
       }}
     >
       {player && (
-        <DialogContent sx={{ p: 3, position: 'relative', zIndex: 1 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2.5 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <Avatar
-                src={player.image ? `${CLOUDINARY}/${player.image}` : undefined}
-                sx={{
-                  width: 80, height: 80,
-                  border: '2px solid #f5c842',
-                  bgcolor: 'rgba(245,200,66,0.12)',
-                  color: '#f5c842',
-                  fontFamily: '"Bebas Neue", sans-serif',
-                  fontSize: '1.5rem',
-                  '& img': { objectFit: 'cover', objectPosition: 'center 5%' },
-                }}
-              >
-                {getInitials(player.name)}
-              </Avatar>
-              <Box>
-                <Typography variant="h6" sx={{ color: '#fff', fontWeight: 700 }}>{player.name}</Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.4 }}>
-                  <PublicIcon sx={{ color: '#f5c842', fontSize: '0.95rem' }} />
-                  <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.78rem' }}>
-                    {player.tours.length} Australian honour{player.tours.length > 1 ? 's' : ''}
-                  </Typography>
-                </Box>
-              </Box>
-            </Box>
-            <IconButton onClick={onClose} size="small" sx={{ color: 'rgba(255,255,255,0.5)', mt: -0.5 }}>
+        <DialogContent sx={{ p: 0 }}>
+          {/* Full player image */}
+          <Box sx={{ position: 'relative' }}>
+            <Box
+              component="img"
+              src={`${CLOUDINARY}/vish-aus.jpg`}
+              alt={player.name}
+              sx={{ width: '100%', height: 'auto', display: 'block' }}
+            />
+            {/* Gradient fade at bottom */}
+            <Box sx={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 120, background: 'linear-gradient(to top, #021a4a 0%, transparent 100%)' }} />
+            {/* Close button */}
+            <IconButton onClick={onClose} size="small" sx={{ position: 'absolute', top: 10, right: 10, color: '#fff', bgcolor: 'rgba(0,0,0,0.45)', '&:hover': { bgcolor: 'rgba(0,0,0,0.65)' } }}>
               <CloseIcon fontSize="small" />
             </IconButton>
-          </Box>
-
-          {/* Australian Duties */}
-          <Typography sx={{ color: '#f5c842', fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.14em', mb: 1 }}>
-            🇦🇺 AUSTRALIAN DUTIES
-          </Typography>
-          <Box sx={{ bgcolor: 'rgba(0,0,0,0.25)', borderRadius: 2, border: '1px solid rgba(245,200,66,0.15)', mb: vishwaState ? 2.5 : 0 }}>
-            {player.tours.map((tour, idx) => (
-              <Box
-                key={`${tour.team}-${tour.year}`}
-                sx={{
-                  px: 2, py: 1.2,
-                  borderBottom: idx < player.tours.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
-                }}
-              >
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2 }}>
-                  <Typography sx={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.85rem', fontWeight: 600 }}>
-                    {tour.team}
-                  </Typography>
-                  <Typography sx={{ color: '#f5c842', fontSize: '0.75rem', fontWeight: 700, flexShrink: 0, whiteSpace: 'nowrap' }}>
-                    {tour.year}
-                  </Typography>
-                </Box>
-                <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.74rem', mt: 0.3 }}>
-                  {tour.detail}
+            {/* Name overlay at bottom */}
+            <Box sx={{ position: 'absolute', bottom: 0, left: 0, right: 0, px: 3, pb: 2 }}>
+              <Typography variant="h6" sx={{ color: '#fff', fontWeight: 700, fontSize: { xs: '1rem', sm: '1.25rem' } }}>{player.name}</Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.3 }}>
+                <PublicIcon sx={{ color: '#f5c842', fontSize: '0.85rem' }} />
+                <Typography sx={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.75rem' }}>
+                  {player.tours.length} Australian honour{player.tours.length > 1 ? 's' : ''}
                 </Typography>
               </Box>
-            ))}
+            </Box>
           </Box>
 
-          {/* State Honours (Vishwa only) */}
-          {vishwaState && (
-            <>
-              <Typography sx={{ color: 'rgba(126,184,245,0.9)', fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.14em', mb: 1 }}>
-                🏏 STATE HONOURS
-              </Typography>
-              <Box sx={{ bgcolor: 'rgba(0,0,0,0.25)', borderRadius: 2, border: '1px solid rgba(126,184,245,0.15)' }}>
-                {vishwaState.honours.map((honour, idx) => {
-                  const { team, years } = parseHonour(honour)
-                  return (
-                    <Box
-                      key={honour}
-                      sx={{
-                        display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2,
-                        px: 2, py: 1.2,
-                        borderBottom: idx < vishwaState.honours.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
-                      }}
-                    >
-                      <Typography sx={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.85rem', fontWeight: 600 }}>{team}</Typography>
-                      {years && (
-                        <Typography sx={{ color: 'rgba(126,184,245,0.9)', fontSize: '0.75rem', fontWeight: 700, flexShrink: 0, whiteSpace: 'nowrap' }}>
-                          {years}
-                        </Typography>
-                      )}
-                    </Box>
-                  )
-                })}
-              </Box>
-            </>
-          )}
+          {/* Content */}
+          <Box sx={{ px: 3, pb: 3, pt: 2 }}>
+            {/* Australian Duties */}
+            <Typography sx={{ color: '#f5c842', fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.14em', mb: 1 }}>
+              🇦🇺 AUSTRALIAN DUTIES
+            </Typography>
+            <Box sx={{ bgcolor: 'rgba(0,0,0,0.25)', borderRadius: 2, border: '1px solid rgba(245,200,66,0.15)', mb: vishwaState ? 2.5 : 0 }}>
+              {player.tours.map((tour, idx) => (
+                <Box
+                  key={`${tour.team}-${tour.year}`}
+                  sx={{
+                    px: 2, py: 1.2,
+                    borderBottom: idx < player.tours.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
+                  }}
+                >
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2 }}>
+                    <Typography sx={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.85rem', fontWeight: 600 }}>
+                      {tour.team}
+                    </Typography>
+                    <Typography sx={{ color: '#f5c842', fontSize: '0.75rem', fontWeight: 700, flexShrink: 0, whiteSpace: 'nowrap' }}>
+                      {tour.year}
+                    </Typography>
+                  </Box>
+                  <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.74rem', mt: 0.3 }}>
+                    {tour.detail}
+                  </Typography>
+                </Box>
+              ))}
+            </Box>
+
+            {/* State Honours (Vishwa only) */}
+            {vishwaState && (
+              <>
+                <Typography sx={{ color: 'rgba(126,184,245,0.9)', fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.14em', mb: 1 }}>
+                  🏏 REPRESENTATIVE HONOURS
+                </Typography>
+                <Box sx={{ bgcolor: 'rgba(0,0,0,0.25)', borderRadius: 2, border: '1px solid rgba(126,184,245,0.15)' }}>
+                  {vishwaState.honours.map((honour, idx) => {
+                    const { team, years } = parseHonour(honour)
+                    return (
+                      <Box
+                        key={honour}
+                        sx={{
+                          display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2,
+                          px: 2, py: 1.2,
+                          borderBottom: idx < vishwaState.honours.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
+                        }}
+                      >
+                        <Typography sx={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.85rem', fontWeight: 600 }}>{team}</Typography>
+                        {years && (
+                          <Typography sx={{ color: 'rgba(126,184,245,0.9)', fontSize: '0.75rem', fontWeight: 700, flexShrink: 0, whiteSpace: 'nowrap' }}>
+                            {years}
+                          </Typography>
+                        )}
+                      </Box>
+                    )
+                  })}
+                </Box>
+              </>
+            )}
+          </Box>
         </DialogContent>
       )}
     </Dialog>
@@ -460,40 +468,54 @@ export default function RepresentativesPage() {
         </Box>
 
         {/* Header */}
-        <Box sx={{ textAlign: 'center', mb: { xs: 4, md: 6 } }}>
-          <Chip
-            label="National & State Competitions"
-            size="small"
-            sx={{
-              mb: 3,
-              bgcolor: 'rgba(245,200,66,0.15)',
-              color: '#f5c842',
-              border: '1px solid rgba(245,200,66,0.3)',
-              fontWeight: 600,
-              letterSpacing: '0.05em',
-              fontSize: '0.72rem',
-            }}
-          />
-          <Typography variant="h1" sx={{ fontSize: { xs: '3rem', sm: '4rem', md: '5.5rem' }, color: '#ffffff', mb: 1 }}>
+        <MotionBox
+          variants={stagger}
+          initial="hidden"
+          animate="show"
+          sx={{ textAlign: 'center', mb: { xs: 4, md: 6 } }}
+        >
+          <MotionBox variants={fadeUp}>
+            <Chip
+              label="National & State Competitions"
+              size="small"
+              sx={{
+                mb: 3,
+                bgcolor: 'rgba(245,200,66,0.15)',
+                color: '#f5c842',
+                border: '1px solid rgba(245,200,66,0.3)',
+                fontWeight: 600,
+                letterSpacing: '0.05em',
+                fontSize: '0.72rem',
+              }}
+            />
+          </MotionBox>
+          <MotionTypography variants={fadeUp} variant="h1" sx={{ fontSize: { xs: '3rem', sm: '4rem', md: '5.5rem' }, color: '#ffffff', mb: 1 }}>
             National Competitions
-          </Typography>
-          <Typography
+          </MotionTypography>
+          <MotionTypography
+            variants={fadeUp}
             variant="body1"
             sx={{ color: 'rgba(255,255,255,0.62)', maxWidth: 620, mx: 'auto', fontSize: { xs: '1rem', md: '1.05rem' } }}
           >
             We're proud of every T&H Cricket player who has gone on to compete at state and national level. Here
             are our players who have been selected for Australian and Victorian representative squads.
-          </Typography>
-        </Box>
+          </MotionTypography>
+        </MotionBox>
 
         {/* Australian Representatives */}
-        <Box sx={{ mb: { xs: 4, md: 6 } }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 4 }}>
+        <MotionBox
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.1 }}
+          sx={{ mb: { xs: 4, md: 6 } }}
+        >
+          <MotionBox variants={fadeUp} sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 4 }}>
             <PublicIcon sx={{ color: '#f5c842' }} />
             <Typography variant="h2" sx={{ fontSize: { xs: '2rem', md: '2.6rem' }, color: '#f5c842' }}>
               Australian Representatives
             </Typography>
-          </Box>
+          </MotionBox>
 
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <Grid container spacing={3} justifyContent="center" sx={{ maxWidth: 480, width: '100%' }}>
@@ -545,6 +567,14 @@ export default function RepresentativesPage() {
                             {player.tours.length} Australian honour{player.tours.length > 1 ? 's' : ''}
                           </Typography>
                         </Box>
+                        {vishwaState && (
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.25 }}>
+                            <EmojiEventsIcon sx={{ color: 'rgba(126,184,245,0.9)', fontSize: '0.9rem' }} />
+                            <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.78rem' }}>
+                              {vishwaState.honours.length} Representative Honour{vishwaState.honours.length > 1 ? 's' : ''}
+                            </Typography>
+                          </Box>
+                        )}
                       </Box>
                     </Box>
 
@@ -571,7 +601,7 @@ export default function RepresentativesPage() {
                     {vishwaState && (
                       <>
                         <Typography sx={{ color: 'rgba(126,184,245,0.9)', fontSize: '0.6rem', fontWeight: 800, letterSpacing: '0.14em', mb: 0.75 }}>
-                          🏏 STATE HONOURS
+                          🏏 REPRESENTATIVE HONOURS
                         </Typography>
                         <Box sx={{ bgcolor: 'rgba(0,0,0,0.25)', border: '1px solid rgba(126,184,245,0.15)', borderRadius: 2 }}>
                           {vishwaState.honours.map((honour, idx) => {
@@ -603,16 +633,21 @@ export default function RepresentativesPage() {
             ))}
           </Grid>
           </Box>
-        </Box>
+        </MotionBox>
 
         {/* State Representatives */}
-        <Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 4 }}>
+        <MotionBox
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.05 }}
+        >
+          <MotionBox variants={fadeUp} sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 4 }}>
             <EmojiEventsIcon sx={{ color: '#f5c842' }} />
             <Typography variant="h2" sx={{ fontSize: { xs: '2rem', md: '2.6rem' }, color: '#ffffff' }}>
               State Representatives
             </Typography>
-          </Box>
+          </MotionBox>
 
           <Grid container spacing={3} justifyContent="center">
             {stateReps.map((player) => {
@@ -623,7 +658,7 @@ export default function RepresentativesPage() {
                   <Card
                     onClick={() => setSelectedState(player)}
                     sx={{
-                      height: '100%', display: 'flex', flexDirection: 'column',
+                      height: '100%', minHeight: 260, display: 'flex', flexDirection: 'column',
                       border: '1px solid rgba(255,255,255,0.1)',
                       borderRadius: 4,
                       overflow: 'hidden',
@@ -666,40 +701,34 @@ export default function RepresentativesPage() {
                           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.4 }}>
                             <EmojiEventsIcon sx={{ color: '#f5c842', fontSize: '0.9rem' }} />
                             <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.78rem' }}>
-                              {player.honours.length} representative honour{player.honours.length > 1 ? 's' : ''}
+                              {player.honours.length} Representative Honour{player.honours.length > 1 ? 's' : ''}
                             </Typography>
                           </Box>
                         </Box>
                       </Box>
-                      <Box sx={{ bgcolor: 'rgba(0,0,0,0.22)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 2, flexGrow: 1 }}>
-                        {(() => {
-                          const MIN = 3
-                          const padded = [...player.honours]
-                          while (padded.length < MIN) padded.push('')
-                          return padded.map((honour, idx) => {
-                            const isEmpty = !honour
-                            const { team, years } = honour ? parseHonour(honour) : { team: '', years: '' }
-                            const nextIsReal = !isEmpty && !!padded[idx + 1]
-                            return (
-                              <Box
-                                key={honour || `pad-${idx}`}
-                                sx={{
-                                  display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2,
-                                  px: 2, py: 1.1,
-                                  borderBottom: nextIsReal ? '1px solid rgba(255,255,255,0.06)' : 'none',
-                                  minHeight: 38,
-                                }}
-                              >
-                                {!isEmpty && <Typography sx={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.82rem', fontWeight: 600 }}>{team}</Typography>}
-                                {!isEmpty && years && (
-                                  <Typography sx={{ color: '#f5c842', fontSize: '0.72rem', fontWeight: 700, flexShrink: 0, whiteSpace: 'nowrap' }}>
-                                    {years}
-                                  </Typography>
-                                )}
-                              </Box>
-                            )
-                          })
-                        })()}
+                      <Box sx={{ bgcolor: 'rgba(0,0,0,0.22)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 2, mt: 'auto' }}>
+                        {player.honours.map((honour, idx) => {
+                          const { team, years } = parseHonour(honour)
+                          const isLast = idx === player.honours.length - 1
+                          return (
+                            <Box
+                              key={honour}
+                              sx={{
+                                display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2,
+                                px: 2, py: 1.1,
+                                borderBottom: !isLast ? '1px solid rgba(255,255,255,0.06)' : 'none',
+                                minHeight: 38,
+                              }}
+                            >
+                              <Typography sx={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.82rem', fontWeight: 600 }}>{team}</Typography>
+                              {years && (
+                                <Typography sx={{ color: '#f5c842', fontSize: '0.72rem', fontWeight: 700, flexShrink: 0, whiteSpace: 'nowrap' }}>
+                                  {years}
+                                </Typography>
+                              )}
+                            </Box>
+                          )
+                        })}
                       </Box>
                     </CardContent>
                   </Card>
@@ -707,7 +736,7 @@ export default function RepresentativesPage() {
               )
             })}
           </Grid>
-        </Box>
+        </MotionBox>
       </Container>
 
       <StateDialog player={selectedState} onClose={() => setSelectedState(null)} />

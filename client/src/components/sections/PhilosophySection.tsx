@@ -1,6 +1,19 @@
 import React from 'react'
 import { Box, Container, Typography, Stack } from '@mui/material'
 import CheckIcon from '@mui/icons-material/Check'
+import { motion, type Variants } from 'framer-motion'
+
+const MotionBox = motion(Box)
+const MotionTypography = motion(Typography)
+
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' as const } },
+}
+const stagger: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1 } },
+}
 
 const BASE = 'https://tandh-backend-deployment-production.up.railway.app'
 import { CLOUDINARY_BASE } from '../../config/cloudinary'
@@ -220,7 +233,6 @@ background:
 export default function PhilosophySection() {
   return (
     <Box
-      id="philosophy"
       component="section"
       sx={{
         py: { xs: 8, md: 12 },
@@ -229,57 +241,70 @@ export default function PhilosophySection() {
         overflow: 'hidden',
       }}
     >
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" id="philosophy" sx={{ scrollMarginTop: { xs: '72px', md: '80px' } }}>
 
         {/* Header */}
-        <Box sx={{ mb: { xs: 6, md: 8 } }}>
-          <Box
-            sx={{
-              display: 'inline-block',
-              bgcolor: 'rgba(245,200,66,0.1)',
-              border: '1px solid rgba(245,200,66,0.2)',
-              borderRadius: 10,
-              px: 2,
-              py: 0.5,
-              mb: 3,
-            }}
-          >
-            <Typography variant="overline" sx={{ color: '#f5c842', fontWeight: 800, letterSpacing: '0.12em', fontSize: '0.72rem' }}>
-              Our Philosophy
-            </Typography>
-          </Box>
+        <MotionBox
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+          sx={{ mb: { xs: 6, md: 8 } }}
+        >
+          <MotionBox variants={fadeUp}>
+            <Box
+              sx={{
+                display: 'inline-block',
+                bgcolor: 'rgba(245,200,66,0.1)',
+                border: '1px solid rgba(245,200,66,0.2)',
+                borderRadius: 10,
+                px: 2,
+                py: 0.5,
+                mb: 3,
+              }}
+            >
+              <Typography variant="overline" sx={{ color: '#f5c842', fontWeight: 800, letterSpacing: '0.12em', fontSize: '0.72rem' }}>
+                Our Philosophy
+              </Typography>
+            </Box>
+          </MotionBox>
 
-          <Typography
+          <MotionTypography
+            variants={fadeUp}
             variant="h2"
             sx={{ fontSize: { xs: '2rem', md: '3rem' }, color: '#fff', fontWeight: 900, lineHeight: 1.1, mb: 2 }}
           >
             Developing Cricketers
             <Box component="span" sx={{ color: '#f5c842' }}> For Success</Box>
-          </Typography>
+          </MotionTypography>
 
-          <Box sx={{ width: 60, height: 4, bgcolor: '#f5c842', borderRadius: 2, mb: 3 }} />
+          <MotionBox variants={fadeUp} sx={{ width: 60, height: 4, bgcolor: '#f5c842', borderRadius: 2, mb: 3 }} />
 
-          <Typography sx={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.85, maxWidth: 680, fontSize: '0.95rem' }}>
+          <MotionTypography variants={fadeUp} sx={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.85, maxWidth: 680, fontSize: '0.95rem' }}>
             At T&H Cricket, we are passionate about developing cricketers for success, both on and off the field.
             Our programs are built on strong technical foundations, combined with a focus on game awareness,
             tactical understanding, and continuous personal development. Whether you're picking up a bat for
             the first time or competing at an elite level, our coaching environment is designed to help every
             player improve, perform, and thrive.
-          </Typography>
-        </Box>
+          </MotionTypography>
+        </MotionBox>
 
-        <SectionBlock
-          title="Player Development"
-          items={philosophyValues}
-          image={`${CLOUDINARY}/hanni.png`}
-          grid
-        />
+        <MotionBox variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.1 }}>
+          <SectionBlock
+            title="Player Development"
+            items={philosophyValues}
+            image={`${CLOUDINARY}/hanni.png`}
+            grid
+          />
+        </MotionBox>
 
-        <SectionBlock
-          title="Cricket Excellence"
-          items={developmentValues}
-          image={`${CLOUDINARY}/tombbl.png`}
-        />
+        <MotionBox variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.1 }}>
+          <SectionBlock
+            title="Cricket Excellence"
+            items={developmentValues}
+            image={`${CLOUDINARY}/tombbl.png`}
+          />
+        </MotionBox>
 
       </Container>
     </Box>

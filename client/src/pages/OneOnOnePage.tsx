@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import {
-  Box, Container, Typography, Avatar, Chip, Button, Card,
+  Box, Container, Typography, Chip, Button, Card,
   Dialog, DialogContent, TextField, Grid, MenuItem, IconButton,
 } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
@@ -9,8 +9,26 @@ import CloseIcon from '@mui/icons-material/Close'
 import PersonIcon from '@mui/icons-material/Person'
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
 import SportsCricketIcon from '@mui/icons-material/SportsCricket'
+import TrendingUpIcon from '@mui/icons-material/TrendingUp'
+import { motion, type Variants } from 'framer-motion'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { CLOUDINARY_BASE } from '../config/cloudinary'
+
+const MotionBox = motion(Box)
+const MotionTypography = motion(Typography)
+
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' as const } },
+}
+const stagger: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1 } },
+}
+const fadeIn: Variants = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { duration: 0.6, ease: 'easeOut' as const } },
+}
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://tandh-backend-deployment-production.up.railway.app'
 
@@ -122,36 +140,88 @@ function RegisterModal({ open, onClose, preselected }: { open: boolean; onClose:
       maxWidth="sm"
       fullWidth
       disableScrollLock
-      slotProps={{ paper: { sx: { bgcolor: '#021a4a', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 4, backgroundImage: 'none' } } }}
+      slotProps={{
+        paper: {
+          sx: {
+            bgcolor: '#05091f',
+            border: '1px solid rgba(245,200,66,0.18)',
+            borderRadius: '24px',
+            backgroundImage: 'none',
+            overflow: 'hidden',
+            boxShadow: '0 0 0 1px rgba(245,200,66,0.08), 0 32px 80px rgba(0,0,0,0.85)',
+          },
+        },
+      }}
     >
-      <DialogContent sx={{ p: 0 }}>
+      <DialogContent sx={{ p: 0, position: 'relative' }}>
+
+        {/* Gold top accent line */}
+        <Box sx={{
+          position: 'absolute', top: 0, left: '50%',
+          transform: 'translateX(-50%)',
+          width: 100, height: 2,
+          background: 'linear-gradient(90deg, transparent, #f5c842, transparent)',
+          zIndex: 2,
+        }} />
+
+        {/* Glow orb */}
+        <Box sx={{
+          position: 'absolute', top: -80, left: '50%',
+          transform: 'translateX(-50%)',
+          width: 320, height: 220,
+          borderRadius: '50%',
+          background: 'radial-gradient(ellipse, rgba(245,200,66,0.06) 0%, transparent 70%)',
+          pointerEvents: 'none',
+          zIndex: 0,
+        }} />
+
         {submitted ? (
-          <Box sx={{ textAlign: 'center', py: 5, px: 3 }}>
-            <Typography variant="h5" sx={{ fontFamily: '"Bebas Neue", sans-serif', color: '#f5c842', mb: 1 }}>
+          <Box sx={{ textAlign: 'center', py: { xs: 5, md: 7 }, px: 4, position: 'relative', zIndex: 1 }}>
+            {/* Success icon */}
+            <Box sx={{
+              width: 64, height: 64, borderRadius: '50%',
+              bgcolor: 'rgba(245,200,66,0.1)',
+              border: '1px solid rgba(245,200,66,0.3)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              mx: 'auto', mb: 2.5,
+            }}>
+              <EmojiEventsIcon sx={{ color: '#f5c842', fontSize: '1.8rem' }} />
+            </Box>
+            <Typography sx={{ fontFamily: '"Bebas Neue", sans-serif', color: '#f5c842', fontSize: '2rem', letterSpacing: '0.04em', mb: 1 }}>
               Interest Registered!
             </Typography>
-            <Typography sx={{ color: 'rgba(255,255,255,0.6)', mb: 3 }}>
+            <Typography sx={{ color: 'rgba(255,255,255,0.55)', mb: 3.5, lineHeight: 1.7 }}>
               Thanks! We'll be in touch shortly to arrange your 1-on-1 session.
             </Typography>
-            <Button variant="text" onClick={handleClose} sx={{ color: 'rgba(255,255,255,0.5)', '&:hover': { color: '#fff' } }}>
+            <Button variant="outlined" onClick={handleClose} sx={{ color: 'rgba(255,255,255,0.5)', borderColor: 'rgba(255,255,255,0.15)', borderRadius: '10px', '&:hover': { color: '#fff', borderColor: 'rgba(255,255,255,0.35)' } }}>
               Close
             </Button>
           </Box>
         ) : (
-          <Box sx={{ p: { xs: 3, md: 4 } }}>
+          <Box sx={{ p: { xs: 3, md: 4 }, position: 'relative', zIndex: 1 }}>
+
+            {/* Modal header */}
             <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', mb: 3 }}>
               <Box>
-                <Typography variant="h5" sx={{ fontFamily: '"Bebas Neue", sans-serif', letterSpacing: '0.04em', color: '#fff', mb: 0.5 }}>
-                  Register Your Interest
+                <Chip
+                  label="Private Coaching"
+                  size="small"
+                  sx={{ mb: 1, bgcolor: 'rgba(245,200,66,0.1)', color: '#f5c842', border: '1px solid rgba(245,200,66,0.22)', fontWeight: 700, fontSize: '0.62rem', letterSpacing: '0.1em' }}
+                />
+                <Typography sx={{ fontFamily: '"Bebas Neue", sans-serif', letterSpacing: '0.04em', color: '#fff', fontSize: { xs: '1.6rem', md: '2rem' }, lineHeight: 1 }}>
+                  Book Your Session
                 </Typography>
-                <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}>
-                  Book a 1-on-1 session with one of our specialists.
+                <Typography sx={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem', mt: 0.5 }}>
+                  Fill in your details and we'll be in touch.
                 </Typography>
               </Box>
-              <IconButton onClick={handleClose} sx={{ color: 'rgba(255,255,255,0.5)', '&:hover': { color: '#fff' }, mt: -0.5, mr: -1 }}>
+              <IconButton onClick={handleClose} sx={{ color: 'rgba(255,255,255,0.35)', '&:hover': { color: '#fff', bgcolor: 'rgba(255,255,255,0.06)' }, mt: -0.5, mr: -1 }}>
                 <CloseIcon />
               </IconButton>
             </Box>
+
+            {/* Gold divider */}
+            <Box sx={{ height: 1, bgcolor: 'rgba(245,200,66,0.12)', mb: 3 }} />
 
             <Grid container spacing={2}>
               <Grid size={{ xs: 12, sm: 6 }}>
@@ -185,9 +255,22 @@ function RegisterModal({ open, onClose, preselected }: { open: boolean; onClose:
                 </Grid>
               )}
               <Grid size={{ xs: 12 }}>
-                <Button variant="contained" onClick={handleSubmit} disabled={loading} endIcon={<ArrowForwardIcon />}
-                  sx={{ bgcolor: '#f5c842', color: '#021a4a', fontWeight: 700, '&:hover': { bgcolor: '#e0b030' }, '&.Mui-disabled': { bgcolor: 'rgba(245,200,66,0.3)', color: 'rgba(2,26,74,0.5)' } }}>
-                  {loading ? 'Submitting...' : 'Register Interest'}
+                <Button
+                  variant="contained"
+                  fullWidth
+                  onClick={handleSubmit}
+                  disabled={loading}
+                  endIcon={<ArrowForwardIcon />}
+                  sx={{
+                    bgcolor: '#f5c842', color: '#021a4a',
+                    fontWeight: 800, py: 1.4, borderRadius: '12px',
+                    fontSize: '0.95rem',
+                    boxShadow: '0 4px 24px rgba(245,200,66,0.25)',
+                    '&:hover': { bgcolor: '#e0b030', boxShadow: '0 6px 32px rgba(245,200,66,0.35)' },
+                    '&.Mui-disabled': { bgcolor: 'rgba(245,200,66,0.2)', color: 'rgba(2,26,74,0.4)' },
+                  }}
+                >
+                  {loading ? 'Submitting…' : 'Register Interest'}
                 </Button>
               </Grid>
             </Grid>
@@ -211,99 +294,424 @@ export default function OneOnOnePage() {
     <Box
       component="main"
       sx={{
-        background: 'linear-gradient(150deg, #010d2a 0%, #021a4a 50%, #032053 100%)',
+        background: 'linear-gradient(170deg, #05091a 0%, #010d2a 40%, #021a4a 80%, #032053 100%)',
         minHeight: '100vh',
         position: 'relative',
         overflow: 'hidden',
       }}
     >
-      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, pt: { xs: 9, md: 10 }, pb: { xs: 8, md: 12 } }}>
-        {/* Back / Home button */}
-        <Box sx={{ mb: 3 }}>
-          <Button startIcon={<ArrowBackIcon />} onClick={() => fromExplore ? navigate('/#explore') : navigate('/')}
-            sx={{ color: 'rgba(255,255,255,0.6)', '&:hover': { color: '#f5c842' }, pl: 0 }}>
-            {fromExplore ? 'Back' : 'Home'}
-          </Button>
-        </Box>
+      {/* Subtle background dot grid */}
+      <Box
+        sx={{
+          position: 'fixed',
+          inset: 0,
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px)',
+          backgroundSize: '32px 32px',
+          pointerEvents: 'none',
+          zIndex: 0,
+        }}
+      />
 
-        {/* Header */}
-        <Box sx={{ textAlign: 'center', mb: { xs: 5, md: 7 } }}>
-          <Chip label="Private coaching" size="small" sx={{ mb: 3, bgcolor: 'rgba(245,200,66,0.15)', color: '#f5c842', border: '1px solid rgba(245,200,66,0.3)', fontWeight: 600, letterSpacing: '0.05em', fontSize: '0.72rem' }} />
-          <Typography variant="h1" sx={{ fontSize: { xs: '3rem', sm: '4rem', md: '5.5rem' }, color: '#ffffff', mb: 1.5 }}>
-            1-on-1 Coaching
-          </Typography>
-          <Typography sx={{ color: 'rgba(255,255,255,0.62)', maxWidth: 580, mx: 'auto', fontSize: { xs: '1rem', md: '1.05rem' }, lineHeight: 1.75 }}>
-            Dedicated sessions tailored to your game. Work directly with one of our specialist coaches to accelerate your development.
-          </Typography>
-        </Box>
+      {/* ── HERO ── */}
+      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, pt: { xs: 10, md: 11 }, mb: { xs: 6, md: 8 } }}>
 
-        {/* Benefits row */}
-        <Box sx={{ display: 'flex', gap: { xs: 1, md: 2 }, justifyContent: 'center', mb: { xs: 6, md: 8 }, flexWrap: 'wrap' }}>
+        {/* Back button */}
+        <Button
+          startIcon={<ArrowBackIcon />}
+          onClick={() => fromExplore ? navigate('/#explore') : navigate('/')}
+          sx={{ color: 'rgba(255,255,255,0.35)', '&:hover': { color: '#f5c842' }, pl: 0, mb: 4 }}
+        >
+          {fromExplore ? 'Back' : 'Home'}
+        </Button>
+
+        {/* Hero card */}
+        <Box sx={{
+          position: 'relative',
+          borderRadius: '28px',
+          overflow: 'hidden',
+          border: '1px solid rgba(245,200,66,0.15)',
+          background: 'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(245,200,66,0.03) 100%)',
+          backdropFilter: 'blur(12px)',
+          px: { xs: 3, sm: 5, md: 8 },
+          py: { xs: 5, md: 7 },
+          textAlign: 'center',
+          boxShadow: '0 0 0 1px rgba(245,200,66,0.08), 0 24px 80px rgba(0,0,0,0.4)',
+        }}>
+
+          {/* Top gold line accent */}
+          <Box sx={{
+            position: 'absolute', top: 0, left: '50%',
+            transform: 'translateX(-50%)',
+            width: 120, height: 2,
+            background: 'linear-gradient(90deg, transparent, #f5c842, transparent)',
+          }} />
+
+          {/* Glow orb behind text */}
+          <Box sx={{
+            position: 'absolute', top: '50%', left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 500, height: 300,
+            borderRadius: '50%',
+            background: 'radial-gradient(ellipse, rgba(245,200,66,0.05) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }} />
+
+          <MotionBox
+            variants={stagger}
+            initial="hidden"
+            animate="show"
+            sx={{ position: 'relative', zIndex: 1 }}
+          >
+            <MotionBox variants={fadeUp}>
+              <Chip
+                label="Private Coaching"
+                size="small"
+                sx={{
+                  mb: 3,
+                  bgcolor: 'rgba(245,200,66,0.1)',
+                  color: '#f5c842',
+                  border: '1px solid rgba(245,200,66,0.25)',
+                  fontWeight: 700,
+                  letterSpacing: '0.12em',
+                  fontSize: '0.65rem',
+                }}
+              />
+            </MotionBox>
+
+            <MotionTypography
+              variants={fadeUp}
+              variant="h1"
+              sx={{
+                fontSize: { xs: '3.4rem', sm: '4.8rem', md: '6.5rem' },
+                color: '#fff',
+                lineHeight: 0.92,
+                mb: 3,
+                letterSpacing: '-0.02em',
+              }}
+            >
+              1-on-1<br />
+              <Box component="span" sx={{ color: '#f5c842' }}>Coaching</Box>
+            </MotionTypography>
+
+            {/* Decorative divider */}
+            <MotionBox variants={fadeIn} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, mb: 3 }}>
+              <Box sx={{ height: 1, width: 48, bgcolor: 'rgba(255,255,255,0.1)' }} />
+              <Box sx={{ width: 5, height: 5, borderRadius: '50%', bgcolor: '#f5c842', opacity: 0.6 }} />
+              <Box sx={{ height: 1, width: 48, bgcolor: 'rgba(255,255,255,0.1)' }} />
+            </MotionBox>
+
+            <MotionTypography
+              variants={fadeUp}
+              sx={{
+                color: 'rgba(255,255,255,0.55)',
+                maxWidth: 480,
+                mx: 'auto',
+                fontSize: { xs: '0.97rem', md: '1.05rem' },
+                lineHeight: 1.8,
+                mb: 4.5,
+              }}
+            >
+              Dedicated sessions built around your game. Work directly with our specialist coaches to fast-track your development.
+            </MotionTypography>
+
+            <MotionBox variants={fadeUp}>
+            <Button
+              variant="contained"
+              size="large"
+              endIcon={<ArrowForwardIcon />}
+              onClick={() => openModal()}
+              sx={{
+                bgcolor: '#f5c842', color: '#021a4a',
+                fontWeight: 800, px: 4.5, py: 1.5,
+                fontSize: '0.95rem', borderRadius: '12px',
+                boxShadow: '0 4px 28px rgba(245,200,66,0.28)',
+                '&:hover': { bgcolor: '#e0b030', boxShadow: '0 8px 36px rgba(245,200,66,0.38)' },
+              }}
+            >
+              Book a Session
+            </Button>
+            </MotionBox>
+          </MotionBox>
+        </Box>
+      </Container>
+
+      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, pb: { xs: 10, md: 14 } }}>
+
+        {/* Benefits strip */}
+        <MotionBox
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.3 }}
+          sx={{
+            display: 'flex',
+            gap: 2,
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+            mb: { xs: 7, md: 9 },
+          }}
+        >
           {[
-            { icon: <PersonIcon sx={{ fontSize: { xs: '1rem', md: '1.25rem' } }} />, label: 'Personalised feedback' },
-            { icon: <SportsCricketIcon sx={{ fontSize: { xs: '1rem', md: '1.25rem' } }} />, label: 'Tailored drills' },
-            { icon: <EmojiEventsIcon sx={{ fontSize: { xs: '1rem', md: '1.25rem' } }} />, label: 'Elite-level coaches' },
+            { icon: <PersonIcon sx={{ fontSize: '1.1rem' }} />, label: 'Personalised feedback' },
+            { icon: <SportsCricketIcon sx={{ fontSize: '1.1rem' }} />, label: 'Tailored drills' },
+            { icon: <TrendingUpIcon sx={{ fontSize: '1.1rem' }} />, label: 'Measurable progress' },
+            { icon: <EmojiEventsIcon sx={{ fontSize: '1.1rem' }} />, label: 'Elite-level coaches' },
           ].map(({ icon, label }) => (
-            <Box key={label} sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0.5, md: 1 }, bgcolor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 3, px: { xs: 1.25, md: 2.5 }, py: { xs: 0.9, md: 1.2 }, flexShrink: 0 }}>
+            <MotionBox
+              key={label}
+              variants={fadeUp}
+              sx={{
+                display: 'flex', alignItems: 'center', gap: 1,
+                bgcolor: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(255,255,255,0.09)',
+                borderRadius: '12px',
+                px: 2.5, py: 1.25,
+                backdropFilter: 'blur(6px)',
+              }}
+            >
               <Box sx={{ color: '#f5c842', display: 'flex' }}>{icon}</Box>
-              <Typography sx={{ color: 'rgba(255,255,255,0.8)', fontWeight: 600, fontSize: { xs: '0.72rem', md: '0.9rem' }, whiteSpace: 'nowrap' }}>{label}</Typography>
-            </Box>
+              <Typography sx={{ color: 'rgba(255,255,255,0.75)', fontWeight: 600, fontSize: '0.88rem', whiteSpace: 'nowrap' }}>
+                {label}
+              </Typography>
+            </MotionBox>
           ))}
-        </Box>
+        </MotionBox>
+
+        {/* Section label */}
+        <MotionBox
+          variants={fadeIn}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}
+        >
+          <Box sx={{ height: 2, width: 28, bgcolor: '#f5c842', borderRadius: 1 }} />
+          <Typography sx={{ color: '#f5c842', fontWeight: 800, fontSize: '0.65rem', letterSpacing: '0.2em' }}>
+            MEET YOUR COACHES
+          </Typography>
+        </MotionBox>
 
         {/* Coach cards */}
-        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', lg: '1fr 1fr 1fr 1fr' }, gap: 3 }}>
+        <MotionBox
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.1 }}
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', lg: '1fr 1fr 1fr 1fr' },
+            gap: { xs: 2.5, md: 3 },
+            mb: { xs: 7, md: 9 },
+          }}
+        >
           {COACHES.map((coach) => (
-            <Card
+            <MotionBox
               key={coach.name}
+              variants={fadeUp}
               sx={{
-                bgcolor: 'rgba(255,255,255,0.05)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: 4,
+                bgcolor: 'rgba(255,255,255,0.03)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderRadius: '20px',
                 overflow: 'hidden',
                 display: 'flex',
                 flexDirection: 'column',
-                transition: 'transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease',
-                '&:hover': { transform: 'translateY(-5px)', bgcolor: 'rgba(255,255,255,0.08)', boxShadow: '0 12px 32px rgba(0,0,0,0.35)' },
+                transition: 'transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease',
+                '&:hover': {
+                  transform: 'translateY(-7px)',
+                  boxShadow: '0 20px 48px rgba(0,0,0,0.45)',
+                  borderColor: 'rgba(245,200,66,0.2)',
+                },
+                '&:hover .photo-img': {
+                  transform: 'scale(1.04)',
+                },
+                '&:hover .book-btn': {
+                  bgcolor: '#f5c842',
+                  color: '#021a4a',
+                  borderColor: '#f5c842',
+                },
               }}
             >
               {/* Photo */}
-              <Box sx={{ height: 220, overflow: 'hidden', position: 'relative' }}>
+              <Box sx={{ height: 260, overflow: 'hidden', position: 'relative' }}>
                 <Box
+                  className="photo-img"
                   component="img"
                   src={`${CLOUDINARY_BASE}/${coach.image}`}
                   alt={coach.name}
-                  sx={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: coach.objectPosition }}
+                  sx={{
+                    width: '100%', height: '100%',
+                    objectFit: 'cover', objectPosition: coach.objectPosition,
+                    transition: 'transform 0.45s ease',
+                    display: 'block',
+                  }}
                 />
-                <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 50%, rgba(1,13,42,0.85) 100%)' }} />
+                {/* Bottom gradient on photo */}
+                <Box sx={{
+                  position: 'absolute', inset: 0,
+                  background: 'linear-gradient(to bottom, transparent 40%, rgba(1,8,30,0.9) 100%)',
+                }} />
+                {/* Role badge */}
+                <Box sx={{
+                  position: 'absolute', bottom: 14, left: 16,
+                }}>
+                  <Typography sx={{ color: '#f5c842', fontWeight: 700, fontSize: '0.65rem', letterSpacing: '0.12em' }}>
+                    {coach.role.toUpperCase()}
+                  </Typography>
+                  <Typography sx={{ color: '#fff', fontWeight: 800, fontSize: '1.1rem', lineHeight: 1.1 }}>
+                    {coach.name}
+                  </Typography>
+                </Box>
               </Box>
 
               {/* Info */}
               <Box sx={{ p: 2.5, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '1.05rem', mb: 0.25 }}>{coach.name}</Typography>
-                <Typography sx={{ color: '#f5c842', fontWeight: 600, fontSize: '0.8rem', mb: 1.5 }}>{coach.speciality}</Typography>
-                <Typography sx={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem', lineHeight: 1.65, mb: 2, flexGrow: 1 }}>{coach.bio}</Typography>
-                <Box sx={{ display: 'flex', gap: 0.75, flexWrap: 'wrap', mb: 2.5 }}>
+                {/* Gold accent line */}
+                <Box sx={{ width: 32, height: 2, bgcolor: '#f5c842', borderRadius: 1, mb: 1.5 }} />
+
+                <Typography sx={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.78rem', fontWeight: 600, mb: 1, letterSpacing: '0.04em' }}>
+                  {coach.speciality}
+                </Typography>
+
+                <Typography sx={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.84rem', lineHeight: 1.7, mb: 2, flexGrow: 1 }}>
+                  {coach.bio}
+                </Typography>
+
+                <Box sx={{ display: 'flex', gap: 0.6, flexWrap: 'wrap', mb: 2.5 }}>
                   {coach.highlights.map(h => (
-                    <Chip key={h} label={h} size="small" sx={{ bgcolor: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.7)', fontSize: '0.67rem' }} />
+                    <Chip
+                      key={h} label={h} size="small"
+                      sx={{
+                        bgcolor: 'rgba(245,200,66,0.07)',
+                        color: 'rgba(245,200,66,0.75)',
+                        border: '1px solid rgba(245,200,66,0.15)',
+                        fontSize: '0.65rem', fontWeight: 600,
+                      }}
+                    />
                   ))}
                 </Box>
-                <Button variant="outlined" fullWidth onClick={() => openModal(coach.name)} endIcon={<ArrowForwardIcon />}
-                  sx={{ color: '#f5c842', borderColor: 'rgba(245,200,66,0.35)', fontWeight: 700, fontSize: '0.82rem', borderRadius: 2.5, '&:hover': { borderColor: '#f5c842', bgcolor: 'rgba(245,200,66,0.06)' } }}>
+
+                <Button
+                  className="book-btn"
+                  variant="outlined"
+                  fullWidth
+                  onClick={() => openModal(coach.name)}
+                  endIcon={<ArrowForwardIcon sx={{ fontSize: '0.9rem !important' }} />}
+                  sx={{
+                    color: '#f5c842',
+                    borderColor: 'rgba(245,200,66,0.3)',
+                    fontWeight: 700,
+                    fontSize: '0.82rem',
+                    borderRadius: '10px',
+                    py: 1,
+                    transition: 'all 0.25s ease',
+                    '&:hover': {
+                      bgcolor: '#f5c842',
+                      color: '#021a4a',
+                      borderColor: '#f5c842',
+                    },
+                  }}
+                >
                   Book with {coach.name.split(' ')[0]}
                 </Button>
               </Box>
-            </Card>
+            </MotionBox>
           ))}
-        </Box>
+        </MotionBox>
 
-        {/* Bottom CTA */}
-        <Box sx={{ textAlign: 'center', mt: { xs: 6, md: 8 } }}>
-          <Button variant="contained" onClick={() => openModal()} endIcon={<ArrowForwardIcon />}
-            sx={{ bgcolor: '#f5c842', color: '#021a4a', fontWeight: 700, px: 4, py: 1.4, fontSize: '1rem', '&:hover': { bgcolor: '#e0b030' } }}>
-            Register Interest
+        {/* ── CTA BLOCK ── */}
+        <MotionBox
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+          sx={{
+            position: 'relative',
+            borderRadius: '28px',
+            mt: { xs: 2, md: 3 },
+            overflow: 'hidden',
+            border: '1px solid rgba(245,200,66,0.18)',
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(245,200,66,0.04) 100%)',
+            backdropFilter: 'blur(12px)',
+            boxShadow: '0 0 0 1px rgba(245,200,66,0.08), 0 24px 80px rgba(0,0,0,0.4)',
+            p: { xs: 3.5, md: '48px 56px' },
+            textAlign: { xs: 'center', md: 'left' },
+            display: 'flex',
+            flexDirection: { xs: 'column', md: 'row' },
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 3,
+          }}
+        >
+          {/* Top gold accent */}
+          <Box sx={{
+            position: 'absolute', top: 0, left: '50%',
+            transform: 'translateX(-50%)',
+            width: 120, height: 2,
+            background: 'linear-gradient(90deg, transparent, #f5c842, transparent)',
+            pointerEvents: 'none',
+          }} />
+
+          {/* Glow orb */}
+          <Box sx={{
+            position: 'absolute', top: '50%', left: '30%',
+            transform: 'translate(-50%, -50%)',
+            width: 400, height: 250,
+            borderRadius: '50%',
+            background: 'radial-gradient(ellipse, rgba(245,200,66,0.05) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }} />
+
+          <Box sx={{ position: 'relative', zIndex: 1 }}>
+            <Chip
+              label="Limited Spots"
+              size="small"
+              sx={{ mb: 1.5, bgcolor: 'rgba(245,200,66,0.1)', color: '#f5c842', border: '1px solid rgba(245,200,66,0.22)', fontWeight: 700, fontSize: '0.62rem', letterSpacing: '0.1em' }}
+            />
+            <Typography sx={{
+              color: '#fff',
+              fontFamily: '"Bebas Neue", sans-serif',
+              fontSize: { xs: '2.2rem', md: '3rem' },
+              letterSpacing: '0.02em',
+              lineHeight: 0.95,
+              mb: 1.25,
+            }}>
+              Ready to Elevate<br />
+              <Box component="span" sx={{ color: '#f5c842' }}>Your Game?</Box>
+            </Typography>
+
+            {/* Divider */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1.25, justifyContent: { xs: 'center', md: 'flex-start' } }}>
+              <Box sx={{ height: 1, width: 36, bgcolor: 'rgba(255,255,255,0.1)' }} />
+              <Box sx={{ width: 4, height: 4, borderRadius: '50%', bgcolor: '#f5c842', opacity: 0.6 }} />
+              <Box sx={{ height: 1, width: 36, bgcolor: 'rgba(255,255,255,0.1)' }} />
+            </Box>
+
+            <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.95rem', lineHeight: 1.6 }}>
+              Register your interest and we'll match you with the right coach.
+            </Typography>
+          </Box>
+
+          <Button
+            variant="contained"
+            size="large"
+            endIcon={<ArrowForwardIcon />}
+            onClick={() => openModal()}
+            sx={{
+              position: 'relative', zIndex: 1, flexShrink: 0,
+              bgcolor: '#f5c842', color: '#021a4a',
+              fontWeight: 800, px: { xs: 4, md: 4.5 }, py: 1.6,
+              borderRadius: '14px', fontSize: '0.95rem',
+              boxShadow: '0 4px 28px rgba(245,200,66,0.28)',
+              '&:hover': { bgcolor: '#e0b030', boxShadow: '0 8px 36px rgba(245,200,66,0.4)' },
+            }}
+          >
+            Book a Session
           </Button>
-        </Box>
+        </MotionBox>
+
+        {/* Bottom padding */}
+        <Box sx={{ height: { xs: 48, md: 72 } }} />
+
       </Container>
 
       <RegisterModal open={modalOpen} onClose={() => setModalOpen(false)} preselected={selectedCoach} />

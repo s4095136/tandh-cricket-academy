@@ -161,6 +161,7 @@ export default function Navbar() {
         anchor="right"
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
+        disableScrollLock
         sx={{
           '& .MuiDrawer-paper': {
             width: 290,

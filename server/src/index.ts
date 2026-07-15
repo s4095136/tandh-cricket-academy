@@ -6,6 +6,7 @@ import apiRouter from './routes/api'
 import coachesRouter from './routes/coaches'
 import testimonialsRouter from './routes/testimonials'
 import enquiriesRouter from './routes/enquiries'
+import privateCoachingRouter from './routes/privateCoaching'
 import cors from 'cors'
 import path from 'path'
 
@@ -23,6 +24,7 @@ app.use('/api', apiRouter)
 app.use('/api', coachesRouter)
 app.use('/api', testimonialsRouter)
 app.use('/api', enquiriesRouter)
+app.use('/api', privateCoachingRouter)
 app.use(
   '/images',
   express.static(path.join(process.cwd(), 'images'))

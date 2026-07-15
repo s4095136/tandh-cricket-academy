@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__visualize__read_me",
+      "mcp__visualize__show_widget",
+      "Bash(python3 -c ' *)",
+      "Bash(python3)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://res.cloudinary.com/dnubhsrlt/image/upload/f_auto,q_auto/london1\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://res.cloudinary.com/dnubhsrlt/image/upload/f_auto,q_auto/london1.jpg\")",
+      "Bash(node_modules/.bin/tsc --noEmit)"
+    ]
+  }
+}

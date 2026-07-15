@@ -81,9 +81,19 @@ const inputSx = {
     '&:hover fieldset': { borderColor: '#f5c842' },
     '&.Mui-focused fieldset': { borderColor: '#f5c842' },
   },
-  '& .MuiInputLabel-root': { color: 'rgba(255,255,255,0.7)' },
+  // Label: dim when empty, yellow when the field has a value or is focused
+  '& .MuiInputLabel-root': { color: 'rgba(255,255,255,0.45)' },
   '& .MuiInputLabel-root.Mui-focused': { color: '#f5c842' },
+  '& .MuiInputLabel-root.MuiInputLabel-shrink': { color: '#f5c842' },
   '& .MuiInputBase-input': { color: '#fff' },
+  // Stop browser autofill from painting a white/yellow background over our dark input
+  '& .MuiInputBase-input:-webkit-autofill': {
+    WebkitBoxShadow: '0 0 0 100px #05091f inset',
+    WebkitTextFillColor: '#ffffff',
+    caretColor: '#ffffff',
+    borderRadius: 'inherit',
+    transition: 'background-color 9999s ease-in-out 0s',
+  },
   '& .MuiSelect-select': { color: '#fff' },
   '& .MuiSvgIcon-root': { color: '#f5c842' },
 }

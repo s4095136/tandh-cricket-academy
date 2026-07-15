@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://thcricket.com.au/sitemap.xml

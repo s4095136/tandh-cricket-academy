@@ -100,7 +100,7 @@ export default function Footer() {
               </IconButton>
 
               <IconButton
-                href="https://www.instagram.com"
+                href="https://www.instagram.com/tandhcricket"
                 target="_blank"
                 rel="noopener"
                 sx={{

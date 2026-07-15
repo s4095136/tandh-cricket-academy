@@ -144,7 +144,7 @@ export default function TourWorldMap() {
 
     const onTouchMove = (e: TouchEvent) => {
       if (e.touches.length < 2) return   // 1 finger → let the page scroll
-      e.preventDefault()
+      // No e.preventDefault() here — touchstart already blocks scroll for 2-finger sequences
       const rect = svg.getBoundingClientRect()
       const t1 = e.touches[0], t2 = e.touches[1]
       const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY)
@@ -171,8 +171,8 @@ export default function TourWorldMap() {
 
     const onTouchEnd = () => { lastDist = 0 }
 
-    svg.addEventListener('touchstart', onTouchStart, { passive: false })
-    svg.addEventListener('touchmove',  onTouchMove,  { passive: false })
+    svg.addEventListener('touchstart', onTouchStart, { passive: false }) // must be non-passive to call preventDefault for 2-finger
+    svg.addEventListener('touchmove',  onTouchMove,  { passive: true  }) // passive so 1-finger never blocks page scroll
     svg.addEventListener('touchend',   onTouchEnd,   { passive: true  })
     return () => {
       svg.removeEventListener('touchstart', onTouchStart)
@@ -189,13 +189,15 @@ export default function TourWorldMap() {
     commit(zoom * r, cx - r * (cx - panX), cy - r * (cy - panY))
   }
 
-  // ── Drag / pan ────────────────────────────────────────────────────────────
-  function onDown(e: React.MouseEvent) {
+  // ── Drag / pan (mouse only — touch is handled by the touch useEffect) ────
+  function onDown(e: React.PointerEvent) {
+    if (e.pointerType === 'touch') return   // let touch events handle it; don't start drag on finger
     if (e.button !== 0) return
     drag.current = { on: true, startX: e.clientX, startY: e.clientY, px: viewRef.current.panX, py: viewRef.current.panY, dist: 0 }
   }
 
-  function onMove(e: React.MouseEvent) {
+  function onMove(e: React.PointerEvent) {
+    if (e.pointerType === 'touch') return   // let touch events handle it
     if (!drag.current.on) return
     const svg = svgRef.current
     if (!svg) return
@@ -207,7 +209,10 @@ export default function TourWorldMap() {
     commit(zoom, drag.current.px + dx / rect.width * VW, drag.current.py + dy / rect.height * VH)
   }
 
-  function onUp() { drag.current.on = false }
+  function onUp(e: React.PointerEvent) {
+    if (e.pointerType === 'touch') return
+    drag.current.on = false
+  }
 
   // ── Load world atlas ──────────────────────────────────────────────────────
   useEffect(() => {
@@ -266,10 +271,10 @@ export default function TourWorldMap() {
           viewBox={`0 0 ${VW} ${VH}`}
           preserveAspectRatio="xMidYMid slice"
           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', cursor: drag.current.on ? 'grabbing' : 'grab', touchAction: 'pan-y' }}
-          onMouseDown={onDown}
-          onMouseMove={onMove}
-          onMouseUp={onUp}
-          onMouseLeave={onUp}
+          onPointerDown={onDown}
+          onPointerMove={onMove}
+          onPointerUp={onUp}
+          onPointerLeave={onUp}
         >
           {/* Ocean */}
           <rect width={VW} height={VH} fill="#030d1f" />

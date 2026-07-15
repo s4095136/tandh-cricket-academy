@@ -97,9 +97,15 @@ function GridWaveCanvas() {
 }
 
 // ── Destination themes ─────────────────────────────────────────────────────
-const DEST_THEME: Record<number, { bg: string }> = {
-  5: { bg: 'linear-gradient(155deg, #004d3a 0%, #00291e 55%, #001410 100%)' }, // Sri Lanka
-  6: { bg: 'linear-gradient(155deg, #012169 0%, #000e3d 55%, #00071f 100%)' }, // England
+const DEST_THEME: Record<number, { bg: string; photo?: string }> = {
+  5: {
+    bg: 'linear-gradient(155deg, #004d3a 0%, #00291e 55%, #001410 100%)',
+    photo: 'https://images.unsplash.com/photo-1562602833-0f4ab2fc46e3?w=900&q=80', // Sri Lanka — Colombo city
+  },
+  6: {
+    bg: 'linear-gradient(155deg, #012169 0%, #000e3d 55%, #00071f 100%)',
+    photo: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=900&q=80', // England — Tower Bridge, London
+  },
 }
 
 // ── Upcoming tour card ─────────────────────────────────────────────────────
@@ -127,7 +133,9 @@ function UpcomingTourCard({ tour, onRegister }: { tour: (typeof TOURS)[0]; onReg
       {/* Destination visual */}
       <Box sx={{
         height: 220,
-        background: theme.bg,
+        background: theme.photo
+          ? `url(${theme.photo}) center/cover no-repeat`
+          : theme.bg,
         position: 'relative',
         overflow: 'hidden',
         display: 'flex',
@@ -135,11 +143,20 @@ function UpcomingTourCard({ tour, onRegister }: { tour: (typeof TOURS)[0]; onReg
         justifyContent: 'center',
         flexShrink: 0,
       }}>
-        {/* Subtle diagonal grid */}
-        <Box sx={{
-          position: 'absolute', inset: 0,
-          backgroundImage: 'repeating-linear-gradient(-45deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 28px)',
-        }} />
+        {/* Dark gradient overlay for photo cards */}
+        {theme.photo && (
+          <Box sx={{
+            position: 'absolute', inset: 0,
+            background: 'linear-gradient(to bottom, rgba(2,5,15,0.35) 0%, rgba(2,5,15,0.65) 100%)',
+          }} />
+        )}
+        {/* Subtle diagonal grid (gradient-only cards) */}
+        {!theme.photo && (
+          <Box sx={{
+            position: 'absolute', inset: 0,
+            backgroundImage: 'repeating-linear-gradient(-45deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 28px)',
+          }} />
+        )}
         {/* Ghost destination name */}
         <Typography sx={{
           position: 'absolute', bottom: -6, left: 14,

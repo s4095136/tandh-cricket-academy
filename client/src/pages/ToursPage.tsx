@@ -173,7 +173,7 @@ function UpcomingTourCard({ tour, onRegister }: { tour: (typeof TOURS)[0]; onReg
         </Typography>
         {/* Center icon + badge */}
         <Box sx={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
-          <Typography sx={{ fontSize: '3.2rem', lineHeight: 1, mb: 1.5 }}>✈️</Typography>
+          {/* <Typography sx={{ fontSize: '3.2rem', lineHeight: 1, mb: 1.5 }}>✈️</Typography> */}
           <Chip
             label="REGISTRATION OPEN"
             size="small"
